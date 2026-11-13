@@ -12,7 +12,8 @@ SITE = (sys.argv[2] if len(sys.argv) > 2 else 'https://dieto.health').rstrip('/'
 HERE = os.path.dirname(os.path.abspath(__file__))
 WWW = os.path.join(HERE, '..', 'www')
 
-BASE_TAG = '<script>window.DIETO_BASE=%r;</script>' % SITE
+PUSH = os.path.exists(os.path.join(HERE, '..', 'android', 'app', 'google-services.json')) or os.environ.get('DIETO_PUSH') == '1'
+BASE_TAG = '<script>window.DIETO_BASE=%r;window.DIETO_PUSH=%s;</script>' % (SITE, 'true' if PUSH else 'false')
 
 
 def read(p):

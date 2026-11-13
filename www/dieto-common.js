@@ -89,7 +89,8 @@
 
     /* ---------- push notifications (Android/iOS app only) ---------- */
     registerPush: function (role, dieticianToken) {
-      if (!NATIVE) return;
+      // only when the app was built with Firebase (google-services.json); without it Android closes the app on register()
+      if (!NATIVE || !window.DIETO_PUSH) return;
       var PN = window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications; if (!PN) return;
       (async function () {
         try {

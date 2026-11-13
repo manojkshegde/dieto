@@ -27,7 +27,7 @@ jobs:
       - name: Firebase config (push notifications)
         env: { GSJ: "${{ secrets.GOOGLE_SERVICES_JSON_B64 }}" }
         run: |
-          if [ -n "$GSJ" ]; then echo "$GSJ" | base64 -d > android/app/google-services.json; else echo "No google-services.json - push notifications will be off in this build"; fi
+          if [ -n "$GSJ" ]; then echo "$GSJ" | base64 -d > android/app/google-services.json; grep -rl "DIETO_PUSH=false" www | xargs -r sed -i "s/DIETO_PUSH=false/DIETO_PUSH=true/g"; else echo "No google-services.json - push notifications will be off in this build"; fi
       - run: npx cap sync android
       - name: Test build (APK to install on your phone)
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
