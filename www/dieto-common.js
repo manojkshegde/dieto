@@ -16,7 +16,10 @@
     user: function () { var u = load(); return u && u.user || null; },
     headers: function () { var h = { 'Content-Type': 'application/json' }, t = Auth.token(); if (t) h['X-Dieto-User'] = t; return h; },
     api: async function (route, body) {
-      var r = await fetch(API + '?route=' + route, { method: 'POST', headers: Auth.headers(), body: JSON.stringify(body || {}) });
+      var ctl = window.AbortController ? new AbortController() : null, tm = ctl && setTimeout(function () { ctl.abort(); }, 20000), r;
+      try { r = await fetch(API + '?route=' + route, { method: 'POST', headers: Auth.headers(), body: JSON.stringify(body || {}), signal: ctl ? ctl.signal : undefined }); }
+      catch (e) { throw new Error(navigator.onLine === false ? 'You’re offline. Check your internet and try again.' : 'Couldn’t reach dietO. Please try again in a moment.'); }
+      finally { clearTimeout(tm); }
       var d = {}; try { d = await r.json(); } catch (e) {}
       if (r.status === 401 && d.error === 'signed out') save(null);
       if (!r.ok) { var e = new Error(d.error || 'Something went wrong. Please try again.'); e.status = r.status; e.data = d; throw e; }
