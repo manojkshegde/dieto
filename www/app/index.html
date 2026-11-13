@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>window.DIETO_BASE='https://dieto.health';</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>dietO</title>
+<meta name="theme-color" content="#1d5a3a">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/favicon-64.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="dietO">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+window.DIETO_APP = {
+  logoUrl: '/Logo.png',
+  api: (window.DIETO_BASE || '') + '/api/dieto-lead.php',      // same endpoint as the website (save / restore / pdf / leads)
+  site: window.DIETO_BASE ? '/test/index.html' : '/'   // the diet test (website home page)
+};
+</script>
+<script src="/dieto-common.js"></script>
+<style>
+:root{--g900:#123a26;--g800:#1d5a3a;--g700:#22704a;--g600:#2a8a59;--g500:#34a26a;--lime:#8cc63f;--lime2:#b8e07a;--mint:#eef6ee;--mint2:#e2f0e1;
+  --ink:#14231b;--ink2:#3d4f45;--mute:#6f8077;--line:#e3ebe5;--bg:#f4f8f3;--amber:#f2b134;--red:#d64545;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--safe-b:env(safe-area-inset-bottom);--safe-t:env(safe-area-inset-top)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button,input{font-family:inherit}
+svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;stroke:currentColor}
+.hidden{display:none!important}
+.top{background:linear-gradient(165deg,var(--g900),var(--g700));color:#fff;padding:calc(14px + var(--safe-t)) 18px 58px;border-radius:0 0 28px 28px}
+.top .row{display:flex;align-items:center;justify-content:space-between}
+.top img.logo{height:30px;display:block}
+.top .wm{font-weight:800;font-size:22px;letter-spacing:-.03em}
+.top .chip{font-size:11.5px;font-weight:700;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:5px 10px;border-radius:999px;color:var(--lime2)}
+.top h1{margin:16px 0 2px;font-size:24px;letter-spacing:-.02em}
+.top p{margin:0;color:rgba(255,255,255,.78);font-size:14px}
+main{max-width:560px;margin:0 auto;padding:0 14px calc(96px + var(--safe-b))}
+.lift{margin-top:-40px}
+.card{background:#fff;border-radius:20px;padding:16px;margin-top:12px;box-shadow:0 4px 18px rgba(18,58,38,.06)}
+.card h3{margin:0 0 10px;font-size:16px;display:flex;align-items:center;gap:8px}.card h3 svg.i{color:var(--g600);width:19px;height:19px}
+.sub{font-size:12.5px;color:var(--mute)}
+/* summary ring */
+.sum{display:flex;gap:16px;align-items:center}
+.ring{position:relative;width:118px;height:118px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .c b{font-size:22px;color:var(--g700);letter-spacing:-.02em}.ring .c span{font-size:11px;color:var(--mute);font-weight:600}
+.bars{flex:1;display:grid;gap:10px}
+.bar .l{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--ink2);margin-bottom:4px}
+.bar .t{height:9px;background:var(--mint2);border-radius:999px;overflow:hidden}.bar .t i{display:block;height:100%;border-radius:999px;background:var(--g600);transition:width .4s}
+/* meals */
+.meal{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.meal:first-child{border-top:0}
+.tile{width:52px;height:52px;flex:none;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--mint2);background-size:cover;background-position:center}
+.tile svg.i{width:26px;height:26px;color:var(--g700)}
+.mi{flex:1;min-width:0}.sl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g600)}
+.nm{font-weight:700;font-size:15px;line-height:1.25}.mm{font-size:12.5px;color:var(--mute)}
+.meal.done .nm{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--lime)}
+.ck{width:38px;height:38px;flex:none;border-radius:12px;border:2px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:transparent}
+.ck svg.i{width:20px;height:20px}
+.meal.done .ck{background:var(--g600);border-color:var(--g600);color:#fff}
+.sw{border:0;background:none;color:var(--mute);cursor:pointer;padding:4px;margin-top:2px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.sw svg.i{width:13px;height:13px}
+.boost{background:#fff7e5;border-radius:14px;padding:10px 12px;margin-top:8px;font-size:13.5px;color:#7a5200;display:flex;gap:10px;align-items:flex-start}.boost svg.i{color:#b07900;width:20px;height:20px;margin-top:1px}
+/* water */
+.water{display:flex;gap:6px;flex-wrap:wrap}
+.water button{width:36px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#b8c8bd}
+.water button.on{background:#e6f3fb;border-color:#9fd0ec;color:#2f8fc4}.water button svg.i{width:20px;height:20px}
+.streak{display:flex;align-items:center;gap:12px}.streak .f{width:46px;height:46px;border-radius:14px;background:#fff1e0;display:flex;align-items:center;justify-content:center;color:#e07a10}
+.streak .f svg.i{width:24px;height:24px}.streak b{font-size:18px}
+/* week tabs */
+.dtabs{display:flex;gap:6px;overflow-x:auto;margin:0 -4px 8px;padding:2px 4px 6px;scrollbar-width:none}.dtabs::-webkit-scrollbar{display:none}
+.dtabs button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:7px 11px;cursor:pointer;color:var(--ink2);line-height:1.15;position:relative}
+.dtabs button b{display:block;font-size:13px}.dtabs button span{font-size:11px;color:var(--mute)}
+.dtabs button.on{background:var(--g700);border-color:var(--g700);color:#fff}.dtabs button.on span{color:var(--lime2)}
+.dtabs button.today:after{content:'';position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--lime)}
+/* buttons & inputs */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:14px 20px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;width:100%}
+.btn svg.i{width:18px;height:18px}
+.btn-g{background:var(--g700);color:#fff}.btn-l{background:var(--lime);color:var(--g900)}.btn-o{background:#fff;color:var(--g800);border:1.5px solid var(--line)}
+.btn[disabled]{opacity:.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inp{width:100%;font-size:18px;font-weight:700;padding:13px 14px;border:2px solid var(--line);border-radius:14px;outline:none;background:#fff;color:var(--ink)}
+.inp:focus{border-color:var(--g600)}
+.irow{display:flex;gap:8px;align-items:stretch}.irow .inp{flex:1}.irow .btn{width:auto;padding:0 18px}
+.msg{font-size:13.5px;font-weight:600;margin-top:8px;min-height:18px}.msg.ok{color:var(--g700)}.msg.err{color:var(--red)}
+/* progress */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:var(--mint);border-radius:14px;padding:10px 6px;text-align:center}
+.stats b{display:block;font-size:19px;color:var(--g700)}.stats span{font-size:11px;color:var(--mute);font-weight:600}
+.hist{margin-top:6px}.hist div{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:14px}.hist div:first-child{border-top:0}
+/* me */
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.kv:first-child{border-top:0}.kv span{color:var(--mute)}.kv b{text-align:right}
+.code{display:flex;align-items:center;justify-content:space-between;background:var(--mint);border:1.5px dashed var(--g500);border-radius:14px;padding:10px 14px}
+.code b{font-size:22px;letter-spacing:.14em;color:var(--g700)}
+.list a,.list button{display:flex;align-items:center;gap:12px;width:100%;padding:13px 2px;border:0;border-top:1px solid var(--line);background:none;text-decoration:none;color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;text-align:left}
+.list a:first-child,.list button:first-child{border-top:0}.list svg.i{color:var(--g600);width:20px;height:20px}.list .danger{color:var(--red)}.list .danger svg.i{color:var(--red)}
+/* onboarding */
+.onb{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:40px 22px calc(40px + var(--safe-b));max-width:480px;margin:0 auto;text-align:center}
+.onb img{height:56px;margin:0 auto 26px;display:block}
+.onb h1{font-size:28px;letter-spacing:-.02em;margin:0 0 10px}.onb p{color:var(--ink2);margin:0 0 24px}
+.onb .or{margin:22px 0 12px;color:var(--mute);font-size:13px;font-weight:700}
+/* bottom nav */
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 6px calc(6px + var(--safe-b));z-index:20}
+nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--mute);text-decoration:none;font-size:11px;font-weight:700}
+nav a svg.i{width:23px;height:23px}nav a.on{color:var(--g700)}
+.toast{position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+.offline{background:#fff7e5;color:#7a5200;font-size:12.5px;font-weight:700;text-align:center;padding:6px}
+.disc{font-size:11.5px;color:var(--mute);margin:16px 4px 0;line-height:1.5}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-clipboard-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></symbol>
+<symbol id="i-bike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5" /> <circle cx="5.5" cy="17.5" r="3.5" /> <circle cx="15" cy="5" r="1" /> <path d="M12 17.5V14l-3-3 4-3 2 3h2" /></symbol>
+<symbol id="i-egg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 8 4 14a8 8 0 0 0 16 0c0-6-4-12-8-12" /></symbol>
+<symbol id="i-droplet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" /></symbol>
+<symbol id="i-dumbbell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z" /> <path d="m2.5 21.5 1.4-1.4" /> <path d="m20.1 3.9 1.4-1.4" /> <path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z" /> <path d="m9.6 14.4 4.8-4.8" /></symbol>
+<symbol id="i-trending-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17h6v-6" /> <path d="m22 17-8.5-8.5-5 5L2 7" /></symbol>
+<symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></symbol>
+<symbol id="i-flower-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" /> <circle cx="12" cy="8" r="2" /> <path d="M12 10v12" /> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" /> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" /></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20" /> <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13" /></symbol>
+<symbol id="i-hand-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h2a2 2 0 0 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16" /> <path d="m14.45 13.39 5.05-4.694C20.196 8 21 6.85 21 5.75a2.75 2.75 0 0 0-4.797-1.837.276.276 0 0 1-.406 0A2.75 2.75 0 0 0 11 5.75c0 1.2.802 2.248 1.5 2.946L16 11.95" /> <path d="m2 15 6 6" /> <path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a1 1 0 0 0-2.75-2.91" /></symbol>
+<symbol id="i-heart-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /> <path d="M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" /></symbol>
+<symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /> <circle cx="12" cy="8" r="6" /></symbol>
+<symbol id="i-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></symbol>
+<symbol id="i-salad" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.496 12a2.5 2.5 0 00.399-2.214A2 2 0 0020.32 6.5 2 2 0 0019 3a2 2 0 00-1.5.68 2 2 0 00-3.287.424 2.5 2.5 0 00-3.189 2.06A3 3 0 0012 12l4-4" /> <path d="M4 12a1 1 0 00-.99 1.133A9 9 0 0012 21a9 9 0 008.99-7.867A1 1 0 0020 12z" /> <path d="M7 21h10" /> <path d="M9.85 6.907A3.5 3.5 0 005.05 12" /></symbol>
+<symbol id="i-soup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.248 3c.273.1.808.53.747 1.36-.05.83-.938 1.2-.989 2.02-.06.78.333 1.24.727 1.62" /> <path d="M16.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.725 1.62" /> <path d="M19.5 12 22 6" /> <path d="M4 12a1 1 0 00-.99 1.133A9 9 0 0012 21a9 9 0 008.99-7.867A1 1 0 0020 12z" /> <path d="M6.252 3c.268.1.794.53.745 1.36-.06.83-.923 1.2-.993 2.02-.05.78.338 1.24.735 1.62" /> <path d="M7 21h10" /></symbol>
+<symbol id="i-cooking-pot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20" /> <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /> <path d="m4 8 16-4" /> <path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8" /></symbol>
+<symbol id="i-wheat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22 16 8" /> <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z" /> <path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /> <path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /> <path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z" /> <path d="M18 12v.5" /> <path d="M16 17.93a9.77 9.77 0 0 1 0-11.86" /> <path d="M7 10.67C7 8 5.58 5.97 2.73 5.5c-1 1.5-1 5 .23 6.5-1.24 1.5-1.24 5-.23 6.5C5.58 18.03 7 16 7 13.33" /> <path d="M10.46 7.26C10.2 5.88 9.17 4.24 8 3h5.8a2 2 0 0 1 1.98 1.67l.23 1.4" /> <path d="m16.01 17.93-.23 1.4A2 2 0 0 1 13.8 21H9.5a5.96 5.96 0 0 0 1.49-3.98" /></symbol>
+<symbol id="i-drumstick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 15.63a7.875 6 135 1 1 6.23-6.23 4.5 3.43 135 0 0-6.23 6.23" /> <path d="m8.29 12.71-2.6 2.6a2.5 2.5 0 1 0-1.65 4.65A2.5 2.5 0 1 0 8.7 18.3l2.59-2.59" /></symbol>
+<symbol id="i-milk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8" /> <path d="M9 2v2.789a4 4 0 0 1-.672 2.219l-.656.984A4 4 0 0 0 7 10.212V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9.789a4 4 0 0 0-.672-2.219l-.656-.984A4 4 0 0 1 15 4.788V2" /> <path d="M7 15a6.472 6.472 0 0 1 5 0 6.47 6.47 0 0 0 5 0" /></symbol>
+<symbol id="i-nut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.847 5.847 20 9a7.23 7.23 0 011.551 7.516C21.241 17.352 21 17.932 21 19v1a1 1 0 01-1 1h-1c-1.069 0-1.648.242-2.485.552A7.2 7.2 0 019.002 20l-3.155-3.153" /> <path d="M18.21 5.43c-1.71.69-5.07 1.07-6.71 1.07.46 1.38.91 2.74.61 4.88a.88.88 0 01-.73.74c-1.78.28-3.54-.17-4.88-.62 0 1.64-.38 5-1.07 6.71-.21.52-.82.55-1.17.12A10 10 0 0118.33 4.26c.43.35.4.97-.12 1.17" /> <path d="M4.93 4.93 3 3a.7.7 0 010-1" /></symbol>
+<symbol id="i-bean" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.165 6.598C9.954 7.478 9.64 8.36 9 9c-.64.64-1.521.954-2.402 1.165A6 6 0 0 0 8 22c7.732 0 14-6.268 14-14a6 6 0 0 0-11.835-1.402Z" /> <path d="M5.341 10.62a4 4 0 1 0 5.279-5.28" /></symbol>
+<symbol id="i-carrot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16a1 1 0 0 0-7-7q-4 4-5.987 12.385a.5.5 0 0 0 .602.602Q11 20 15 16l-3-3" /> <path d="M15 9q4 4 7 0-3-4-7 0 4-4 0-7-4 3 0 7" /> <path d="m8 15-2.58-2.58" /></symbol>
+<symbol id="i-coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2" /> <path d="M14 2v2" /> <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /> <path d="M6 2v2" /></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.528V3a1 1 0 0 1 1-1h0" /> <path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21" /></symbol>
+<symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /> <path d="M7 2v20" /> <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></symbol>
+<symbol id="i-utensils-crossed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8" /> <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7" /> <path d="m2.1 21.8 6.4-6.3" /> <path d="m19 5-7 7" /></symbol>
+<symbol id="i-venus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v7" /> <path d="M9 19h6" /> <circle cx="12" cy="9" r="6" /></symbol>
+<symbol id="i-mars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5" /> <path d="m21 3-6.75 6.75" /> <circle cx="10" cy="14" r="6" /></symbol>
+<symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></symbol>
+<symbol id="i-person-standing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1" /> <path d="m9 20 3-6 3 6" /> <path d="m6 8 6 2 6-2" /> <path d="M12 10v4" /></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></symbol>
+<symbol id="i-turtle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 10 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a8 8 0 1 0-16 0v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3l2-4h4Z" /> <path d="M4.82 7.9 8 10" /> <path d="M15.18 7.9 12 10" /> <path d="M16.93 10H20a2 2 0 0 1 0 4H2" /></symbol>
+<symbol id="i-footprints" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" /> <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z" /> <path d="M16 17h4" /> <path d="M4 13h4" /></symbol>
+<symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></symbol>
+<symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4" /> <path d="M3 11v-1a4 4 0 0 1 4-4h14" /> <path d="m7 22-4-4 4-4" /> <path d="M21 13v1a4 4 0 0 1-4 4H3" /></symbol>
+<symbol id="i-clipboard-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /></symbol>
+<symbol id="i-circle-dashed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.1 2.182a10 10 0 0 1 3.8 0" /> <path d="M13.9 21.818a10 10 0 0 1-3.8 0" /> <path d="M17.609 3.721a10 10 0 0 1 2.69 2.7" /> <path d="M2.182 13.9a10 10 0 0 1 0-3.8" /> <path d="M20.279 17.609a10 10 0 0 1-2.7 2.69" /> <path d="M21.818 10.1a10 10 0 0 1 0 3.8" /> <path d="M3.721 6.391a10 10 0 0 1 2.7-2.69" /> <path d="M6.391 20.279a10 10 0 0 1-2.69-2.7" /></symbol>
+<symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol>
+<symbol id="i-shield-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="M9 12h6" /> <path d="M12 9v6" /></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol>
+<symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol>
+<symbol id="i-thumbs-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" /> <path d="M7 10v12" /></symbol>
+<symbol id="i-pill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" /> <path d="m8.5 8.5 7 7" /></symbol>
+<symbol id="i-smile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10V9" /> <path d="M16.472 15a6 6 0 01-8.943 0" /> <path d="M9 10V9" /> <circle cx="12" cy="12" r="10" /></symbol>
+<symbol id="i-baby" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" /> <path d="M15 12h.01" /> <path d="M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1" /> <path d="M9 12h.01" /></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /> <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /> <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /> <path d="m2 2 20 20" /></symbol>
+<symbol id="i-armchair" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3" /> <path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z" /> <path d="M5 18v2" /> <path d="M19 18v2" /></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></symbol>
+<symbol id="i-sofa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" /> <path d="M2 16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z" /> <path d="M4 18v2" /> <path d="M20 18v2" /> <path d="M12 4v9" /></symbol>
+<symbol id="i-alarm-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8" /> <path d="M12 9v4l2 2" /> <path d="M5 3 2 6" /> <path d="m22 6-3-3" /> <path d="M6.38 18.7 4 21" /> <path d="M17.64 18.67 20 21" /></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+<symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16" /> <path d="M2 8h18a2 2 0 0 1 2 2v10" /> <path d="M2 17h20" /> <path d="M6 8v9" /></symbol>
+<symbol id="i-bed-double" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8" /> <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" /> <path d="M12 4v6" /> <path d="M2 18h20" /></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" /> <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" /> <path d="M5 21h14" /></symbol>
+<symbol id="i-egg-fried" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.5" cy="12.5" r="3.5" /> <path d="M3 8c0-3.5 2.5-6 6.5-6 5 0 4.83 3 7.5 5s5 2 5 6c0 4.5-2.5 6.5-7 6.5-2.5 0-2.5 2.5-6 2.5s-7-2-7-5.5c0-3 1.5-3 1.5-5C3.5 10 3 9 3 8Z" /></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></symbol>
+<symbol id="i-pizza" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14-1 1" /> <path d="m13.75 18.25-1.25 1.42" /> <path d="M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12" /> <path d="M18.8 9.3a1 1 0 0 0 2.1 7.7" /> <path d="M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z" /></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol>
+<symbol id="i-credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2" /> <line x1="2" x2="22" y1="10" y2="10" /> <path d="M6 14h2" /></symbol>
+<symbol id="i-gem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3 8 9l4 13 4-13-2.5-6" /> <path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" /> <path d="M2 9h20" /></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></symbol>
+<symbol id="i-chart-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></symbol>
+<symbol id="i-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></symbol>
+<symbol id="i-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14" /> <path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /> <path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" /> <rect x="3" y="7" width="18" height="4" rx="1" /></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></symbol>
+<symbol id="i-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></symbol>
+<symbol id="i-croissant" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 18H4.774a1.5 1.5 0 0 1-1.352-.97 11 11 0 0 1 .132-6.487" /> <path d="M18 10.2V4.774a1.5 1.5 0 0 0-.97-1.352 11 11 0 0 0-6.486.132" /> <path d="M18 5a4 3 0 0 1 4 3 2 2 0 0 1-2 2 10 10 0 0 0-5.139 1.42" /> <path d="M5 18a3 4 0 0 0 3 4 2 2 0 0 0 2-2 10 10 0 0 1 1.42-5.14" /> <path d="M8.709 2.554a10 10 0 0 0-6.155 6.155 1.5 1.5 0 0 0 .676 1.626l9.807 5.42a2 2 0 0 0 2.718-2.718l-5.42-9.807a1.5 1.5 0 0 0-1.626-.676" /></symbol>
+<symbol id="i-cup-soda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8 1.75 12.28a2 2 0 0 0 2 1.72h4.54a2 2 0 0 0 2-1.72L18 8" /> <path d="M5 8h14" /> <path d="M7 15a6.47 6.47 0 0 1 5 0 6.47 6.47 0 0 0 5 0" /> <path d="m12 8 1-6h2" /></symbol>
+<symbol id="i-refresh-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></symbol>
+<symbol id="i-cookie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17h.01" /> <path d="M11.496 2c.324-.016.558.292.529.615a4 4 0 004.235 4.368.713.713 0 01.758.757 4 4 0 004.366 4.237c.323-.03.63.204.614.527a10 10 0 01-2.915 6.566A1 1 0 114.93 4.918 10 10 0 0111.496 2" /> <path d="M12 12h.01" /> <path d="M16 16h.01" /> <path d="M16 3h.01" /> <path d="M21 4h.01" /> <path d="M21 8h.01" /> <path d="M7 14h.01" /> <path d="M9 8h.01" /></symbol>
+<symbol id="i-sandwich" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.37 11.223 8.372-6.777a2 2 0 0 1 2.516 0l8.371 6.777" /> <path d="M21 15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5.25" /> <path d="M3 15a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h9" /> <path d="m6.67 15 6.13 4.6a2 2 0 0 0 2.8-.4l3.15-4.2" /> <rect width="20" height="4" x="2" y="11" rx="1" /></symbol>
+<symbol id="i-chef-hat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v5" /> <path d="M14 11v5" /> <path d="M6 12.65c0-.457-.316-.844-.727-1.041A4 4 0 017.52 4.034a1.53 1.53 0 001.367-.547 4 4 0 016.225 0 1.53 1.53 0 001.367.547 4 4 0 012.248 7.575c-.411.197-.727.584-.727 1.04V19a2 2 0 01-2 2H8a2 2 0 01-2-2z" /> <path d="M6 16h12" /></symbol>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <path d="M8 30h48c0 13-10.7 23-24 23S8 43 8 30z" fill="currentColor"/>
+    <path d="M18 29c-1-8 4-14 11-15-1 7-5 12-11 15z" fill="#8cc63f"/>
+    <path d="M30 29c0-9 6-15 14-15 0 8-6 14-14 15z" fill="#4fb36f"/>
+    <circle cx="46" cy="18" r="6" fill="#a6d45a"/>
+    <path d="M22 56h20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+</svg>
+<div id="root"></div>
+<nav id="nav" class="hidden">
+  <a href="#today"><svg class="i"><use href="#i-sun"/></svg>Today</a>
+  <a href="#week"><svg class="i"><use href="#i-utensils"/></svg>Week</a>
+  <a href="#progress"><svg class="i"><use href="#i-chart-line"/></svg>Progress</a>
+  <a href="#me"><svg class="i"><use href="#i-user"/></svg>Me</a>
+</nav>
+<script>
+/* =====================================================================
+   dietO ENGINE — menu data, nutrition maths, plan builder
+   Replace MENU with the live kitchen menu (same fields) when the menu API is ready.
+   Fields: id, slot (b/l/s/d), type (vegan|veg|egg|nonveg), jain, cuisine (north|south|cont|asian),
+           tags (lowgi, highprotein, lowcarb, heart), allergens, name, emoji, kcal, p, c, f, ingredients, img (optional photo URL)
+===================================================================== */
+var DIETO = (function () {
+  'use strict';
+  function D(id, slot, type, jain, cuisine, tags, al, name, emoji, kcal, p, c, f, ing) {
+    return { id: id, slot: slot, type: type, jain: !!jain, cuisine: cuisine, tags: tags, al: al, name: name, emoji: emoji, kcal: kcal, p: p, c: c, f: f, ing: ing };
+  }
+  var MENU = [
+    // ---------- Breakfast ----------
+    D('b01','b','vegan',0,'north',['lowgi','heart'],[],'Besan Chilla with Mint Chutney','🥞',280,14,32,9,'besan, onion, tomato, coriander, mint'),
+    D('b02','b','veg',1,'north',['lowgi','highprotein'],['dairy'],'Moong Dal Cheela with Paneer','🥞',340,22,30,14,'moong dal, paneer, capsicum'),
+    D('b03','b','vegan',0,'north',[],['nuts'],'Vegetable Poha with Peanuts','🍛',320,8,52,9,'poha, onion, peanuts, peas, curry leaves'),
+    D('b04','b','vegan',0,'south',['lowgi','heart'],[],'Ragi Dosa with Sambar','🫓',300,10,48,7,'ragi, urad dal, toor dal, onion, drumstick'),
+    D('b05','b','vegan',0,'south',['heart'],[],'Idli with Sambar & Coconut Chutney','🍚',330,11,58,6,'rice, urad dal, toor dal, coconut, onion'),
+    D('b06','b','vegan',0,'south',['lowgi','heart'],['gluten'],'Vegetable Oats Upma','🥣',290,9,44,8,'oats, carrot, peas, onion'),
+    D('b07','b','egg',0,'north',['highprotein'],['egg','gluten'],'Masala Egg Bhurji with Multigrain Toast','🍳',360,22,26,18,'egg, onion, tomato, multigrain bread'),
+    D('b08','b','egg',0,'cont',['highprotein','lowgi'],['egg','gluten'],'Egg-White Omelette & Avocado Toast','🍳',320,24,24,13,'egg white, spinach, avocado, sourdough'),
+    D('b09','b','veg',1,'cont',['highprotein'],['dairy','gluten'],'Greek Yogurt Bowl with Berries & Muesli','🥣',310,20,36,9,'greek yogurt, berries, muesli, chia, flax'),
+    D('b10','b','nonveg',0,'north',['highprotein'],['gluten','dairy'],'Chicken Keema Paratha with Curd','🫓',420,30,36,16,'chicken mince, whole wheat, onion, curd'),
+    D('b11','b','vegan',0,'cont',['highprotein'],['soy','gluten'],'Tofu Scramble on Multigrain Toast','🍳',330,22,26,15,'tofu, onion, spinach, multigrain bread'),
+    D('b12','b','vegan',1,'south',['lowgi','highprotein','heart'],[],'Moong Dal Dosa with Coconut Chutney','🫓',300,16,40,8,'moong dal, coconut, green chilli'),
+    D('b13','b','vegan',1,'south',['lowgi','heart'],[],'Jowar Upma (no onion-garlic)','🥣',280,8,46,7,'jowar, beans, peas, curry leaves'),
+    D('b14','b','egg',0,'cont',['lowcarb','highprotein'],['egg','dairy'],'Cheese & Spinach Omelette','🍳',340,24,4,25,'egg, cheese, spinach, butter'),
+    // ---------- Lunch ----------
+    D('l01','l','veg',1,'cont',['highprotein','lowgi'],['dairy'],'Grilled Paneer Bowl','🥗',520,28,52,21,'paneer, brown rice, capsicum, zucchini'),
+    D('l02','l','vegan',0,'north',['lowgi','heart'],[],'Rajma Brown Rice Bowl with Salad','🍛',520,20,84,9,'rajma, brown rice, onion, tomato'),
+    D('l03','l','vegan',0,'north',['lowgi','heart'],['gluten'],'Dal Tadka, Multigrain Rotis & Bhindi','🍛',540,20,78,15,'toor dal, multigrain atta, bhindi, onion, garlic'),
+    D('l04','l','nonveg',0,'north',['highprotein','lowgi'],['dairy'],'Chicken Tikka Quinoa Bowl with Raita','🍗',560,44,46,20,'chicken, quinoa, curd, onion, garlic'),
+    D('l05','l','veg',0,'south',[],['dairy'],'Sambar Rice with Poriyal & Curd','🍚',540,17,88,12,'rice, toor dal, beans, coconut, curd, onion'),
+    D('l06','l','veg',0,'south',['lowgi'],['dairy'],'Millet Bisi Bele Bath with Raita','🍲',500,17,76,13,'foxtail millet, toor dal, vegetables, curd'),
+    D('l07','l','nonveg',0,'south',['highprotein','heart'],['fish'],'Kerala Fish Curry with Red Rice','🐟',560,36,62,17,'fish, red rice, coconut, cabbage thoran'),
+    D('l08','l','egg',0,'north',['highprotein'],['egg'],'Egg Curry with Jeera Brown Rice','🍛',540,26,64,19,'egg, brown rice, onion, tomato'),
+    D('l09','l','vegan',0,'asian',[],['soy'],'Thai Green Curry Tofu with Brown Rice','🍜',540,22,66,19,'tofu, brown rice, coconut milk, basil, garlic'),
+    D('l10','l','nonveg',0,'asian',['highprotein'],['soy','gluten'],'Chicken Stir-Fry with Millet Noodles','🍜',520,38,52,16,'chicken, millet noodles, soy sauce, vegetables, garlic'),
+    D('l11','l','vegan',1,'north',['lowgi','heart'],['gluten'],'Jain Chana Masala with Rotis & Cabbage','🍛',530,20,80,14,'chickpeas, whole wheat, cabbage, tomato'),
+    D('l12','l','vegan',0,'cont',['lowgi','highprotein','heart'],[],'Chickpea Quinoa Salad with Hummus','🥗',500,20,60,18,'chickpeas, quinoa, cucumber, hummus, garlic'),
+    D('l13','l','nonveg',0,'cont',['highprotein','lowgi'],['gluten'],'Grilled Chicken Salad & Multigrain Bread','🥗',480,42,34,18,'chicken, lettuce, multigrain bread, olive oil'),
+    D('l14','l','veg',0,'north',['lowcarb','highprotein'],['dairy'],'Paneer Tikka Salad (low-carb)','🥗',450,28,14,30,'paneer, capsicum, onion, garlic, curd'),
+    // ---------- Snack ----------
+    D('s01','s','vegan',1,'north',['lowgi','heart'],[],'Roasted Makhana','🍵',150,5,22,5,'makhana, rock salt, pepper'),
+    D('s02','s','vegan',0,'north',['lowgi','highprotein','heart'],[],'Sprouts Chaat','🥗',170,10,24,3,'moong sprouts, onion, tomato, lemon'),
+    D('s03','s','veg',1,'cont',['highprotein','lowgi'],['dairy','nuts'],'Greek Yogurt with Nuts & Seeds','🥣',190,14,12,10,'greek yogurt, almonds, pumpkin seeds'),
+    D('s04','s','egg',0,'north',['highprotein','lowcarb'],['egg'],'Masala Boiled Eggs','🥚',150,13,1,10,'egg, chaat masala'),
+    D('s05','s','vegan',1,'north',['highprotein'],['nuts'],'Roasted Chana & Peanut Mix','🥜',180,9,18,8,'roasted chana, peanuts'),
+    D('s06','s','vegan',1,'south',['lowgi','heart'],[],'Chickpea Sundal','🫘',170,8,26,4,'chickpeas, coconut, curry leaves'),
+    D('s07','s','veg',1,'north',['heart'],['dairy'],'Masala Chaas & Fruit Cup','🍉',150,6,26,3,'buttermilk, seasonal fruit'),
+    D('s08','s','nonveg',0,'north',['highprotein','lowcarb'],['dairy'],'Chicken Tikka Bites','🍢',180,26,3,7,'chicken, curd, spices'),
+    D('s09','s','vegan',0,'cont',['lowgi','heart'],[],'Hummus & Veggie Sticks','🥕',160,6,16,8,'hummus, carrot, cucumber, garlic'),
+    D('s10','s','vegan',1,'asian',['highprotein'],['soy'],'Edamame with Sea Salt','🫛',160,13,11,7,'edamame'),
+    D('s11','s','veg',1,'north',['highprotein','lowcarb'],['dairy'],'Paneer & Veggie Skewers','🍢',200,14,6,13,'paneer, capsicum, tomato'),
+    // ---------- Dinner ----------
+    D('d01','d','veg',1,'north',['lowgi','heart'],['dairy'],'Millet Khichdi with Curd','🍲',450,17,66,12,'foxtail millet, moong dal, beans, pumpkin, curd'),
+    D('d02','d','veg',0,'north',['highprotein'],['dairy','gluten'],'Palak Paneer with Multigrain Rotis','🍛',520,26,44,26,'spinach, paneer, multigrain atta, garlic'),
+    D('d03','d','nonveg',0,'cont',['highprotein','lowgi','heart'],['fish'],'Grilled Fish, Sautéed Veggies & Quinoa','🐟',480,40,34,18,'fish, quinoa, broccoli, zucchini'),
+    D('d04','d','nonveg',0,'north',['highprotein','lowgi'],['dairy'],'Tandoori Chicken with Dal & Salad','🍗',500,48,30,18,'chicken, curd, moong dal, cucumber'),
+    D('d05','d','vegan',1,'north',['lowgi','heart'],[],'Lauki Chana Dal with Jowar Roti','🍛',420,18,62,10,'lauki, chana dal, jowar'),
+    D('d06','d','vegan',0,'south',[],[],'Vegetable Uttapam with Sambar','🫓',440,14,70,11,'rice, urad dal, onion, tomato, toor dal'),
+    D('d07','d','nonveg',0,'south',['highprotein'],[],'Chicken Chettinad with Millet Dosa','🍗',520,40,42,20,'chicken, millet, onion, coconut, spices'),
+    D('d08','d','vegan',0,'asian',['highprotein','heart'],['soy'],'Tofu & Broccoli Stir-Fry with Brown Rice','🥦',470,26,52,16,'tofu, broccoli, brown rice, garlic, soy sauce'),
+    D('d09','d','egg',0,'asian',['highprotein'],['egg','soy'],'Egg & Veggie Fried Millet','🍳',480,24,56,17,'egg, foxtail millet, vegetables, soy sauce'),
+    D('d10','d','veg',1,'cont',['highprotein','lowcarb'],['dairy'],'Paneer-Stuffed Bell Peppers with Soup','🫑',440,24,20,28,'paneer, bell pepper, tomato soup'),
+    D('d11','d','nonveg',0,'north',['lowcarb','highprotein'],['dairy'],'Butter Chicken with Cauliflower Rice','🍗',520,40,14,34,'chicken, butter, cream, cauliflower'),
+    D('d12','d','vegan',1,'north',['lowgi','heart'],[],'Moong Dal Soup, Sautéed Veggies & Millet Roti','🥣',380,18,52,9,'moong dal, beans, zucchini, bajra')
+  ];
+  var SLOT_NAME = { b: 'Breakfast', l: 'Lunch', s: 'Evening snack', d: 'Dinner' };
+  var SLOT_SHARE = { b: .25, l: .35, s: .10, d: .30 };
+  var PREF_TYPES = { veg: ['vegan', 'veg'], nonveg: ['vegan', 'veg', 'egg', 'nonveg'], egg: ['vegan', 'veg', 'egg'], vegan: ['vegan'], jain: ['vegan', 'veg'] };
+  var COND_TAG = { diabetes: 'lowgi', pcos: 'lowgi', bp: 'heart', cholesterol: 'heart', liver: 'heart', heart: 'heart', thyroid: 'highprotein' };
+
+  /* ---------- nutrition maths ---------- */
+  function calc(a) {
+    var sexK = a.gender === 'male' ? 5 : a.gender === 'female' ? -161 : -78; // 'other' = midpoint of both formulas
+    var bmr = 10 * a.kg + 6.25 * a.cm - 5 * a.age + sexK;
+    var actBase = { sit: 1.2, some: 1.375, active: 1.55, athlete: 1.725 }[a.activity] || 1.3;
+    var actAdd = { none: 0, w12: .05, w35: .1, daily: .15 }[a.workouts] || 0;
+    var bodyAdj = { lean: .02, average: 0, heavy: -.02 }[a.bodytype] || 0;
+    var mult = Math.min(1.9, actBase + actAdd + bodyAdj);
+    var tdee = bmr * mult;
+    var m2 = Math.pow(a.cm / 100, 2), bmi = a.kg / m2;
+    var hasCond = a.conditions.length > 0, cautious = hasCond || a.medication === 'yes' || a.age >= 60 || a.pregnant === 'na';
+    var goal = a.goal;
+    // Weight-loss goal with an underweight BMI is redirected to healthy maintenance
+    var redirected = false;
+    if ((goal === 'lose') && bmi < 18.5) { goal = 'maintain'; redirected = true; }
+    var pace = (goal === 'lose' || goal === 'gain') ? (a.pace || 'standard') : 'gradual';
+    if (cautious && pace === 'aggressive') pace = 'standard';
+    var kcal = tdee, dir = 0;
+    var wantsLoss = goal === 'lose' || (goal === 'medical' && bmi >= 25) || (goal === 'wellness' && bmi >= 27);
+    if (wantsLoss) { dir = -1; kcal = tdee - Math.min(tdee * ({ gradual: .15, standard: .2, aggressive: .25 }[pace]), 1000); }
+    if (goal === 'gain') { dir = 1; kcal = tdee + tdee * ({ gradual: .08, standard: .12, aggressive: .15 }[pace]); }
+    var floor = a.gender === 'male' ? 1500 : a.gender === 'female' ? 1200 : 1350;
+    kcal = Math.round(Math.max(kcal, floor) / 10) * 10;
+    var refKg = bmi > 30 ? 25 * m2 : a.kg;
+    var pPerKg = goal === 'gain' ? 1.6 : dir < 0 ? 1.2 : 1.0;   // g per kg (adjusted weight at high BMI); +0.2 for frequent training
+    if (a.workouts === 'w35' || a.workouts === 'daily') pPerKg += .2;
+    var protein = Math.round(Math.min(refKg * pPerKg, kcal * .32 / 4));
+    var carbPct = (a.conditions.indexOf('diabetes') >= 0 || a.conditions.indexOf('pcos') >= 0) ? .40 : .48;
+    var carbs = Math.round(kcal * carbPct / 4);
+    var fat = Math.max(Math.round((kcal - protein * 4 - carbs * 4) / 9), Math.round(kcal * .2 / 9));
+    carbs = Math.round((kcal - protein * 4 - fat * 9) / 4);
+    // Timeline
+    var target = a.targetKg, weeks = null, rate = 0, targetNote = '';
+    var healthyMin = Math.round(18.5 * m2 * 10) / 10;
+    if (dir !== 0 && target) {
+      if (dir < 0 && target < healthyMin) { targetNote = 'Your target is below the healthy range for your height, so I’ve set it to ' + healthyMin + ' kg.'; target = healthyMin; }
+      if ((dir < 0 && target < a.kg) || (dir > 0 && target > a.kg)) {
+        rate = Math.abs(tdee - kcal) * 7 / 7700;                 // kg per week from the energy gap
+        rate = dir < 0 ? Math.min(rate, a.kg * .01) : Math.min(Math.max(rate, .2), .4);
+        weeks = Math.max(2, Math.ceil(Math.abs(a.kg - target) / rate));
+      }
+    }
+    return { bmr: Math.round(bmr), tdee: Math.round(tdee), kcal: kcal, p: protein, c: carbs, f: fat, bmi: Math.round(bmi * 10) / 10,
+      dir: dir, pace: pace, weeks: weeks, target: target, rate: rate, targetNote: targetNote, goal: goal, redirected: redirected, healthyMin: healthyMin };
+  }
+
+  function bmiRead(bmi) {
+    if (bmi < 18.5) return { label: 'Below the healthy range', text: 'Your plan focuses on nourishing, protein-rich meals to build strength, not on cutting calories.' };
+    if (bmi < 25) return { label: 'Healthy range', text: 'Great starting point. Your plan is about feeling stronger and more energetic, not just a number on the scale.' };
+    if (bmi < 30) return { label: 'Slightly above the healthy range', text: 'Very fixable with steady habits. A moderate, high-protein plan gets you there without feeling deprived.' };
+    return { label: 'Above the healthy range', text: 'Every kilo you lose here makes a real difference to energy and long-term health, and we’ll get there one week at a time.' };
+  }
+
+  /* ---------- meal selection ---------- */
+  function exclTerms(a) {
+    return (a.allergyOther || '').toLowerCase().split(/,|\band\b|\//).map(function (s) { return s.replace(/allerg(y|ic)|to|intoleran(t|ce)/g, '').trim(); }).filter(function (s) { return s.length > 2; });
+  }
+  function eligible(m, a) {
+    if (PREF_TYPES[a.pref].indexOf(m.type) < 0) return false;
+    if (a.pref === 'jain' && !m.jain) return false;
+    for (var i = 0; i < m.al.length; i++) if (a.allergies.indexOf(m.al[i]) >= 0) return false;
+    var text = (m.name + ' ' + m.ing).toLowerCase();
+    var ex = exclTerms(a);
+    for (var j = 0; j < ex.length; j++) if (text.indexOf(ex[j].replace(/s$/, '')) >= 0) return false;
+    return true;
+  }
+  function score(m, a, r) {
+    var s = Math.random() * 1.5;
+    if (a.cuisines.length && a.cuisines.indexOf('any') < 0 && a.cuisines.indexOf(m.cuisine) >= 0) s += 2.5;
+    a.conditions.forEach(function (c) { if (COND_TAG[c] && m.tags.indexOf(COND_TAG[c]) >= 0) s += 3; });
+    if ((r.dir !== 0 || a.workouts === 'w35' || a.workouts === 'daily') && m.tags.indexOf('highprotein') >= 0) s += 1.5;
+    s += (m.p * 4 / m.kcal - .18) * 8;   // protein density: favour dishes that help reach the protein target
+    if ((a.conditions.indexOf('diabetes') >= 0 || a.conditions.indexOf('pcos') >= 0) && m.tags.indexOf('lowgi') < 0) s -= 2;
+    if (a.conditions.some(function (c) { return COND_TAG[c] === 'heart'; }) && m.tags.indexOf('heart') < 0) s -= 2;
+    return s;
+  }
+  function pick(slot, a, r, avoid, used) {
+    var pool = MENU.filter(function (m) { return m.slot === slot && eligible(m, a); });
+    if (!pool.length) return null;
+    var fresh = pool.filter(function (m) { return avoid.indexOf(m.id) < 0; });
+    if (fresh.length) pool = fresh;
+    var scored = pool.map(function (m) { return { m: m, s: score(m, a, r) - 2.2 * ((used && used[m.id]) || 0) }; });
+    scored.sort(function (x, y) { return y.s - x.s; });
+    return scored[0].m;
+  }
+  function portion(m, slot, kcal) {
+    var t = Math.round(kcal * SLOT_SHARE[slot] / 10) * 10, s = t / m.kcal;
+    return { meal: m, slot: slot, kcal: t, p: Math.round(m.p * s), c: Math.round(m.c * s), f: Math.round(m.f * s) };
+  }
+  function buildDay(a, r, avoid, used) {
+    avoid = avoid || [];
+    return ['b', 'l', 's', 'd'].map(function (slot) {
+      var m = pick(slot, a, r, avoid, used);
+      if (!m) return { slot: slot, missing: true };
+      avoid.push(m.id);
+      if (used) used[m.id] = (used[m.id] || 0) + 1;
+      return portion(m, slot, r.kcal);
+    });
+  }
+  // 7 days: no dish repeats on back-to-back days (when the menu allows), and less-used dishes are preferred
+  function buildWeek(a, r) {
+    var used = {}, prev = [], week = [];
+    for (var d = 0; d < 7; d++) {
+      var day = buildDay(a, r, prev.slice(), used);
+      prev = day.filter(function (x) { return !x.missing; }).map(function (x) { return x.meal.id; });
+      week.push(day);
+    }
+    return week;
+  }
+
+  /* ---------- naming & copy ---------- */
+  var COND_NAME = { diabetes: 'Diabetic-Friendly', pcos: 'PCOS-Friendly', thyroid: 'Thyroid-Supportive', bp: 'Heart-Healthy · Low Sodium', cholesterol: 'Heart-Healthy', liver: 'Liver-Friendly', heart: 'Heart-Healthy' };
+  var COND_TXT = { diabetes: 'diabetes', pcos: 'PCOS', thyroid: 'thyroid', bp: 'blood pressure', cholesterol: 'cholesterol', liver: 'fatty liver', heart: 'heart condition' };
+  var GOAL_NAME = { lose: 'Fat Loss', gain: 'Muscle Gain', maintain: 'Clean Eating', medical: 'Balanced Therapeutic', wellness: 'Balanced Wellness' };
+  var PREF_NAME = { veg: 'Vegetarian', nonveg: 'Non-Vegetarian', egg: 'Eggetarian', vegan: 'Vegan', jain: 'Jain' };
+  var CUISINE_NAME = { north: 'North Indian', south: 'South Indian', cont: 'Continental', asian: 'Asian' };
+
+  function identity(a, r) {
+    var parts = [];
+    var c = a.conditions.filter(function (x) { return COND_NAME[x]; });
+    if (a.pregnant === 'yes') parts.push('Pregnancy Nutrition');
+    else if (c.length) parts.push(COND_NAME[c[0]]);
+    else parts.push(GOAL_NAME[r.goal]);
+    if (a.pregnant !== 'yes' && (r.dir !== 0 || a.workouts === 'w35' || a.workouts === 'daily') && parts[0].indexOf('Protein') < 0) parts.push('High Protein');
+    if ((a.pref === 'jain' || a.pref === 'vegan') && parts.length < 3) parts.push(PREF_NAME[a.pref]);
+    return parts.slice(0, 3).join(' · ');
+  }
+  function listTxt(arr) { return arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1]; }
+  function note(a, r) {
+    var why = [];
+    var c = a.conditions.filter(function (x) { return COND_TXT[x]; }).map(function (x) { return COND_TXT[x]; });
+    if (c.length) why.push('your ' + listTxt(c));
+    why.push({ sit: 'a mostly seated day', some: 'a moderately active day', active: 'an active routine', athlete: 'your athlete-level activity' }[a.activity] || 'your routine');
+    var goalTxt = r.dir < 0 && r.target && r.weeks ? 'your goal of reaching ' + r.target + ' kg' : r.dir > 0 ? 'your goal to build muscle' : { maintain: 'your goal to eat clean', wellness: 'your wellness goal', medical: 'managing your health', lose: 'your weight-loss goal', gain: 'your goal to build muscle' }[r.goal];
+    why.push(goalTxt);
+    var style = [];
+    if (a.conditions.indexOf('diabetes') >= 0 || a.conditions.indexOf('pcos') >= 0) style.push('low-GI');
+    if (a.conditions.some(function (x) { return COND_TAG[x] === 'heart'; })) style.push('heart-healthy');
+    if (r.dir !== 0 || a.workouts === 'w35' || a.workouts === 'daily') style.push('high-protein');
+    if (!style.length) style.push('balanced');
+    var cz = a.cuisines.filter(function (x) { return CUISINE_NAME[x]; }).map(function (x) { return CUISINE_NAME[x]; });
+    var s = 'Based on ' + listTxt(why) + ', I’ve built a ' + listTxt(style) + ' ' + (a.pref === 'jain' ? 'Jain' : PREF_NAME[a.pref].toLowerCase()) + ' plan' + (cz.length ? ' around the ' + listTxt(cz) + ' food you enjoy' : '') + '.';
+    if (a.history === 'nostick' || a.history === 'reversed') s += ' Since past diets ' + (a.history === 'nostick' ? 'didn’t stick' : 'worked but didn’t last') + ', there’s no crash dieting here: a steady pace, food you actually like' + (a.cheat === 'yes' ? ', and room for cheat meals' : '') + '.';
+    if (a.sleep === 'lt5' || a.sleep === '5to7') s += ' One more thing: you’re sleeping under 7 hours. Better sleep makes cravings much easier to manage, so I’ll check in on that too.';
+    if (r.redirected) s += ' Your BMI is already below the healthy range, so this plan helps you stay strong and nourished rather than lose weight.';
+    return s;
+  }
+  function timelineText(r) {
+    if (!r.weeks) return '';
+    var d = new Date(); d.setDate(d.getDate() + r.weeks * 7);
+    var day = d.getDate(), part = day <= 10 ? 'early' : day <= 20 ? 'mid' : 'late';
+    return 'At this pace, you could reach ' + r.target + ' kg by ' + part + ' ' + d.toLocaleString('en-IN', { month: 'long' }) + (d.getFullYear() !== new Date().getFullYear() ? ' ' + d.getFullYear() : '') + '.';
+  }
+  function recommendTier(a) {
+    if (a.conditions.length || a.medication === 'yes' || a.pregnant === 'yes') return 'clinical';
+    var n = a.slots.length;
+    if (a.budget === 'premium' || n >= 3) return 'premium';
+    if (n === 2) return 'standard';
+    if (a.budget === 'budget') return 'starter';
+    return n <= 1 ? 'starter' : 'standard';
+  }
+
+  return { MENU: MENU, SLOT_NAME: SLOT_NAME, calc: calc, bmiRead: bmiRead, buildDay: buildDay, buildWeek: buildWeek, pick: pick, portion: portion, eligible: eligible,
+    identity: identity, note: note, timelineText: timelineText, recommendTier: recommendTier, PREF_NAME: PREF_NAME, CUISINE_NAME: CUISINE_NAME, COND_TXT: COND_TXT, listTxt: listTxt };
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var C = window.DIETO_APP || {}, E = DIETO;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function h(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === 'class') e.className = attrs[k];
+      else if (k === 'text') e.textContent = attrs[k];
+      else if (k === 'html') e.innerHTML = attrs[k];
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] !== false && attrs[k] != null) e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function ic(n) { return '<svg class="i"><use href="#i-' + n + '"/></svg>'; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function first(n) { return String(n || '').trim().split(/\s+/)[0]; }
+
+  /* ---------- storage ---------- */
+  function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+  function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var P = load('dieto_plan', null), LOG = load('dieto_log', {}), WTS = load('dieto_weights', []);
+  var STANDALONE = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  var IS_IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function parseYmd(s) { var p = String(s || '').split('-'); return p.length === 3 ? new Date(+p[0], +p[1] - 1, +p[2]) : new Date(); }
+  function dayDiff(a, b) { return Math.round((new Date(b.getFullYear(), b.getMonth(), b.getDate()) - new Date(a.getFullYear(), a.getMonth(), a.getDate())) / 864e5); }
+  function todayIdx() { var n = dayDiff(parseYmd(P.start), new Date()); return ((n % 7) + 7) % 7; }
+  function dateFor(i) { var d = new Date(); d.setDate(d.getDate() + (i - todayIdx())); return d; }
+  function dayLog(dstr) { return LOG[dstr] || { done: {}, water: 0 }; }
+
+  /* ---------- server ---------- */
+  function api(route, body) {
+    return fetch(C.api + (route ? (C.api.indexOf('?') >= 0 ? '&' : '?') + 'route=' + route : ''), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  }
+  function ping(extra) {
+    if (!P || !P.phone) return;
+    var b = Object.assign({ phone: '+91' + P.phone, last_seen: new Date().toISOString() }, extra || {});
+    if (STANDALONE) b.app_installed = 'Yes';
+    api('', b).catch(function () {});
+  }
+  var syncTimer = null;
+  function savePlan() {
+    P.savedAt = new Date().toISOString(); store('dieto_plan', P);
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(function () {
+      api('save', { phone: P.phone, code: P.code || '', plan: P }).then(function (r) { return r.json(); }).then(function (d) {
+        if (d && d.code && d.code !== P.code) { P.code = d.code; store('dieto_plan', P); }
+      }).catch(function () {});
+    }, 800);
+  }
+
+  /* ---------- toast + offline ---------- */
+  var toastEl = h('div', { class: 'toast' }); document.body.appendChild(toastEl);
+  var toastT; function toast(t) { toastEl.textContent = t; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2200); }
+  var offEl = h('div', { class: 'offline hidden', text: 'You’re offline. Your plan still works; changes sync when you’re back online.' });
+  document.body.insertBefore(offEl, document.body.firstChild);
+  function net() { offEl.classList.toggle('hidden', navigator.onLine); }
+  window.addEventListener('online', net); window.addEventListener('offline', net); net();
+
+  /* ---------- plan helpers ---------- */
+  var R, A;
+  function dishIcon(m) {
+    var n = (m.name + ' ' + m.ing).toLowerCase();
+    var map = [[/omelette|bhurji|boiled egg|egg curry|fried millet|\begg\b/, 'egg'], [/fish/, 'fish'], [/chicken|keema/, 'drumstick'], [/salad|bowl/, 'salad'],
+      [/dosa|chilla|cheela|uttapam|paratha|idli|toast/, 'wheat'], [/soup|sambar|kadhi|khichdi|dal|curry|bisi bele|chana masala|roti/, 'cooking-pot'],
+      [/yogurt|chaas|curd/, 'milk'], [/makhana|peanut|almond|nuts/, 'nut'], [/sprout|sundal|edamame|chickpea|chana/, 'bean'], [/hummus|veggie sticks|carrot/, 'carrot'],
+      [/fruit/, 'apple'], [/upma|poha|oats/, 'soup'], [/stir-fry|noodle|thai/, 'utensils-crossed'], [/pepper|skewer|tikka/, 'chef-hat']];
+    for (var k = 0; k < map.length; k++) if (map[k][0].test(n)) return map[k][1];
+    return 'utensils';
+  }
+  function totals(day) { return day.filter(function (x) { return !x.missing; }).reduce(function (s, x) { return { k: s.k + x.kcal, p: s.p + x.p }; }, { k: 0, p: 0 }); }
+  function boostFor(day) {
+    if (R.hideNums) return null;
+    var gap = R.p - totals(day).p; if (gap < 8) return null;
+    var g = Math.ceil(gap / 5) * 5;
+    var opts = A.pref === 'vegan' || (A.allergies || []).indexOf('dairy') >= 0 ? 'roasted chana, sprouts, tofu or a plant-protein shake'
+      : A.pref === 'nonveg' || A.pref === 'egg' ? '2–3 boiled eggs, Greek yogurt, paneer or a scoop of whey' : 'Greek yogurt, paneer, sprouts or a scoop of whey';
+    return 'Add about ' + g + 'g protein: ' + opts + '.';
+  }
+  function swap(dayIdx, i) {
+    var day = P.WEEK[dayIdx], cur = day[i]; if (!cur || cur.missing) return false;
+    var avoid = []; [P.WEEK[(dayIdx + 6) % 7], day, P.WEEK[(dayIdx + 1) % 7]].forEach(function (d) { d.forEach(function (x) { if (!x.missing) avoid.push(x.meal.id); }); });
+    var m = E.pick(cur.slot, A, R, avoid);
+    if (!m || m.id === cur.meal.id) { toast('No other option fits all your rules for this meal yet.'); return false; }
+    day[i] = E.portion(m, cur.slot, R.kcal); savePlan(); toast('Swapped for ' + m.name); return true;
+  }
+  function targetLine() { return R.hideNums ? 'Nutritionist-led plan' : 'Daily target: ' + R.kcal.toLocaleString('en-IN') + ' kcal · ' + R.p + 'g protein · ' + R.c + 'g carbs · ' + R.f + 'g fat'; }
+  function planPayload(extra) {
+    return Object.assign({
+      first_name: P.name, phone: '+91' + P.phone, diet_identity: R.identity, plan_targets: targetLine(),
+      plan_timeline: !R.hideNums && R.weeks ? E.timelineText(R) : '', plan_note: R.note, page_url: location.origin + '/', app_code: P.code || '',
+      plan_week: P.WEEK.map(function (day, d) {
+        var b = boostFor(day);
+        return { label: 'Day ' + (d + 1), weekday: dateFor(d).toLocaleDateString('en-IN', { weekday: 'long' }), boost: b || '', meals: day.map(function (x) {
+          return x.missing ? { slot: E.SLOT_NAME[x.slot], name: 'Designed by our nutritionist', kcal: '', p: '' } : { slot: E.SLOT_NAME[x.slot], name: x.meal.name, kcal: R.hideNums ? '' : x.kcal, p: R.hideNums ? '' : x.p };
+        }) };
+      })
+    }, extra || {});
+  }
+
+  /* ---------- layout ---------- */
+  var root = $('#root'), navEl = $('#nav');
+  function header(title, sub) {
+    var t = h('div', { class: 'top' });
+    var row = h('div', { class: 'row' });
+    var logo = h('img', { class: 'logo', src: C.logoUrl, alt: 'dietO' });
+    logo.onerror = function () { logo.replaceWith(h('span', { class: 'wm', text: 'dietO' })); };
+    row.appendChild(logo);
+    if (R) row.appendChild(h('span', { class: 'chip', text: R.identity }));
+    t.appendChild(row); t.appendChild(h('h1', { text: title })); if (sub) t.appendChild(h('p', { text: sub }));
+    return t;
+  }
+  function greet() { var hr = new Date().getHours(); return hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening'; }
+  function mealRow(x, dayIdx, i, checkable, dstr) {
+    if (x.missing) return h('div', { class: 'meal' }, [h('div', { class: 'tile', html: ic('chef-hat') }), h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + '</div><div class="nm">Designed by our nutritionist</div>' })]);
+    var log = dstr ? dayLog(dstr) : null, done = log && log.done[x.slot];
+    var row = h('div', { class: 'meal' + (done ? ' done' : '') });
+    row.appendChild(h('div', { class: 'tile', html: x.meal.img ? '' : ic(dishIcon(x.meal)), style: x.meal.img ? 'background-image:url("' + x.meal.img + '")' : false }));
+    var mi = h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + '</div><div class="nm">' + esc(x.meal.name) + '</div><div class="mm">' + (R.hideNums ? 'Balanced portion' : x.kcal + ' kcal · ' + x.p + 'g protein') + '</div>' });
+    var sw = h('button', { class: 'sw', html: ic('refresh-cw') + 'Swap', onclick: function () { if (swap(dayIdx, i)) render(); } });
+    mi.appendChild(sw); row.appendChild(mi);
+    if (checkable) {
+      row.appendChild(h('button', { class: 'ck', 'aria-label': 'Mark as eaten', html: ic('circle-check'), onclick: function () {
+        var l = dayLog(dstr); l.done[x.slot] = !l.done[x.slot]; LOG[dstr] = l; store('dieto_log', LOG); render();
+      } }));
+    }
+    return row;
+  }
+  function streak() {
+    var n = 0, d = new Date(), plannedSlots = function (idx) { return P.WEEK[idx].filter(function (x) { return !x.missing; }).map(function (x) { return x.slot; }); };
+    var complete = function (date) { var idx = ((dayDiff(parseYmd(P.start), date) % 7) + 7) % 7, l = dayLog(ymd(date)); return plannedSlots(idx).every(function (s) { return l.done[s]; }); };
+    if (!complete(d)) d.setDate(d.getDate() - 1);
+    while (n < 365 && dayDiff(parseYmd(P.start), d) >= 0 && complete(d)) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+
+  /* ---------- views ---------- */
+  function viewToday() {
+    var di = todayIdx(), day = P.WEEK[di], dstr = ymd(new Date()), log = dayLog(dstr);
+    root.appendChild(header(greet() + ', ' + first(P.name), new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) + ' · Day ' + (di + 1) + ' of your plan'));
+    var m = h('main', { class: 'lift' });
+    var eaten = day.filter(function (x) { return !x.missing && log.done[x.slot]; });
+    var et = eaten.reduce(function (s, x) { return { k: s.k + x.kcal, p: s.p + x.p }; }, { k: 0, p: 0 });
+    var planned = day.filter(function (x) { return !x.missing; }).length;
+    var frac = R.hideNums ? eaten.length / Math.max(1, planned) : Math.min(1, et.k / R.kcal);
+    var C0 = 2 * Math.PI * 50;
+    var sum = h('div', { class: 'card' }, [h('div', { class: 'sum', html:
+      '<div class="ring"><svg width="118" height="118" viewBox="0 0 118 118"><circle cx="59" cy="59" r="50" fill="none" stroke="#e2f0e1" stroke-width="11"/><circle cx="59" cy="59" r="50" fill="none" stroke="url(#rg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="' + C0 + '" stroke-dashoffset="' + (C0 * (1 - frac)) + '"/><defs><linearGradient id="rg"><stop offset="0" stop-color="#2a8a59"/><stop offset="1" stop-color="#8cc63f"/></linearGradient></defs></svg>' +
+      '<div class="c"><b>' + (R.hideNums ? eaten.length + '/' + planned : et.k.toLocaleString('en-IN')) + '</b><span>' + (R.hideNums ? 'meals' : 'of ' + R.kcal.toLocaleString('en-IN') + ' kcal') + '</span></div></div>' +
+      '<div class="bars">' + (R.hideNums ? '' : '<div class="bar"><div class="l"><span>Protein</span><span>' + et.p + ' / ' + R.p + 'g</span></div><div class="t"><i style="width:' + Math.min(100, et.p / R.p * 100) + '%"></i></div></div>') +
+      '<div class="bar"><div class="l"><span>Meals eaten</span><span>' + eaten.length + ' / ' + planned + '</span></div><div class="t"><i style="width:' + (eaten.length / Math.max(1, planned) * 100) + '%;background:#8cc63f"></i></div></div></div>' })]);
+    m.appendChild(sum);
+    var mc = h('div', { class: 'card' }, [h('h3', { html: ic('utensils') + 'Today’s meals' })]);
+    var list = h('div'); day.forEach(function (x, i) { list.appendChild(mealRow(x, di, i, true, dstr)); }); mc.appendChild(list);
+    var b = boostFor(day); if (b) mc.appendChild(h('div', { class: 'boost', html: ic('dumbbell') + '<span>' + esc(b) + '</span>' }));
+    mc.appendChild(h('p', { class: 'sub', style: 'margin:10px 0 0', text: 'Tap the tick when you’ve eaten a meal.' }));
+    m.appendChild(mc);
+    var wc = h('div', { class: 'card' }, [h('h3', { html: ic('droplet') + 'Water · ' + log.water + ' of 8 glasses' })]);
+    var wrow = h('div', { class: 'water' });
+    for (var g = 1; g <= 8; g++) (function (g) {
+      wrow.appendChild(h('button', { class: g <= log.water ? 'on' : '', 'aria-label': g + ' glasses', html: ic('cup-soda'), onclick: function () { var l = dayLog(dstr); l.water = l.water === g ? g - 1 : g; LOG[dstr] = l; store('dieto_log', LOG); render(); } }));
+    })(g);
+    wc.appendChild(wrow); m.appendChild(wc);
+    var s = streak();
+    m.appendChild(h('div', { class: 'card' }, [h('div', { class: 'streak', html: '<div class="f">' + ic('flame') + '</div><div><b>' + s + '-day streak</b><div class="sub">' + (s ? 'Days in a row with every meal ticked. Keep it going!' : 'Tick all of today’s meals to start your streak.') + '</div></div>' })]));
+    m.appendChild(h('a', { class: 'card', href: DietoAuth.href('/consult/'), style: 'display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:linear-gradient(135deg,#1d5a3a,#2a8a59);color:#fff',
+      html: '<div style="width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:22px;flex:none">' + ic('message-circle') + '</div>' +
+        '<div style="flex:1"><b style="display:block;font-size:16px">Talk to a dietician</b><span style="font-size:13px;color:#d6ecd6">One-to-one chat about your plan, from ₹200</span></div>' + '<span style="font-weight:800;color:#b8e07a">›</span>' }));
+    m.appendChild(h('p', { class: 'disc', text: 'General nutrition guidance, not medical advice. Follow your doctor’s advice if you have a medical condition.' }));
+    root.appendChild(m);
+  }
+
+  var weekSel = null;
+  function viewWeek() {
+    var ti = todayIdx(); if (weekSel == null) weekSel = ti;
+    root.appendChild(header('Your 7-day plan', R.hideNums ? 'Nutritionist-led plan' : R.kcal.toLocaleString('en-IN') + ' kcal · ' + R.p + 'g protein a day'));
+    var m = h('main', { class: 'lift' });
+    var c = h('div', { class: 'card' });
+    var tabs = h('div', { class: 'dtabs' });
+    P.WEEK.forEach(function (_, d) {
+      tabs.appendChild(h('button', { class: (d === weekSel ? 'on' : '') + (d === ti ? ' today' : ''), html: '<b>Day ' + (d + 1) + '</b><span>' + (d === ti ? 'Today' : dateFor(d).toLocaleDateString('en-IN', { weekday: 'short' })) + '</span>', onclick: function () { weekSel = d; render(); } }));
+    });
+    c.appendChild(tabs);
+    var day = P.WEEK[weekSel], t = totals(day);
+    c.appendChild(h('div', { class: 'sub', style: 'font-weight:700;color:var(--g600)', text: dateFor(weekSel).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }) + (R.hideNums ? '' : ' · ' + t.k.toLocaleString('en-IN') + ' kcal · ' + t.p + 'g protein') }));
+    var list = h('div'); day.forEach(function (x, i) { list.appendChild(mealRow(x, weekSel, i, false)); }); c.appendChild(list);
+    var b = boostFor(day); if (b) c.appendChild(h('div', { class: 'boost', html: ic('dumbbell') + '<span>' + esc(b) + '</span>' }));
+    m.appendChild(c);
+    // PDF
+    var pc = h('div', { class: 'card' }, [h('h3', { html: ic('clipboard-list') + 'Your plan as a PDF' })]);
+    var row = h('div', { class: 'row2' });
+    var dl = h('button', { class: 'btn btn-g', html: ic('clipboard-list') + 'Download' });
+    var em = h('button', { class: 'btn btn-o', html: ic('mail') + 'Email it' });
+    row.appendChild(dl); row.appendChild(em); pc.appendChild(row);
+    var box = h('div', { class: 'hidden', style: 'margin-top:10px' });
+    var ein = h('input', { class: 'inp', type: 'email', placeholder: 'you@email.com', style: 'font-size:16px;font-weight:500', value: (P.A && P.A.email) || '' });
+    var go = h('button', { class: 'btn btn-l', text: 'Send' });
+    var msg = h('div', { class: 'msg' });
+    box.appendChild(h('div', { class: 'irow' }, [ein, go])); box.appendChild(msg); pc.appendChild(box);
+    em.onclick = function () { box.classList.toggle('hidden'); ein.focus(); };
+    go.onclick = async function () {
+      var v = ein.value.trim(); if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { msg.className = 'msg err'; msg.textContent = 'Please enter a valid email.'; return; }
+      go.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending…';
+      try { var r = await api('', planPayload({ email: v, send_plan: 'yes' })); var d = await r.json(); if (!d.emailed) throw 0; P.A.email = v; store('dieto_plan', P); msg.className = 'msg ok'; msg.textContent = 'Sent! Check your inbox (and Promotions).'; }
+      catch (e) { msg.className = 'msg err'; msg.textContent = navigator.onLine ? 'Couldn’t send right now. Try Download instead.' : 'You’re offline. Try again when connected.'; }
+      go.disabled = false;
+    };
+    dl.onclick = async function () {
+      dl.disabled = true;
+      try {
+        var r = await api('pdf', planPayload()); if (!r.ok) throw 0;
+        var blob = await r.blob(), url = URL.createObjectURL(blob), a = h('a', { href: url, download: 'dietO-7-day-plan.pdf' });
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      } catch (e) { toast(navigator.onLine ? 'Couldn’t create the PDF. Try again.' : 'Connect to the internet to download the PDF.'); }
+      dl.disabled = false;
+    };
+    m.appendChild(pc);
+    root.appendChild(m);
+  }
+
+  function weightSeries() {
+    // the starting weight from the test stays fixed; logged weights follow it
+    return [{ d: P.start, kg: A.kg }].concat(WTS.slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; }));
+  }
+  function chart(series) {
+    var W = 320, H = 150, pl = 34, pr = 10, pt = 12, pb = 22;
+    var t0 = parseYmd(series[0].d), lastD = parseYmd(series[series.length - 1].d);
+    var spanDays = Math.max(14, dayDiff(t0, lastD) + 7);
+    var vals = series.map(function (p) { return p.kg; }); if (R.target) vals.push(R.target);
+    var lo = Math.floor(Math.min.apply(null, vals) - 1), hi = Math.ceil(Math.max.apply(null, vals) + 1);
+    var X = function (d) { return pl + dayDiff(t0, parseYmd(d)) / spanDays * (W - pl - pr); };
+    var Y = function (v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="display:block">';
+    for (var k = 0; k <= 3; k++) { var v = lo + (hi - lo) * k / 3, y = Y(v); s += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y + '" y2="' + y + '" stroke="#e3ebe5"/><text x="' + (pl - 6) + '" y="' + (y + 4) + '" font-size="10" fill="#6f8077" text-anchor="end">' + Math.round(v) + '</text>'; }
+    if (R.target) s += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(R.target) + '" y2="' + Y(R.target) + '" stroke="#8cc63f" stroke-width="2" stroke-dasharray="5 5"/><text x="' + (W - pr) + '" y="' + (Y(R.target) - 5) + '" font-size="10" font-weight="700" fill="#2a8a59" text-anchor="end">Goal ' + R.target + ' kg</text>';
+    if (R.weeks && R.target) { var endD = new Date(t0); endD.setDate(endD.getDate() + Math.min(spanDays, R.weeks * 7)); var frac = Math.min(1, spanDays / (R.weeks * 7)); var projV = series[0].kg + (R.target - series[0].kg) * frac; s += '<line x1="' + X(series[0].d) + '" y1="' + Y(series[0].kg) + '" x2="' + X(ymd(endD)) + '" y2="' + Y(projV) + '" stroke="#b8c8bd" stroke-width="1.5" stroke-dasharray="3 4"/>'; }
+    s += '<polyline fill="none" stroke="#22704a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="' + series.map(function (p) { return X(p.d) + ',' + Y(p.kg); }).join(' ') + '"/>';
+    series.forEach(function (p, i) { s += '<circle cx="' + X(p.d) + '" cy="' + Y(p.kg) + '" r="' + (i === series.length - 1 ? 5 : 3.5) + '" fill="' + (i === series.length - 1 ? '#8cc63f' : '#22704a') + '" stroke="#fff" stroke-width="1.5"/>'; });
+    s += '<text x="' + pl + '" y="' + (H - 4) + '" font-size="10" fill="#6f8077">' + t0.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + '</text><text x="' + (W - pr) + '" y="' + (H - 4) + '" font-size="10" fill="#6f8077" text-anchor="end">' + lastD.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + '</text></svg>';
+    return s;
+  }
+  function viewProgress() {
+    var series = weightSeries(), now = series[series.length - 1].kg, start = series[0].kg, ch = Math.round((now - start) * 10) / 10;
+    root.appendChild(header('Your progress', R.target && R.weeks ? E.timelineText(R) : 'Log your weight once a week, same time of day.'));
+    var m = h('main', { class: 'lift' });
+    var lc = h('div', { class: 'card' }, [h('h3', { html: ic('scale') + 'Log today’s weight' })]);
+    var inp = h('input', { class: 'inp', type: 'number', inputmode: 'decimal', step: '0.1', placeholder: 'kg', value: now });
+    var btn = h('button', { class: 'btn btn-g', html: 'Save' }), msg = h('div', { class: 'msg' });
+    btn.onclick = function () {
+      var v = parseFloat(inp.value);
+      if (!(v >= 30 && v <= 250)) { msg.className = 'msg err'; msg.textContent = 'Please enter your weight in kg.'; return; }
+      v = Math.round(v * 10) / 10; var d = ymd(new Date());
+      WTS = WTS.filter(function (w) { return w.d !== d; }); WTS.push({ d: d, kg: v }); store('dieto_weights', WTS);
+      ping({ current_kg: v }); toast('Saved: ' + v + ' kg'); render();
+    };
+    lc.appendChild(h('div', { class: 'irow' }, [inp, btn])); lc.appendChild(msg); m.appendChild(lc);
+    var sc = h('div', { class: 'card' });
+    sc.appendChild(h('div', { class: 'stats', html: '<div><b>' + start + '</b><span>start (kg)</span></div><div><b>' + now + '</b><span>now (kg)</span></div><div><b>' + (ch > 0 ? '+' : '') + ch + '</b><span>change (kg)</span></div>' }));
+    sc.appendChild(h('div', { style: 'margin-top:12px', html: chart(series) }));
+    if (!WTS.length) sc.appendChild(h('p', { class: 'sub', style: 'margin:6px 0 0', text: 'Your chart fills in as you log your weight.' }));
+    m.appendChild(sc);
+    var bmi = Math.round(now / Math.pow(A.cm / 100, 2) * 10) / 10, br = E.bmiRead(bmi);
+    if (!R.hideNums) m.appendChild(h('div', { class: 'card', html: '<h3>' + ic('compass') + 'BMI now: ' + bmi + '</h3><p style="margin:0;color:var(--ink2);font-size:14.5px"><b>' + esc(br.label) + '.</b> ' + esc(br.text) + '</p>' }));
+    if (WTS.length) {
+      var hc = h('div', { class: 'card' }, [h('h3', { html: ic('chart-line') + 'History' })]);
+      var hist = h('div', { class: 'hist' });
+      WTS.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; }).slice(0, 12).forEach(function (w) { hist.appendChild(h('div', { html: '<span>' + parseYmd(w.d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) + '</span><b>' + w.kg + ' kg</b>' })); });
+      hc.appendChild(hist); m.appendChild(hc);
+    }
+    root.appendChild(m);
+  }
+
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; if (location.hash === '#me') render(); });
+  window.addEventListener('appinstalled', function () { ping({ app_installed: 'Yes' }); toast('dietO installed'); });
+  function viewMe() {
+    root.appendChild(header(P.name || 'You', '+91 ' + P.phone));
+    var m = h('main', { class: 'lift' });
+    var pc = h('div', { class: 'card' }, [h('h3', { html: ic('user') + 'Your plan' })]);
+    var kv = [['Plan', R.identity], ['Daily target', R.hideNums ? 'Set by your nutritionist' : R.kcal.toLocaleString('en-IN') + ' kcal · ' + R.p + 'g protein'], ['Diet', A.pref ? E.PREF_NAME[A.pref] : ''], ['Meals', (A.slots || []).map(function (s) { return E.SLOT_NAME[s]; }).join(', ')], ['Started', parseYmd(P.start).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })]];
+    kv.forEach(function (r) { if (r[1]) pc.appendChild(h('div', { class: 'kv', html: '<span>' + r[0] + '</span><b>' + esc(r[1]) + '</b>' })); });
+    m.appendChild(pc);
+    if (P.code) {
+      var cc = h('div', { class: 'card' }, [h('h3', { html: ic('smartphone') + 'Your app code' }), h('p', { class: 'sub', style: 'margin:-4px 0 10px', text: 'Use it to open your plan on another phone.' })]);
+      var cb = h('div', { class: 'code' }, [h('b', { text: P.code }), h('button', { class: 'btn btn-o', style: 'width:auto;padding:8px 14px', text: 'Copy', onclick: function () { try { navigator.clipboard.writeText(P.code); toast('Code copied'); } catch (e) {} } })]);
+      cc.appendChild(cb); m.appendChild(cc);
+    }
+    var acc = h('div', { class: 'card' });
+    var au = DietoAuth.user();
+    if (au) {
+      acc.appendChild(h('h3', { html: ic('user') + 'Signed in' }));
+      acc.appendChild(h('p', { class: 'sub', style: 'margin:-4px 0 10px', text: '+91 ' + au.phone + ' · your plan and dietician chats are saved to this number.' }));
+      acc.appendChild(h('button', { class: 'btn btn-o', text: 'Sign out', onclick: async function () { await DietoAuth.signOut(); toast('Signed out'); render(); } }));
+    } else {
+      acc.appendChild(h('h3', { html: ic('user') + 'Save your plan to your number' }));
+      var aw = h('div'); acc.appendChild(aw);
+      DietoAuth.widget(aw, { phone: P.phone, name: P.name, sub: 'Sign in to open your plan and dietician chats on any phone.', onDone: function () { toast('Signed in'); savePlan(); render(); } });
+    }
+    m.appendChild(acc);
+    var lc = h('div', { class: 'card' }); var list = h('div', { class: 'list' });
+    if (!STANDALONE && !DietoAuth.native) {
+      if (deferredPrompt) list.appendChild(h('button', { html: ic('smartphone') + 'Install the dietO app', onclick: function () { deferredPrompt.prompt(); deferredPrompt = null; } }));
+      else if (IS_IOS) list.appendChild(h('button', { html: ic('smartphone') + 'Add to iPhone home screen', onclick: function () { toast('Tap Share, then “Add to Home Screen”'); } }));
+    }
+    list.appendChild(h('a', { href: C.site + '?chat=1', html: ic('message-circle') + 'Ask dietO AI' }));
+    list.appendChild(h('a', { href: DietoAuth.href('/consult/'), html: ic('message-circle') + 'Chat with a dietician' }));
+    list.appendChild(h('a', { href: C.site + '?start=1', html: ic('refresh-cw') + 'Retake the diet test' }));
+    var del = h('button', { class: 'danger', html: ic('circle-x') + 'Remove my plan from this phone' });
+    del.onclick = function () {
+      if (!del._armed) { del._armed = true; del.innerHTML = ic('circle-x') + 'Tap again to remove'; setTimeout(function () { del._armed = false; del.innerHTML = ic('circle-x') + 'Remove my plan from this phone'; }, 3000); return; }
+      ['dieto_plan', 'dieto_log', 'dieto_weights'].forEach(function (k) { localStorage.removeItem(k); }); P = null; location.hash = ''; render();
+    };
+    list.appendChild(del); lc.appendChild(list); m.appendChild(lc);
+    m.appendChild(h('div', { class: 'card', html: '<h3>' + ic('bike') + 'Meal delivery</h3><p style="margin:0;color:var(--ink2);font-size:14.5px">Launching soon. You’re on the early-access list, and we’ll message +91 ' + esc(P.phone) + ' the day we start delivering near ' + esc(A.pincode || 'you') + '.</p>' }));
+    root.appendChild(m);
+  }
+
+  function viewOnboard() {
+    navEl.classList.add('hidden');
+    var o = h('div', { class: 'onb' });
+    var logo = h('img', { src: C.logoUrl, alt: 'dietO' }); logo.onerror = function () { logo.replaceWith(h('div', { class: 'wm', style: 'font-size:34px;font-weight:800;color:var(--g700);margin-bottom:20px', text: 'dietO' })); };
+    o.appendChild(logo);
+    o.appendChild(h('h1', { text: 'Your diet plan, in your pocket' }));
+    o.appendChild(h('p', { text: 'Take the free 2-minute AI diet test to build your plan, or sign in to open the plan you already have.' }));
+    o.appendChild(h('a', { class: 'btn btn-g', href: C.site + '?start=1', html: ic('sparkles') + 'Take the free diet test' }));
+    o.appendChild(h('div', { class: 'or', text: 'ALREADY HAVE A PLAN?' }));
+    var sib = h('div', { style: 'text-align:left' }); o.appendChild(sib);
+    DietoAuth.widget(sib, { sub: 'Sign in with the mobile number you used for the diet test.', onDone: function (d) {
+      if (d.plan) { P = d.plan; P.code = d.code || P.code; store('dieto_plan', P); ping({ app_installed: STANDALONE ? 'Yes' : '' }); location.hash = '#today'; render(); }
+      else { sib.innerHTML = '<p style="margin:0;color:var(--ink2);line-height:1.5">You’re signed in, but we didn’t find a plan for this number yet. Take the free diet test to build one.</p>'; }
+    } });
+    var codeBox = h('div', { class: 'hidden' });
+    o.appendChild(h('a', { href: '#', style: 'display:block;margin:14px 0 4px;color:var(--g700);font-weight:700;font-size:14px', text: 'Have an app code instead?', onclick: function (e) { e.preventDefault(); codeBox.classList.toggle('hidden'); } }));
+    o.appendChild(codeBox);
+    var inp = h('input', { class: 'inp', placeholder: 'App code, e.g. K7Q2MD9P', autocapitalize: 'characters', autocomplete: 'off', style: 'text-align:center;letter-spacing:.12em;text-transform:uppercase' });
+    var btn = h('button', { class: 'btn btn-o', style: 'margin-top:8px', text: 'Open my plan' });
+    var msg = h('div', { class: 'msg' });
+    btn.onclick = async function () {
+      var code = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (code.length < 6) { msg.className = 'msg err'; msg.textContent = 'Please enter your 8-character app code.'; return; }
+      btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Opening your plan…';
+      try {
+        var r = await api('restore', { code: code }); var d = await r.json();
+        if (!r.ok || !d.plan) throw 0;
+        P = d.plan; P.code = d.code; store('dieto_plan', P); ping({ app_installed: STANDALONE ? 'Yes' : '' }); location.hash = '#today'; render();
+      } catch (e) { msg.className = 'msg err'; msg.textContent = navigator.onLine ? 'We couldn’t find that code. Check it in your plan email.' : 'You’re offline. Connect to the internet to open your plan.'; }
+      btn.disabled = false;
+    };
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') btn.click(); });
+    codeBox.appendChild(inp); codeBox.appendChild(btn); codeBox.appendChild(msg);
+    o.appendChild(h('a', { href: DietoAuth.href('/dietician/'), style: 'display:block;margin-top:26px;color:var(--mute);font-size:13px;font-weight:700', text: 'Are you a dietO dietician? Sign in here' }));
+    root.appendChild(o);
+  }
+
+  var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe };
+  function render() {
+    root.innerHTML = '';
+    if (!P || !P.WEEK || !P.R) { viewOnboard(); return; }
+    R = P.R; A = P.A || {};
+    navEl.classList.remove('hidden');
+    var v = (location.hash || '#today').slice(1); if (!VIEWS[v]) v = 'today';
+    $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + v); });
+    VIEWS[v]();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', render);
+  render();
+  // once-a-day "last seen" ping so you can see active users in Brevo / the admin dashboard
+  if (P && P.phone && localStorage.getItem('dieto_seen') !== ymd(new Date())) { ping({}); try { localStorage.setItem('dieto_seen', ymd(new Date())); } catch (e) {} }
+  if ('serviceWorker' in navigator && !DietoAuth.native) navigator.serviceWorker.register('/sw.js').catch(function () {});
+})();
+</script>
+</body>
+</html>

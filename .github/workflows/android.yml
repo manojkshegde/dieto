@@ -1,0 +1,45 @@
+# Builds the dietO Android app on GitHub (no Android Studio needed).
+# Actions tab → "Build Android app" → Run workflow. Download the result from the run's "Artifacts".
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   GOOGLE_SERVICES_JSON_B64   base64 of android/app/google-services.json (from Firebase) — needed for push notifications
+#   KEYSTORE_B64               base64 of your upload keystore (.jks)      — only for the Play Store build
+#   KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
+name: Build Android app
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - uses: android-actions/setup-android@v3
+      - run: npm ci || npm install
+      - name: Firebase config (push notifications)
+        env: { GSJ: "${{ secrets.GOOGLE_SERVICES_JSON_B64 }}" }
+        run: if [ -n "$GSJ" ]; then echo "$GSJ" | base64 -d > android/app/google-services.json; else echo "No google-services.json: push notifications will be off in this build"; fi
+      - run: npx cap sync android
+      - name: Test build (APK to install on your phone)
+        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with: { name: dieto-debug-apk, path: android/app/build/outputs/apk/debug/*.apk }
+      - name: Play Store build (signed AAB)
+        env:
+          KS: "${{ secrets.KEYSTORE_B64 }}"
+          KSP: "${{ secrets.KEYSTORE_PASSWORD }}"
+          KA: "${{ secrets.KEY_ALIAS }}"
+          KP: "${{ secrets.KEY_PASSWORD }}"
+        run: |
+          if [ -z "$KS" ]; then echo "No keystore secret: skipping the Play Store build"; exit 0; fi
+          echo "$KS" | base64 -d > upload.jks
+          cd android && ./gradlew bundleRelease
+          jarsigner -keystore ../upload.jks -storepass "$KSP" -keypass "$KP" -sigalg SHA256withRSA -digestalg SHA-256 app/build/outputs/bundle/release/app-release.aab "$KA"
+      - uses: actions/upload-artifact@v4
+        if: ${{ hashFiles('android/app/build/outputs/bundle/release/*.aab') != '' }}
+        with: { name: dieto-playstore-aab, path: android/app/build/outputs/bundle/release/*.aab }

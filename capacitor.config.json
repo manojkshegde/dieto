@@ -1,0 +1,28 @@
+{
+  "appId": "health.dieto.app",
+  "appName": "dietO",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f4f8f3"
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
+    },
+    "SplashScreen": {
+      "launchShowDuration": 900,
+      "backgroundColor": "#ffffff",
+      "showSpinner": false,
+      "androidScaleType": "CENTER_INSIDE"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1d5a3a",
+      "overlaysWebView": false
+    }
+  }
+}
