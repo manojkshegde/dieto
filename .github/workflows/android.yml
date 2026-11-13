@@ -23,7 +23,8 @@ jobs:
       - run: npm ci || npm install
       - name: Firebase config (push notifications)
         env: { GSJ: "${{ secrets.GOOGLE_SERVICES_JSON_B64 }}" }
-        run: if [ -n "$GSJ" ]; then echo "$GSJ" | base64 -d > android/app/google-services.json; else echo "No google-services.json: push notifications will be off in this build"; fi
+        run: |
+          if [ -n "$GSJ" ]; then echo "$GSJ" | base64 -d > android/app/google-services.json; else echo "No google-services.json - push notifications will be off in this build"; fi
       - run: npx cap sync android
       - name: Test build (APK to install on your phone)
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
@@ -36,7 +37,7 @@ jobs:
           KA: "${{ secrets.KEY_ALIAS }}"
           KP: "${{ secrets.KEY_PASSWORD }}"
         run: |
-          if [ -z "$KS" ]; then echo "No keystore secret: skipping the Play Store build"; exit 0; fi
+          if [ -z "$KS" ]; then echo "No keystore secret - skipping the Play Store build"; exit 0; fi
           echo "$KS" | base64 -d > upload.jks
           cd android && ./gradlew bundleRelease
           jarsigner -keystore ../upload.jks -storepass "$KSP" -keypass "$KP" -sigalg SHA256withRSA -digestalg SHA-256 app/build/outputs/bundle/release/app-release.aab "$KA"
