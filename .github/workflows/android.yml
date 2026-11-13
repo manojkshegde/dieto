@@ -10,6 +10,8 @@ on:
   workflow_dispatch:
   push:
     tags: ['v*']
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,6 +33,18 @@ jobs:
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with: { name: dieto-debug-apk, path: android/app/build/outputs/apk/debug/*.apk }
+      - name: Publish the test APK as a GitHub release (Releases page of this repo)
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk dietO-test.apk
+          TAG="test-build-${{ github.run_number }}"
+          gh release create "$TAG" dietO-test.apk --title "dietO test build ${{ github.run_number }}" --notes "Install on Android: download dietO-test.apk and open it (allow installs from this source)." --prerelease
+      - name: Also keep the latest APK on the 'builds' branch
+        run: |
+          mkdir /tmp/b && cp dietO-test.apk /tmp/b/ && cd /tmp/b
+          git init -q -b builds && git add dietO-test.apk
+          git -c user.name="github-actions" -c user.email="actions@github.com" commit -q -m "Test APK from run ${{ github.run_number }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" builds
       - name: Play Store build (signed AAB)
         env:
           KS: "${{ secrets.KEYSTORE_B64 }}"
