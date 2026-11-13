@@ -496,7 +496,8 @@ var DIETO = (function () {
 
   /* ---------- server ---------- */
   function api(route, body) {
-    return fetch(C.api + (route ? (C.api.indexOf('?') >= 0 ? '&' : '?') + 'route=' + route : ''), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    var ctl = window.AbortController ? new AbortController() : null; if (ctl) setTimeout(function () { ctl.abort(); }, 20000);
+    return fetch(C.api + (route ? (C.api.indexOf('?') >= 0 ? '&' : '?') + 'route=' + route : ''), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(body), signal: ctl ? ctl.signal : undefined });
   }
   function ping(extra) {
     if (!P || !P.phone) return;

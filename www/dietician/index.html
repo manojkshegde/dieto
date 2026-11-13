@@ -118,7 +118,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   }
   async function api(route, body) {
     var ctl = window.AbortController ? new AbortController() : null, tm = ctl && setTimeout(function () { ctl.abort(); }, 20000), r;
-    try { r = await fetch(C.api + '?route=' + route, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Dieto-Token': TOKEN }, body: JSON.stringify(body || {}), signal: ctl ? ctl.signal : undefined }); }
+    try { r = await fetch(C.api + '?route=' + route, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(Object.assign({ _d: TOKEN }, body || {})), signal: ctl ? ctl.signal : undefined }); }
     catch (e) { throw new Error('Couldn’t reach dietO. Please check your internet and try again.'); }
     finally { clearTimeout(tm); }
     var d = {}; try { d = await r.json(); } catch (e) {}

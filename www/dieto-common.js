@@ -14,10 +14,11 @@
     get: load,
     token: function () { var u = load(); return u && u.token || ''; },
     user: function () { var u = load(); return u && u.user || null; },
-    headers: function () { var h = { 'Content-Type': 'application/json' }, t = Auth.token(); if (t) h['X-Dieto-User'] = t; return h; },
+    headers: function () { return { 'Content-Type': 'text/plain;charset=UTF-8' }; },
+    body: function (o) { var b = Object.assign({}, o || {}), t = Auth.token(); if (t) b._u = t; return JSON.stringify(b); },
     api: async function (route, body) {
       var ctl = window.AbortController ? new AbortController() : null, tm = ctl && setTimeout(function () { ctl.abort(); }, 20000), r;
-      try { r = await fetch(API + '?route=' + route, { method: 'POST', headers: Auth.headers(), body: JSON.stringify(body || {}), signal: ctl ? ctl.signal : undefined }); }
+      try { r = await fetch(API + '?route=' + route, { method: 'POST', headers: Auth.headers(), body: Auth.body(body), signal: ctl ? ctl.signal : undefined }); }
       catch (e) { throw new Error(navigator.onLine === false ? 'You’re offline. Check your internet and try again.' : 'Couldn’t reach dietO. Please try again in a moment.'); }
       finally { clearTimeout(tm); }
       var d = {}; try { d = await r.json(); } catch (e) {}
@@ -118,9 +119,9 @@
     _sendToken: function (tok) {
       var platform = window.Capacitor.getPlatform();
       Object.keys(Auth._roles || {}).forEach(function (role) {
-        var h = { 'Content-Type': 'application/json' };
-        if (role === 'dietician') h['X-Dieto-Token'] = Auth._roles[role]; else { var t = Auth.token(); if (!t) return; h['X-Dieto-User'] = t; }
-        fetch(API + '?route=device', { method: 'POST', headers: h, body: JSON.stringify({ token: tok, platform: platform, role: role }) }).catch(function () {});
+        var b = { token: tok, platform: platform, role: role };
+        if (role === 'dietician') b._d = Auth._roles[role]; else { var t = Auth.token(); if (!t) return; b._u = t; }
+        fetch(API + '?route=device', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(b) }).catch(function () {});
       });
     },
     /* Page links: '/consult/#s=3' → '/consult/index.html#s=3' inside the app (no folder index there). */

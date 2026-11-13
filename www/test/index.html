@@ -1489,7 +1489,7 @@ var DIETO = (function () {
     var body = JSON.stringify(pl);
     try { window.dispatchEvent(new CustomEvent('dieto:lead', { detail: JSON.parse(body) })); } catch (e) {}
     if (!C.leadWebhookUrl) return;
-    fetch(C.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true })
+    fetch(C.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: body, keepalive: true })
       .catch(function () { return fetch(C.leadWebhookUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: body }); })
       .catch(function () {});
   }
@@ -1969,7 +1969,7 @@ var DIETO = (function () {
       try { localStorage.setItem('dieto_plan', JSON.stringify(planForApp())); } catch (e) {}
       var url = apiUrl('save'); if (!url) return;
       try {
-        var r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: A.phone, code: A.appCode || '', plan: planForApp() }) });
+        var r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify({ phone: A.phone, code: A.appCode || '', plan: planForApp() }) });
         var d = await r.json();
         if (d && d.code && d.code !== A.appCode) {
           A.appCode = d.code;
@@ -2099,7 +2099,7 @@ var DIETO = (function () {
       dl.disabled = true; var t = dl.innerHTML; dl.textContent = 'Preparing PDF…';
       track('plan_pdf_download');
       try {
-        var r = await fetch(C.leadWebhookUrl + (C.leadWebhookUrl.indexOf('?') >= 0 ? '&' : '?') + 'route=pdf', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(leadPayload('plan_downloaded')) });
+        var r = await fetch(C.leadWebhookUrl + (C.leadWebhookUrl.indexOf('?') >= 0 ? '&' : '?') + 'route=pdf', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(leadPayload('plan_downloaded')) });
         if (!r.ok) throw new Error('pdf');
         var blob = await r.blob(), url = URL.createObjectURL(blob), aEl = document.createElement('a');
         aEl.href = url; aEl.download = 'dietO-7-day-plan-' + first(A.name).toLowerCase() + '.pdf'; document.body.appendChild(aEl); aEl.click(); aEl.remove();
@@ -2124,7 +2124,7 @@ var DIETO = (function () {
       var ok = false;
       if (C.leadWebhookUrl) {
         try {
-          var r = await fetch(C.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(leadPayload('plan_emailed', { send_plan: 'yes' })) });
+          var r = await fetch(C.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(leadPayload('plan_emailed', { send_plan: 'yes' })) });
           var d = await r.json(); ok = !!(d && d.emailed);
         } catch (e) { ok = false; }
       }
@@ -2373,7 +2373,7 @@ var DIETO = (function () {
     // --- fallback: AI or nudge ---
     if (C.aiEndpoint) {
       var t = h('div', { class: 'cm b typing', html: '<i></i><i></i><i></i>' }); cmsgs.appendChild(t); scroll();
-      fetch(C.aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: q, history: history.slice(-11, -1), profile: A && R ? { identity: R.identity, kcal: R.kcal, protein: R.p, pref: A.pref, conditions: A.conditions } : {}, plan: DAY ? DAY.filter(function (x) { return !x.missing; }).map(function (x) { return x.slot + ': ' + x.meal.name; }).join('\n') : '' }) })
+      fetch(C.aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify({ message: q, history: history.slice(-11, -1), profile: A && R ? { identity: R.identity, kcal: R.kcal, protein: R.p, pref: A.pref, conditions: A.conditions } : {}, plan: DAY ? DAY.filter(function (x) { return !x.missing; }).map(function (x) { return x.slot + ': ' + x.meal.name; }).join('\n') : '' }) })
         .then(function (r) { return r.json(); }).then(function (d) { t.remove(); botSay(d.reply || 'Sorry, I couldn’t answer that.', coachMode ? null : NUDGE, 0); })
         .catch(function () { t.remove(); botSay('Good question! The quickest way I can help is to build your exact plan: it takes 2 minutes.', NUDGE, 0); });
       return;
@@ -2512,7 +2512,7 @@ var DIETO = (function () {
         submitted_at: new Date().toISOString(), first_name: nm, phone: '+91' + ph, pincode: pin, serviceable: 'Pre-launch'
       }, src, { channel: src.utm_source || (/instagram/i.test(navigator.userAgent) ? 'instagram_inapp' : d.referrer ? 'referral' : 'direct') }));
       try { window.dispatchEvent(new CustomEvent('dieto:lead', { detail: JSON.parse(body) })); } catch (x) {}
-      if (CFG.leadWebhookUrl) fetch(CFG.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true })
+      if (CFG.leadWebhookUrl) fetch(CFG.leadWebhookUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: body, keepalive: true })
         .catch(function () { return fetch(CFG.leadWebhookUrl, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: body }); }).catch(function () {});
       try { window.dietO && window.dietO.track('early_access_join', { from: 'landing_form' }); } catch (x) {}
       var first = esc(nm.split(' ')[0]);

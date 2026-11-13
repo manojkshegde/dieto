@@ -55,6 +55,7 @@ t = rep(t, "leadWebhookUrl: '/api/dieto-lead.php'", "leadWebhookUrl: '%s/api/die
 t = rep(t, "href: '/app/'", "href: '/app/index.html'", 'test')
 t = rep(t, "navigator.serviceWorker.register('/sw.js')", "(window.DIETO_BASE ? Promise.reject() : navigator.serviceWorker.register('/sw.js'))", 'test')
 t = rep(t, "  function appCard() {\n", "  function appCard() {\n    if (window.DIETO_BASE) return h('div', { class: 'card appcard' }, [h('a', { class: 'btn btn-lime btn-block', href: '/app/index.html', html: ic('smartphone') + 'Open my plan in the app' })]);\n", 'test', 1)
+t = t.replace("'Content-Type': 'application/json'", "'Content-Type': 'text/plain;charset=UTF-8'")   # simple requests: no CORS pre-check from the app
 write('test/index.html', t)
 
 # dietician chat (client) and dietician dashboard
