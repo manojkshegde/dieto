@@ -178,7 +178,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   async function poll() {
     clearTimeout(STATE_T);
     try { var d = await api('d_state'); S.data = d; draw(); } catch (e) { if (!TOKEN) return; }
-    STATE_T = setTimeout(poll, document.hidden ? 8000 : 3000);
+    STATE_T = setTimeout(poll, document.hidden ? 15000 : 5000);
   }
   function draw(force) {
     var d = S.data, me = d.me;
@@ -298,8 +298,9 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   function closeChat() { clearTimeout(CHAT_T); clearInterval(TICK); SEL = 0; CH = null; S.layout.classList.remove('chatting'); S.main.innerHTML = ''; S.main.appendChild(el('div', { class: 'blank', text: 'Pick a chat on the left.' })); draw(); }
   async function chatPoll() {
     if (!CH) return; var id = CH.id;
-    try { var v = await api('d_poll', { session_id: id, after: CH.last }); if (CH && CH.id === id) renderChat(v); } catch (e) {}
-    if (CH && CH.id === id) CHAT_T = setTimeout(chatPoll, CH.v && CH.v.status === 'active' ? 2000 : 8000);
+    try { var v = await api('d_poll', { session_id: id, after: CH.last }); if (CH && CH.id === id) { CH.quiet = v.messages && v.messages.length ? 0 : (CH.quiet || 0) + 1; renderChat(v); } } catch (e) {}
+    // fast while messages are flowing, slower when quiet or in the background
+    if (CH && CH.id === id) CHAT_T = setTimeout(chatPoll, CH.v && CH.v.status === 'active' ? (document.hidden ? 10000 : Math.min(6000, 2000 + (CH.quiet || 0) * 400)) : 15000);
   }
   function renderChat(v) {
     CH.v = v;
@@ -357,7 +358,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     var t = CH.ta.value.trim(); if (!t) return;
     CH.ta.value = ''; CH.ta.style.height = 'auto';
     var tmp = el('div', { class: 'm d', 'data-pending': '1', style: 'opacity:.6' }, [t]); tmp.dataset.text = t; CH.msgs.appendChild(tmp); CH.msgs.scrollTop = CH.msgs.scrollHeight;
-    try { await api('d_send', { session_id: CH.id, text: t }); clearTimeout(CHAT_T); chatPoll(); } catch (e) { tmp.remove(); CH.ta.value = t; toast(e.message); }
+    try { await api('d_send', { session_id: CH.id, text: t }); clearTimeout(CHAT_T); CH.quiet = 0; chatPoll(); } catch (e) { tmp.remove(); CH.ta.value = t; toast(e.message); }
   }
   document.addEventListener('visibilitychange', function () { if (!document.hidden && S) { poll(); if (CH) { clearTimeout(CHAT_T); chatPoll(); } } });
   if (TOKEN) start(); else login();

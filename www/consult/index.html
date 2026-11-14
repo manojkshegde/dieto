@@ -439,9 +439,11 @@ window.DIETO_CONSULT = {
     catch (e) { if (CUR && CUR.id === id) POLL = setTimeout(refresh, 5000); return; }
     if (!CUR || CUR.id !== id) return;
     CUR.v = v; render(v);
-    var wait = v.status === 'active' ? 2000 : v.status === 'waiting' ? 3000 : v.status === 'booked' ? 15000 : v.status === 'pending' ? 6000 : 0;
-    if (v.can_extend && v.status === 'ended') wait = 6000;
-    if (wait) POLL = setTimeout(refresh, document.hidden ? Math.max(wait, 8000) : wait);
+    // check often while messages are flowing, slow down when the chat is quiet (saves server load)
+    CUR.quiet = v.messages && v.messages.length ? 0 : (CUR.quiet || 0) + 1;
+    var wait = v.status === 'active' ? Math.min(6000, 2000 + CUR.quiet * 400) : v.status === 'waiting' ? 4000 : v.status === 'booked' ? 30000 : v.status === 'pending' ? 8000 : 0;
+    if (v.can_extend && v.status === 'ended') wait = 8000;
+    if (wait) POLL = setTimeout(refresh, document.hidden ? Math.max(wait, v.status === 'active' ? 10000 : 20000) : wait);
   }
   function headFor(v) {
     var h = CUR.head; h.innerHTML = '';
@@ -521,7 +523,7 @@ window.DIETO_CONSULT = {
           var t = ta.value.trim(); if (!t) return;
           ta.value = ''; ta.style.height = 'auto';
           var tmp = el('div', { class: 'm c', 'data-pending': '1', style: 'opacity:.6' }, [t]); tmp.dataset.text = t; CUR.msgs.appendChild(tmp); CUR.msgs.scrollTop = CUR.msgs.scrollHeight;
-          try { await api('send', { session_id: CUR.id, key: CUR.key, text: t }); clearTimeout(POLL); refresh(); }
+          try { await api('send', { session_id: CUR.id, key: CUR.key, text: t }); clearTimeout(POLL); CUR.quiet = 0; refresh(); }
           catch (e) { tmp.remove(); ta.value = t; toast(e.message); }
         }
         CUR.foot.appendChild(el('div', { class: 'bar' }, [ta, send]));
