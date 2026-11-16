@@ -572,12 +572,14 @@ window.DIETO_CONSULT = {
     if (atBottom || v.messages.length) CUR.msgs.scrollTop = CUR.msgs.scrollHeight;
     // banner: extend
     CUR.banner.innerHTML = '';
-    if (v.status === 'active' && v.remaining <= 60 || (v.status === 'ended' && v.can_extend)) {
-      CUR.banner.appendChild(el('div', { class: 'banner' }, [el('span', { class: 'sp', text: v.status === 'ended' ? 'Time’s up. Need a little more?' : 'Less than a minute left.' }),
-        el('button', { class: 'btn sm', text: '+' + v.ext.minutes + ' min · ' + rs(v.ext.price), onclick: extend })]));
+    if (v.status === 'active' && v.remaining <= 60) {
+      CUR.banner.appendChild(el('div', { class: 'banner' }, [el('span', { class: 'sp', text: 'Less than a minute left.' }),
+        el('button', { class: 'btn sm', text: 'Continue · ' + rs(v.ext.price), onclick: extend })]));
     }
-    // footer: input or end state
-    var mode = v.status === 'active' ? 'input' : 'done';
+    // footer: typing box, "continue now" offer, or end state
+    var canCont = v.status === 'ended' && v.can_extend && !CUR.skipCont;
+    var mode = v.status === 'active' ? 'input' : canCont ? 'cont' : 'done';
+    if (mode === 'cont' && CUR.contTimer) { var lft = Math.max(0, (v.ext_until || 0) - v.now); CUR.contTimer.textContent = 'This offer stays open for ' + mmss(lft) + '.'; }
     if (CUR.footMode !== mode) {
       CUR.footMode = mode; CUR.foot.innerHTML = '';
       if (mode === 'input') {
@@ -596,6 +598,18 @@ window.DIETO_CONSULT = {
         CUR.foot.appendChild(el('div', { class: 'bar' }, [ta, send]));
         CUR.foot.appendChild(el('div', { style: 'text-align:center;padding:0 0 calc(6px + var(--safe-b));background:#fff' }, [el('button', { style: 'border:0;background:none;color:var(--mute);font-size:12.5px;font-weight:700;cursor:pointer', text: 'End chat', onclick: async function () { if (confirm('End this chat now? Unused time is not refunded.')) { await api('end', { session_id: CUR.id, key: CUR.key }).catch(function () {}); clearTimeout(POLL); refresh(); } } })]));
         setTimeout(function () { try { ta.focus({ preventScroll: true }); } catch (e) {} }, 50);
+      } else if (mode === 'cont') {
+        var dn = v.dietician ? v.dietician.name : 'your dietician';
+        var cb = el('div', { class: 'card cont', style: 'margin:0;border-radius:22px 22px 0 0;text-align:center;padding:20px 18px calc(16px + var(--safe-b));box-shadow:0 -8px 30px rgba(18,58,38,.12)' });
+        cb.appendChild(el('div', { style: 'font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g700)', text: v.free ? 'Free chat finished' : 'Time’s up' }));
+        cb.appendChild(el('h2', { style: 'margin:6px 0 4px;font-size:21px', text: v.free ? 'Your free ' + v.paid_minutes + ' minutes are over' : 'Want to keep going?' }));
+        cb.appendChild(el('p', { style: 'margin:0 0 14px;color:var(--mute);font-size:14.5px;line-height:1.5', text: 'Continue with ' + dn + ' for ' + v.ext.minutes + ' more minutes. Your chat carries on right where you left off.' }));
+        cb.appendChild(el('button', { class: 'btn block', style: 'font-size:17px;padding:16px', html: ic('zap') + ' Continue now · ' + rs(v.ext.price), onclick: extend }));
+        cb.appendChild(el('p', { class: 'note', style: 'margin:10px 0 0', text: 'Pay by UPI, card or wallet. ' + v.ext.minutes + ' minutes are added as soon as you pay.' }));
+        CUR.contTimer = el('p', { class: 'note', style: 'margin:4px 0 0' }); cb.appendChild(CUR.contTimer);
+        CUR.contTimer.textContent = 'This offer stays open for ' + mmss(Math.max(0, (v.ext_until || 0) - v.now)) + '.';
+        cb.appendChild(el('button', { style: 'border:0;background:none;color:var(--mute);font-size:13.5px;font-weight:700;cursor:pointer;margin-top:8px', text: 'Not now', onclick: function () { CUR.skipCont = true; CUR.footMode = ''; render(CUR.v); } }));
+        CUR.foot.appendChild(cb);
       } else {
         var box = el('div', { class: 'card', style: 'margin:0;border-radius:18px 18px 0 0;text-align:center;padding-bottom:calc(16px + var(--safe-b))' });
         if (v.status === 'refunded') box.appendChild(el('p', { style: 'margin:0 0 10px;color:var(--mute)', text: 'This chat was refunded.' }));
@@ -618,7 +632,13 @@ window.DIETO_CONSULT = {
       var endAt = Date.now() + v.remaining * 1000;
       var tick = function () { var r = Math.max(0, Math.round((endAt - Date.now()) / 1000)); if (CUR && CUR.timer) { CUR.timer.lastChild.textContent = mmss(r); CUR.timer.classList.toggle('low', r <= 60); } if (r <= 0) { clearInterval(TICK); clearTimeout(POLL); refresh(); } };
       tick(); TICK = setInterval(tick, 1000);
-    } else if (CUR.timer) { CUR.timer.remove(); CUR.timer = null; }
+    } else {
+      if (CUR.timer) { CUR.timer.remove(); CUR.timer = null; }
+      if (mode === 'cont' && CUR.contTimer) {   // count down the 3-minute "continue" window
+        var until = Date.now() + Math.max(0, (v.ext_until || 0) - v.now) * 1000;
+        TICK = setInterval(function () { var r = Math.max(0, Math.round((until - Date.now()) / 1000)); if (CUR && CUR.contTimer) CUR.contTimer.textContent = 'This offer stays open for ' + mmss(r) + '.'; if (r <= 0) { clearInterval(TICK); clearTimeout(POLL); refresh(); } }, 1000);
+      }
+    }
   }
   async function extend() {
     try {
