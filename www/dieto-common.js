@@ -54,7 +54,7 @@
     /* Renders a phone → OTP sign-in box into `box`. onDone({user, plan, code}) runs after a successful sign-in. */
     widget: function (box, opts) {
       opts = opts || {};
-      var css = 'width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line,#e3ebe5);background:#fff;font-size:17px;outline:0;font-family:inherit;margin:0';
+      var css = 'width:100%;box-sizing:border-box;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line,#e3ebe5);background:#fff;font-size:17px;outline:0;font-family:inherit;margin:0';
       var btnCss = 'width:100%;margin-top:10px;border:0;border-radius:14px;padding:14px;font-weight:800;font-size:15.5px;background:var(--g700,#22704a);color:#fff;cursor:pointer;font-family:inherit';
       box.innerHTML = '';
       var wrap = document.createElement('div');
@@ -89,7 +89,10 @@
             await new Promise(function (ok, bad) { window.sendOtp('91' + phone, function (r) { ok(r); }, function (e) { bad(new Error(m91err(e))); }); });
           }
           $('[data-s1]').style.display = 'none'; $('[data-s2]').style.display = '';
-          $('[data-to]').textContent = widget ? 'We sent a 6-digit code to +91 ' + phone + ' (check WhatsApp and SMS).' : 'We sent a 6-digit code to +91 ' + phone + '.';
+          if (widget) {
+            var who = widget.sender || 'Verify';
+            $('[data-to]').innerHTML = 'Check <b>WhatsApp</b> on +91 ' + phone + ': we’ve sent your <b>dietO login code</b>' + (who.toLowerCase() === 'dieto' ? '.' : ' from “' + who.replace(/[<>&"]/g, '') + '”.');
+          } else $('[data-to]').textContent = 'We sent a 6-digit code to +91 ' + phone + '.';
           if (d.test_code) say('Test mode: your code is ' + d.test_code, true);
           countdown(d.resend_in || 30); setTimeout(function () { otp.focus(); }, 50);
           // Android: read the SMS code automatically where supported
