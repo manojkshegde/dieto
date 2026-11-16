@@ -10,6 +10,30 @@
   function load() { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; } }
   function save(v) { try { if (v) localStorage.setItem(KEY, JSON.stringify(v)); else localStorage.removeItem(KEY); } catch (e) {} }
 
+  /* MSG91 OTP widget (when the server uses it): loaded once, with our own sign-in screen (no MSG91 popup). */
+  var M91 = null;
+  function msg91(w) {
+    if (M91) return M91;
+    M91 = new Promise(function (resolve, reject) {
+      window.initSendOTP = undefined;
+      var cfg = { widgetId: w.id, tokenAuth: w.token, exposeMethods: true, success: function () {}, failure: function () {} };
+      var urls = ['https://verify.msg91.com/otp-provider.js', 'https://verify.phone91.com/otp-provider.js'], i = 0;
+      function attempt() {
+        var sc = document.createElement('script'); sc.src = urls[i]; sc.async = true;
+        sc.onload = function () {
+          try { if (typeof window.initSendOTP === 'function') window.initSendOTP(cfg); } catch (e) {}
+          var t = 0, iv = setInterval(function () { if (typeof window.sendOtp === 'function') { clearInterval(iv); resolve(); } else if (++t > 100) { clearInterval(iv); M91 = null; reject(new Error('Sign-in service didn’t load. Please try again.')); } }, 100);
+        };
+        sc.onerror = function () { if (++i < urls.length) attempt(); else { M91 = null; reject(new Error('Couldn’t reach the sign-in service. Check your internet.')); } };
+        document.head.appendChild(sc);
+      }
+      attempt();
+    });
+    return M91;
+  }
+  function m91err(e) { return (e && (e.message || e.msg || (typeof e === 'string' ? e : ''))) || 'Something went wrong. Please try again.'; }
+  function m91token(d) { if (!d) return ''; if (typeof d === 'string') return d; return d.message || d['access-token'] || d.accessToken || d.token || ''; }
+
   var Auth = {
     get: load,
     token: function () { var u = load(); return u && u.token || ''; },
@@ -45,7 +69,7 @@
         '<p data-msg role="alert" style="margin:10px 0 0;font-size:14px;font-weight:600;min-height:1em"></p>';
       box.appendChild(wrap);
       var $ = function (s) { return wrap.querySelector(s); };
-      var ph = $('[data-ph]'), otp = $('[data-otp]'), msg = $('[data-msg]'), resend = $('[data-resend]'), timer = null, phone = '';
+      var ph = $('[data-ph]'), otp = $('[data-otp]'), msg = $('[data-msg]'), resend = $('[data-resend]'), timer = null, phone = '', widget = null;
       if (opts.phone) ph.value = String(opts.phone).replace(/\D/g, '').slice(-10);
       function say(t, ok) { msg.textContent = t || ''; msg.style.color = ok ? 'var(--g700,#22704a)' : 'var(--red,#d64545)'; }
       function countdown(s) {
@@ -59,8 +83,13 @@
         say(''); $('[data-send]').disabled = true; $('[data-send]').textContent = 'Sending…';
         try {
           var d = await Auth.api('auth_start', { phone: phone });
+          widget = d.widget || null;
+          if (widget) {   // MSG91 sends the code (WhatsApp / SMS / email, as set in MSG91)
+            await msg91(widget);
+            await new Promise(function (ok, bad) { window.sendOtp('91' + phone, function (r) { ok(r); }, function (e) { bad(new Error(m91err(e))); }); });
+          }
           $('[data-s1]').style.display = 'none'; $('[data-s2]').style.display = '';
-          $('[data-to]').textContent = 'We sent a 6-digit code to +91 ' + phone + '.';
+          $('[data-to]').textContent = widget ? 'We sent a 6-digit code to +91 ' + phone + ' (check WhatsApp and SMS).' : 'We sent a 6-digit code to +91 ' + phone + '.';
           if (d.test_code) say('Test mode: your code is ' + d.test_code, true);
           countdown(d.resend_in || 30); setTimeout(function () { otp.focus(); }, 50);
           // Android: read the SMS code automatically where supported
@@ -73,7 +102,11 @@
         if (c.length !== 6) return say('Enter the 6-digit code.');
         $('[data-verify]').disabled = true; $('[data-verify]').textContent = 'Checking…'; say('');
         try {
-          var d = await Auth.api('auth_verify', { phone: phone, code: c, name: opts.name || '' });
+          var d;
+          if (widget) {
+            var res = await new Promise(function (ok, bad) { window.verifyOtp(c, function (r) { ok(r); }, function (e) { bad(new Error(m91err(e))); }); });
+            d = await Auth.api('auth_widget', { access_token: m91token(res), phone: phone, name: opts.name || '' });
+          } else d = await Auth.api('auth_verify', { phone: phone, code: c, name: opts.name || '' });
           save({ token: d.token, user: d.user });
           Auth.registerPush('user');
           if (opts.onDone) opts.onDone(d);
