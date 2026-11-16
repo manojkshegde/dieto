@@ -213,7 +213,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     sec.appendChild(el('h3', { text: 'Waiting now' }));
     if (!d.queue.length) sec.appendChild(el('div', { class: 'none', text: d.me.online_flag ? 'No one waiting. New chats will beep.' : 'You are offline. Turn on Online to get live chats.' }));
     d.queue.forEach(function (q) {
-      sec.appendChild(el('div', { class: 'item new' }, [el('div', { class: 'sp' }, [el('b', { text: q.name }), el('small', { text: (q.for_me ? 'Asked for you · ' : '') + 'waiting ' + mmss(q.waited) + (q.topic ? ' · ' + q.topic : '') })]),
+      sec.appendChild(el('div', { class: 'item new' }, [el('div', { class: 'sp' }, [el('b', { text: q.name }), el('small', { text: (q.free ? 'Free chat · ' : 'Paid · ') + (q.for_me ? 'Asked for you · ' : '') + 'waiting ' + mmss(q.waited) + (q.topic ? ' · ' + q.topic : '') })]),
         el('button', { class: 'btn sm', text: 'Accept', onclick: function () { accept(q.id); } })]));
     });
     sec.appendChild(el('h3', { text: 'In progress' }));
