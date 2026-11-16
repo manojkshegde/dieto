@@ -771,6 +771,7 @@ var DIETO = (function () {
     }
     list.appendChild(h('a', { href: C.site + '?chat=1', html: ic('message-circle') + 'Ask dietO AI' }));
     list.appendChild(h('a', { href: DietoAuth.href('/consult/'), html: ic('message-circle') + 'Chat with a dietician' }));
+    if (au) list.appendChild(h('a', { href: DietoAuth.href('/consult/#account'), html: ic('user') + 'Account, invoices and privacy' }));
     list.appendChild(h('a', { href: C.site + '?start=1', html: ic('refresh-cw') + 'Retake the diet test' }));
     var del = h('button', { class: 'danger', html: ic('circle-x') + 'Remove my plan from this phone' });
     del.onclick = function () {

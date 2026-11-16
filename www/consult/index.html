@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chat with a dietician · dietO</title>
-<meta name="theme-color" content="#1d5a3a">
+<meta name="theme-color" content="#0B3B26">
 <meta name="robots" content="noindex">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" type="image/png" href="/icons/favicon-64.png">
@@ -14,114 +14,165 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--g900:#123a26;--g800:#1d5a3a;--g700:#22704a;--g600:#2a8a59;--lime:#8cc63f;--lime2:#b8e07a;--mint:#eef6ee;--mint2:#e2f0e1;
-  --ink:#14231b;--ink2:#3d4f45;--mute:#6f8077;--line:#e3ebe5;--bg:#f4f8f3;--amber:#f2b134;--red:#d64545;
-  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--safe-b:env(safe-area-inset-bottom);--safe-t:env(safe-area-inset-top)}
+:root{--g900:#0B3B26;--g800:#0F4A30;--g700:#146C43;--g600:#1C8452;--lime:#C8F169;--lime2:#C8F169;--mint:#E3F1E8;--mint2:#E3F1E8;
+  --ink:#0F1F17;--ink2:#3D4F46;--mute:#4F6359;--line:#DCE7E0;--bg:#F3F8F4;--amber:#E8A317;--warm:#FFF4DE;--warmink:#8A5A00;--red:#A12D20;--redbg:#FDE8E6;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--safe-b:env(safe-area-inset-bottom);--safe-t:env(safe-area-inset-top);
+  --sh:0 2px 10px rgba(11,59,38,.06)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
-button,input,textarea{font-family:inherit;font-size:16px}
+button,input,textarea,select{font-family:inherit;font-size:16px}
+a{color:var(--g700)}
 svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .hidden{display:none!important}
 .app{max-width:560px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
-.top{background:linear-gradient(165deg,var(--g900),var(--g700));color:#fff;padding:calc(14px + var(--safe-t)) 18px 26px;border-radius:0 0 26px 26px}
+.top{background:var(--g900);color:#fff;padding:calc(16px + var(--safe-t)) 20px 28px;border-radius:0 0 30px 30px}
 .top .row{display:flex;align-items:center;gap:12px}
-.top .back{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);border:0;color:#fff;display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.top .back{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.12);border:0;color:#fff;display:grid;place-items:center;cursor:pointer;text-decoration:none}
 .top img.logo{height:26px}
-.top h1{margin:16px 0 4px;font-size:23px;letter-spacing:-.02em;line-height:1.2}
-.top p{margin:0;color:#cfe6d4;font-size:14.5px}
-.price{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:999px;font-weight:700;font-size:13.5px;color:var(--lime2)}
-main{flex:1;padding:16px 16px calc(24px + var(--safe-b))}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:14px;padding:4px;box-shadow:0 2px 10px rgba(18,58,38,.06);margin:-6px 0 16px}
-.tabs button{border:0;background:none;padding:11px;border-radius:11px;font-weight:700;font-size:14.5px;color:var(--mute);cursor:pointer}
+.top .acct{margin-left:auto;height:42px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:14px}
+.top h1{margin:18px 0 6px;font-size:26px;letter-spacing:-.02em;line-height:1.2;font-weight:800}
+.top p{margin:0;color:#CFE3D7;font-size:14.5px;line-height:1.5}
+.price{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--lime);color:var(--g900);padding:8px 14px;border-radius:999px;font-weight:800;font-size:13.5px}
+main{flex:1;padding:18px 16px calc(24px + var(--safe-b))}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:999px;padding:5px;box-shadow:var(--sh);margin:-12px 0 16px}
+.tabs button{border:0;background:none;padding:11px;border-radius:999px;font-weight:700;font-size:14.5px;color:var(--mute);cursor:pointer}
 .tabs button.on{background:var(--g700);color:#fff}
-.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 12px rgba(18,58,38,.06);margin-bottom:12px}
-.plancard{display:flex;gap:14px;align-items:center;border:1.5px solid #cfe6d6}
-.plancard .ic{width:46px;height:46px;border-radius:14px;background:#e8f4ec;color:var(--g700);display:grid;place-items:center;flex:none}
+.card{background:#fff;border-radius:24px;padding:18px;box-shadow:var(--sh);margin-bottom:12px}
+.plancard{display:flex;gap:14px;align-items:center}
+.plancard .ic,.ico{width:48px;height:48px;border-radius:16px;background:var(--warm);color:var(--warmink);display:grid;place-items:center;flex:none}
 .plancard small{display:block;color:var(--mute);font-size:13px;line-height:1.45;margin-top:2px}
-.pday{background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px rgba(18,58,38,.05)}
+.pday{background:#fff;border-radius:20px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh)}
 .pday h3{margin:0 0 8px;font-size:15px;color:var(--g700)}
-.pday .r{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:6px 0;border-top:1px solid #eef3ef;font-size:14.5px;line-height:1.45}
-.pday .r:first-of-type{border-top:0}.pday .r span{color:var(--mute);font-weight:700;font-size:13px}
-.pnotes{background:#fff7e5;border-radius:16px;padding:14px 16px;margin-bottom:12px;white-space:pre-wrap;line-height:1.55;font-size:14.5px}
-@media print{.chead,.chead *,button,.btn,.noprint{display:none!important}body,.app{background:#fff!important}.pday{box-shadow:none;border:1px solid #ddd;break-inside:avoid}}
-.h{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:18px 2px 10px}
+.pday .r{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:8px 0;border-top:1px solid #EEF3EF;font-size:14.5px;line-height:1.45}
+.pday .r:first-of-type{border-top:0}.pday .r span{color:var(--mute);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.pnotes{background:var(--warm);color:#5C3B00;border-radius:20px;padding:14px 16px;margin-bottom:12px;white-space:pre-wrap;line-height:1.55;font-size:14.5px}
+@media print{.chead,.chead *,button,.btn,.noprint{display:none!important}body,.app{background:#fff!important}.pday,.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}}
+.h{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:20px 4px 10px}
 .dt{display:flex;gap:12px;align-items:center}
-.av{width:52px;height:52px;border-radius:50%;background:var(--mint2);color:var(--g700);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none;object-fit:cover;position:relative}
-.av.sm{width:38px;height:38px;font-size:14px}
-.dot{position:absolute;right:1px;bottom:1px;width:13px;height:13px;border-radius:50%;background:#2fbf71;border:2.5px solid #fff}
+.av{width:52px;height:52px;border-radius:50%;background:var(--mint);color:var(--g700);display:grid;place-items:center;font-weight:800;font-size:17px;flex:none;object-fit:cover;position:relative}
+.av.sm{width:42px;height:42px;font-size:14px}
+.dot{position:absolute;right:1px;bottom:1px;width:13px;height:13px;border-radius:50%;background:#22A35A;border:2.5px solid #fff}
 .dt b{display:block;font-size:16px}
 .dt small{display:block;color:var(--mute);font-size:13px;line-height:1.4}
 .dt .sp{flex:1;min-width:0}
-.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--g700);margin-top:4px}
-.tag.off{background:#f1f3f2;color:var(--mute)}
-.tag.busy{background:#fff3d6;color:#8a6200}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:14px 18px;font-weight:800;font-size:15.5px;cursor:pointer;text-decoration:none;background:var(--g700);color:#fff;transition:transform .15s,opacity .15s}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--mint);color:var(--g700);margin-top:6px}
+.tag.off{background:#EEF3EF;color:var(--mute)}
+.tag.busy{background:var(--warm);color:var(--warmink)}
+.tag.ver{background:var(--lime);color:var(--g900)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:15px 22px;font-weight:800;font-size:15.5px;cursor:pointer;text-decoration:none;background:var(--g700);color:#fff;transition:transform .15s,opacity .15s;box-shadow:0 8px 20px -8px rgba(20,108,67,.45)}
 .btn:active{transform:scale(.98)}
-.btn.lime{background:var(--lime);color:var(--g900)}
-.btn.ghost{background:#fff;color:var(--g700);box-shadow:inset 0 0 0 1.5px var(--line)}
-.btn.sm{padding:9px 13px;font-size:14px;border-radius:11px}
+.btn.lime{background:var(--lime);color:var(--g900);box-shadow:none}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.danger{background:var(--red);box-shadow:none}
+.btn.sm{padding:10px 16px;font-size:14px}
 .btn.block{width:100%}
 .btn[disabled]{opacity:.5;pointer-events:none}
-.any{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,var(--g800),var(--g600));color:#fff;border-radius:18px;padding:18px;border:0;width:100%;text-align:left;cursor:pointer;box-shadow:0 10px 24px -12px rgba(18,58,38,.6);margin-bottom:12px}
-.any .ic{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:22px;flex:none}
-.any b{display:block;font-size:16.5px}
-.any small{color:#d6ecd6;font-size:13px}
+.any{display:flex;align-items:center;gap:14px;background:var(--g700);color:#fff;border-radius:24px;padding:18px;border:0;width:100%;text-align:left;cursor:pointer;box-shadow:0 12px 28px -14px rgba(11,59,38,.7);margin-bottom:12px}
+.any .ic{width:50px;height:50px;border-radius:16px;background:var(--lime);color:var(--g900);display:grid;place-items:center;font-size:22px;flex:none}
+.any b{display:block;font-size:17px}
+.any small{color:#CFE3D7;font-size:13px}
 .empty{text-align:center;color:var(--mute);padding:22px 10px;font-size:14.5px;line-height:1.5}
 .empty .big{font-size:34px;color:var(--g600);margin-bottom:6px}
 .days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}
-.days button{flex:none;border:0;background:#fff;border-radius:14px;padding:10px 12px;min-width:64px;text-align:center;cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--ink)}
+.days button{flex:none;border:0;background:#fff;border-radius:16px;padding:10px 12px;min-width:64px;text-align:center;cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--ink)}
 .days button small{display:block;font-size:11.5px;color:var(--mute);font-weight:700;text-transform:uppercase}
 .days button b{font-size:18px}
-.days button.on{background:var(--g700);color:#fff;box-shadow:none}.days button.on small{color:#cfe6d4}
+.days button.on{background:var(--g700);color:#fff;box-shadow:none}.days button.on small{color:#CFE3D7}
 .times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.times button{border:0;background:var(--mint);color:var(--g800);border-radius:12px;padding:11px 6px;font-weight:700;font-size:14.5px;cursor:pointer}
+.times button{border:0;background:var(--mint);color:var(--g800);border-radius:999px;padding:11px 6px;font-weight:700;font-size:14.5px;cursor:pointer}
 .times button.on{background:var(--g700);color:#fff}
-.sel{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:15px;margin-bottom:12px}
-label.f{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12px 0 6px}
-.in{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;outline:0;font-size:16px}
-.in:focus{border-color:var(--g600);box-shadow:0 0 0 4px rgba(42,138,89,.12)}
-textarea.in{resize:vertical;min-height:84px}
-.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink2);line-height:1.45;margin:14px 0;cursor:pointer}
+.sel{width:100%;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-size:15px;margin-bottom:12px}
+label.f{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:14px 0 6px}
+.in{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;outline:0;font-size:16px}
+.in:focus{border-color:var(--g700);box-shadow:0 0 0 4px rgba(20,108,67,.12)}
+textarea.in{resize:vertical;min-height:88px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:600;font-size:13.5px;cursor:pointer}
+.chip.on{border-color:var(--g700);background:var(--mint);color:var(--g700);font-weight:700}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--ink2);line-height:1.5;margin:14px 0;cursor:pointer;background:var(--bg);border-radius:16px;padding:12px 14px}
 .chk input{width:20px;height:20px;accent-color:var(--g700);flex:none;margin-top:1px}
-.prof{background:var(--mint);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--ink2);line-height:1.55;margin-top:8px}
+.prof{background:var(--mint);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--ink2);line-height:1.6;margin-top:8px}
 .prof b{color:var(--ink)}
-.sum{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-weight:700}
-.sum span{color:var(--mute);font-weight:600}
+.sum{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-weight:800;font-size:16px}
+.sum span{color:var(--ink2);font-weight:600;font-size:15px}
+.sum s{color:var(--mute);font-weight:600;margin-right:6px}
 .err{color:var(--red);font-weight:600;font-size:14px;margin:10px 0 0}
-.note{font-size:12.5px;color:var(--mute);line-height:1.5;margin:10px 2px 0}
-.my a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 2px;border-top:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:14.5px}
+.note{font-size:12.5px;color:var(--mute);line-height:1.55;margin:12px 2px 0}
+.my a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 2px;border-top:1px solid #EEF3EF;text-decoration:none;color:var(--ink);font-size:14.5px}
 .my a:first-child{border-top:0}
-.st{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;background:#f1f3f2;color:var(--mute);white-space:nowrap}
-.st.active,.st.waiting{background:#e2f6ea;color:#16865a}.st.booked{background:#e7efff;color:#2b5fc0}.st.refunded{background:#fff3d6;color:#8a6200}
+.st{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:#EEF3EF;color:var(--mute);white-space:nowrap}
+.st.active,.st.waiting{background:var(--mint);color:var(--g700)}.st.booked{background:#E7EFFF;color:#2B5FC0}.st.refunded{background:var(--warm);color:var(--warmink)}.st.plan_done{background:var(--lime);color:var(--g900)}
+.rows{background:#fff;border-radius:24px;overflow:hidden;box-shadow:var(--sh);margin-bottom:12px}
+.rows>a,.rows>button,.rows>div{display:flex;align-items:center;gap:12px;padding:15px 16px;border:0;border-top:1px solid #EEF3EF;background:none;width:100%;text-align:left;color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:700;cursor:pointer}
+.rows>:first-child{border-top:0}
+.rows .ri{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--mint);color:var(--g700);flex:none}
+.rows .sp{flex:1;min-width:0}.rows small{display:block;color:var(--mute);font-weight:500;font-size:12.5px;margin-top:2px}
+.rows .bad{color:var(--red)}
 /* chat */
 .chat{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:560px;margin:0 auto;background:var(--bg)}
-.chead{background:linear-gradient(165deg,var(--g900),var(--g700));color:#fff;padding:calc(10px + var(--safe-t)) 14px 12px;display:flex;align-items:center;gap:10px}
-.chead .sp{flex:1;min-width:0}.chead b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chead small{color:#cfe6d4;font-size:12.5px}
-.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:15px;background:rgba(255,255,255,.14);padding:7px 11px;border-radius:999px;display:inline-flex;gap:6px;align-items:center}
+.chead{background:#fff;color:var(--ink);padding:calc(12px + var(--safe-t)) 14px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.chead .back{width:40px!important;height:40px!important;border-radius:13px!important;background:var(--bg)!important;color:var(--ink)!important}
+.chead .sp{flex:1;min-width:0}.chead b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chead small{color:var(--mute);font-size:12.5px}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:14px;background:var(--g900);color:var(--lime);padding:8px 12px;border-radius:999px;display:inline-flex;gap:6px;align-items:center}
 .timer.low{background:var(--amber);color:var(--g900)}
-.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
-.m{max-width:80%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
-.m.c{align-self:flex-end;background:var(--g700);color:#fff;border-bottom-right-radius:5px}
-.m.d{align-self:flex-start;background:#fff;box-shadow:0 1px 4px rgba(18,58,38,.08);border-bottom-left-radius:5px}
-.m.sys{align-self:center;background:transparent;color:var(--mute);font-size:12.5px;text-align:center;padding:2px 10px;max-width:92%}
+.msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
+.m{max-width:80%;padding:11px 14px;border-radius:20px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
+.m.c{align-self:flex-end;background:var(--g700);color:#fff;border-bottom-right-radius:6px}
+.m.d{align-self:flex-start;background:#fff;box-shadow:var(--sh);border-bottom-left-radius:6px}
+.m.sys{align-self:center;background:var(--mint);color:var(--g700);font-size:12.5px;font-weight:700;text-align:center;padding:6px 12px;border-radius:999px;max-width:92%}
 .m time{display:block;font-size:10.5px;opacity:.65;margin-top:3px;text-align:right}
-.bar{background:#fff;border-top:1px solid var(--line);padding:10px 10px calc(10px + var(--safe-b));display:flex;gap:8px;align-items:flex-end}
-.bar textarea{flex:1;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px;max-height:120px;min-height:46px;resize:none;outline:0}
-.bar textarea:focus{border-color:var(--g600)}
-.bar .send{width:46px;height:46px;border-radius:14px;border:0;background:var(--g700);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;font-size:18px}
-.banner{margin:10px 12px 0;background:#fff7e5;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:14px;color:#6b4a00}
+.m.file{padding:6px}
+.m.file img{display:block;max-width:220px;max-height:260px;border-radius:15px;background:#EEF3EF}
+.m.file .pdf{display:flex;gap:10px;align-items:center;padding:6px 8px;color:inherit;text-decoration:none;min-width:200px}
+.m.file .pdf span.t{width:42px;height:50px;border-radius:10px;background:#fff;color:#C0392B;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none}
+.m.d.file .pdf span.t{background:var(--redbg)}
+.m.file .pdf b{display:block;font-size:14px}.m.file .pdf small{font-size:12px;opacity:.75}
+.m.file time{padding:0 8px 2px}
+.bar{background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + var(--safe-b));display:flex;gap:8px;align-items:flex-end}
+.bar textarea{flex:1;border:1.5px solid var(--line);border-radius:24px;padding:12px 16px;max-height:120px;min-height:48px;resize:none;outline:0;background:var(--bg)}
+.bar textarea:focus{border-color:var(--g700);background:#fff}
+.bar .send{width:48px;height:48px;border-radius:50%;border:0;background:var(--g700);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;font-size:18px;box-shadow:0 6px 16px rgba(20,108,67,.3)}
+.bar .att{width:48px;height:48px;border-radius:50%;border:0;background:var(--mint);color:var(--g700);display:grid;place-items:center;cursor:pointer;flex:none;font-size:19px}
+.banner{margin:10px 12px 0;background:var(--warm);border-radius:18px;padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:14px;color:#5C3B00;font-weight:600}
 .banner .sp{flex:1}
-.wait{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 24px;gap:10px}
-.pulse{width:86px;height:86px;border-radius:50%;background:var(--mint2);display:grid;place-items:center;color:var(--g700);font-size:34px;position:relative}
-.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid var(--g600);animation:pl 1.6s ease-out infinite}
-@keyframes pl{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
-.wait h2{margin:8px 0 0;font-size:20px}.wait p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.5;max-width:340px}
-.stars{display:flex;gap:6px;justify-content:center;margin:10px 0}
-.stars button{border:0;background:none;font-size:32px;color:#d9dee8;cursor:pointer;padding:0;line-height:1}
-.stars button.on{color:#f5b301}
-.toast{position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);background:var(--g900);color:#fff;padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;z-index:99;max-width:90vw;text-align:center}
-.demo{background:#fff3d6;color:#7a5200;font-size:12.5px;font-weight:700;text-align:center;padding:6px}
-@media (prefers-reduced-motion:reduce){.pulse::after{animation:none}}
+.wait{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 24px;gap:12px}
+.wait.dark{background:var(--g900);color:#fff}
+.wait.dark p{color:#CFE3D7}.wait.dark .note{color:#CFE3D7}
+.pulse{width:110px;height:110px;border-radius:50%;background:var(--g700);display:grid;place-items:center;color:var(--lime);font-size:42px;position:relative;box-shadow:0 0 0 14px rgba(200,241,105,.12)}
+.wait:not(.dark) .pulse{background:var(--mint);color:var(--g700);box-shadow:none}
+.pulse::after,.pulse::before{content:"";position:absolute;inset:-18px;border-radius:50%;border:2px solid var(--lime);animation:pl 2.4s ease-out infinite}
+.pulse::before{animation-delay:1.2s}
+.wait:not(.dark) .pulse::after,.wait:not(.dark) .pulse::before{border-color:var(--g600)}
+@keyframes pl{from{transform:scale(.7);opacity:.6}to{transform:scale(1.35);opacity:0}}
+.wait h2{margin:10px 0 0;font-size:24px;letter-spacing:-.02em}.wait p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.55;max-width:340px}
+.wchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px}
+.wchip b{color:var(--lime)}
+.wcard{background:#fff;color:var(--ink);border-radius:24px;padding:16px;width:100%;max-width:360px;text-align:left;display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.wcard p{color:var(--mute)!important;font-size:13.5px!important}
+.stars{display:flex;gap:8px;justify-content:center;margin:6px 0}
+.stars button{border:0;width:52px;height:52px;border-radius:16px;background:var(--warm);color:#E8A317;cursor:pointer;padding:0;display:grid;place-items:center;font-size:26px}
+.stars button.on{background:#E8A317;color:#fff}
+.sheet{background:#fff;border-radius:30px 30px 0 0;padding:14px 20px calc(20px + var(--safe-b));box-shadow:0 -12px 40px rgba(11,31,23,.18);display:flex;flex-direction:column;gap:14px}
+.sheet .handle{align-self:center;width:44px;height:5px;border-radius:999px;background:var(--line)}
+.pill{align-self:flex-start;background:var(--lime);color:var(--g900);padding:6px 12px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.mini{display:flex;align-items:center;gap:12px;background:var(--bg);border-radius:20px;padding:12px 14px}
+.mini .sp{flex:1}.mini .pr{text-align:right}.mini .pr b{display:block;font-size:22px;color:var(--g700)}.mini .pr small{font-size:12px;color:var(--mute)}
+.offer{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);flex-wrap:wrap;gap:8px}
+.offer span.o{background:var(--warm);color:var(--warmink);padding:6px 10px;border-radius:999px;font-weight:800}
+.linkbtn{border:0;background:none;color:var(--mute);font-size:14.5px;font-weight:700;cursor:pointer;padding:8px}
+.toast{position:fixed;left:50%;bottom:calc(90px + var(--safe-b));transform:translateX(-50%);background:var(--g900);color:#fff;padding:12px 18px;border-radius:999px;font-size:14px;font-weight:600;z-index:99;max-width:90vw;text-align:center}
+.demo{background:var(--warm);color:var(--warmink);font-size:12.5px;font-weight:700;text-align:center;padding:6px}
+.ov{position:fixed;inset:0;background:rgba(11,31,23,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.ov .sheet{width:100%;max-width:560px;max-height:92vh;overflow:auto}
+.att3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.att3 button{height:100px;border-radius:22px;border:0;font-weight:700;font-size:13.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+.att3 svg.i{width:28px;height:28px}
+.inv{font-size:13.5px}.inv .r{display:flex;justify-content:space-between;padding:5px 0}.inv .r.t{font-size:16px;font-weight:800;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.inv .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;font-size:12.5px}.inv .g span{color:var(--mute);display:block}
+.kv{display:grid;gap:12px;margin:6px 0}
+.kv>div{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5}
+.kv .ri{width:34px;height:34px;border-radius:11px;background:var(--mint);color:var(--g700);display:grid;place-items:center;flex:none}
+@media (prefers-reduced-motion:reduce){.pulse::after,.pulse::before{animation:none}}
 </style>
 </head>
 <body>
@@ -148,7 +199,16 @@ window.DIETO_CONSULT = {
     send: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>', x: '<path d="M18 6L6 18M6 6l12 12"/>',
     user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', star: '<path d="M12 3l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.6 6.1 20.8l1.3-6.5L2.5 9.8 9.1 9z"/>',
-    plus: '<path d="M12 5v14M5 12h14"/>', check: '<path d="M20 6L9 17l-5-5"/>', refund: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>'
+    plus: '<path d="M12 5v14M5 12h14"/>', check: '<path d="M20 6L9 17l-5-5"/>', refund: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+    clip: '<path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
+    cam: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+    img: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+    pdf: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M9 17h4"/>',
+    bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/>',
+    receipt: '<path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h3"/>',
+    trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v5M14 11v5"/>', dl: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+    lock: '<rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', next: '<path d="M9 18l6-6-6-6"/>',
+    alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>', arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>', play: '<path d="M5 3l14 9-14 9z"/>'
   };
   function ic(n) { return '<svg class="i" viewBox="0 0 24 24">' + (ICONS[n] || '') + '</svg>'; }
   function el(tag, attrs, kids) {
@@ -221,7 +281,8 @@ window.DIETO_CONSULT = {
     stopAll();
     root.innerHTML = '';
     var top = el('header', { class: 'top' }, [
-      el('div', { class: 'row' }, [el('a', { class: 'back', href: DietoAuth.href(C.home), 'aria-label': 'Back to the app', html: ic('back') }), el('img', { class: 'logo', src: C.logoUrl, alt: 'dietO', onerror: 'this.remove()' })]),
+      el('div', { class: 'row' }, [el('a', { class: 'back', href: DietoAuth.href(C.home), 'aria-label': 'Back to the app', html: ic('back') }), el('img', { class: 'logo', src: C.logoUrl, alt: 'dietO', onerror: 'this.remove()' }),
+        DietoAuth.user() ? el('a', { class: 'acct', href: '#account', html: ic('user') + ' Account' }) : null]),
       el('h1', { text: 'Talk to a qualified dietician' }),
       el('p', { text: 'One-to-one chat. They can see your diet test, so you get to the point fast.' })
     ]);
@@ -231,7 +292,7 @@ window.DIETO_CONSULT = {
     try { var r = await Promise.all([api('config'), api('dieticians')]); CFG = r[0]; DT = r[1].dieticians; }
     catch (e) { main.innerHTML = ''; main.appendChild(el('div', { class: 'card empty', text: 'Could not load dieticians. Check your connection and try again.' })); return; }
     if (CFG.demo) root.prepend(el('div', { class: 'demo', text: 'Test mode: payments are simulated, no money is taken.' }));
-    top.appendChild(el('span', { class: 'price', html: ic('zap') + (CFG.free && CFG.free.enabled ? 'First ' + CFG.free.minutes + ' min free · then ' : '') + rs(CFG.live.price) + ' / ' + CFG.live.minutes + ' min · extend anytime' }));
+    top.appendChild(el('span', { class: 'price', html: ic('zap') + (CFG.free && CFG.free.enabled && CFG.free_eligible ? 'First ' + CFG.free.minutes + ' min free · then ' : '') + rs(CFG.live.price) + ' / ' + CFG.live.minutes + ' min' }));
     main.innerHTML = '';
     if (!CFG.live_enabled && CFG.slots_enabled) TAB = 'slot'; if (CFG.live_enabled && !CFG.slots_enabled) TAB = 'live';
     if (CFG.live_enabled && CFG.slots_enabled) {
@@ -266,7 +327,8 @@ window.DIETO_CONSULT = {
       var act = d.online ? el('button', { class: 'btn sm', text: 'Chat', onclick: function () { checkout({ mode: 'live', dietician: d }); } })
         : (CFG.slots_enabled && d.next_slot ? el('button', { class: 'btn sm ghost', text: 'Book', onclick: function () { TAB = 'slot'; SLOT_D = d.id; home(); } }) : null);
       main.appendChild(el('div', { class: 'card dt' }, [avatar(d), el('div', { class: 'sp' }, [el('b', { text: d.name }), sub ? el('small', { text: sub }) : null,
-        d.rating ? el('small', { html: ic('star') + ' ' + d.rating + ' (' + d.ratings + ')' }) : null, tag]), act]));
+        d.rating ? el('small', { html: ic('star') + ' ' + d.rating + ' (' + d.ratings + (d.ratings === 1 ? ' rating)' : ' ratings)') }) : null,
+        el('div', {}, [tag, d.reg_no ? el('span', { class: 'tag ver', style: 'margin-left:6px', html: ic('shield') + ' Verified' }) : null])]), act]));
     });
   }
   var SLOT_D = 0, SLOT_DAY = '', SLOT_PICK = null;
@@ -350,6 +412,7 @@ window.DIETO_CONSULT = {
         sub: 'Your chats are saved to your number, so you can open them on any phone. We’ll send a 6-digit code on WhatsApp.', onDone: async function () { try { CFG = await api('config'); } catch (e) {} checkout(o); } });
       return;
     }
+    if (!AU.consent) { consentScreen(function () { checkout(o); }); return; }
     var nameIn = el('input', { class: 'in', autocomplete: 'given-name', value: (PLAN && PLAN.name) || AU.name || '' });
     var phoneIn = el('input', { class: 'in', type: 'tel', inputmode: 'numeric', maxlength: '10', autocomplete: 'tel-national', value: (PLAN && PLAN.phone) || '' });
     var emailIn = el('input', { class: 'in', type: 'email', autocomplete: 'email', value: (PLAN && PLAN.A && PLAN.A.email) || AU.email || '' });
@@ -372,7 +435,8 @@ window.DIETO_CONSULT = {
     }
     var FREE = o.mode === 'live' && CFG.free_eligible;
     if (FREE) pkg = { price: 0, minutes: CFG.free.minutes };
-    card.appendChild(el('div', { class: 'sum' }, [el('span', { text: o.mode === 'plan' ? 'Personalised 7-day plan' : FREE ? 'Your first ' + pkg.minutes + '-minute chat' : pkg.minutes + '-minute chat' }), el('b', { text: FREE ? 'Free' : rs(pkg.price) })]));
+    card.appendChild(el('div', { class: 'sum' }, [el('span', { text: o.mode === 'plan' ? 'Personalised 7-day plan' : FREE ? 'Your first ' + pkg.minutes + '-minute chat' : pkg.minutes + '-minute chat' }),
+      FREE ? el('b', { html: '<s>' + rs(CFG.live.price) + '</s><span style="color:var(--g700);font-weight:800">Free</span>' }) : el('b', { text: rs(pkg.price) })]));
     var err = el('p', { class: 'err hidden', role: 'alert' });
     var payLabel = FREE ? ic('zap') + ' Start my free chat' : ic('shield') + ' Pay ' + rs(pkg.price) + ' securely';
     var pay = el('button', { class: 'btn block', html: payLabel });
@@ -466,6 +530,8 @@ window.DIETO_CONSULT = {
       else DietoAuth.widget(box, { title: 'Sign in to open this chat', sub: 'Use the mobile number you paid with.', onDone: function () { session(id); } });
       return;
     }
+    if (!CFG) { try { CFG = await api('config'); } catch (e) {} }
+    if (!DT.length) api('dieticians').then(function (r) { DT = r.dieticians || []; }).catch(function () {});
     CUR = { id: id, key: key, v: null }; LAST = 0; SEEN = {};
     var wrap = el('div', { class: 'chat' }); root.appendChild(wrap);
     var head = el('div', { class: 'chead' }); var body = el('div', { style: 'flex:1;display:flex;flex-direction:column;min-height:0' });
@@ -518,16 +584,20 @@ window.DIETO_CONSULT = {
     if (v.status === 'active') { CUR.timer = el('span', { class: 'timer', html: ic('clock') + '<span>' + mmss(v.remaining) + '</span>' }); h.appendChild(CUR.timer); }
   }
   function render(v) {
-    var mode = v.mode !== 'plan' && (v.status === 'active' || v.status === 'ended' || v.status === 'refunded') ? 'chat' : v.status;
+    var missed = (v.status === 'refunded' && v.ended_by === 'refund-auto') || (v.status === 'cancelled' && v.ended_by === 'no-dietician');
+    var mode = missed ? 'missed' : v.mode !== 'plan' && (v.status === 'active' || v.status === 'ended' || v.status === 'refunded') ? 'chat' : v.status;
     var b = CUR.body;
     if (CUR.prevStatus === 'waiting' && v.status === 'active') { try { navigator.vibrate && navigator.vibrate([120, 60, 120]); } catch (e) {} toast('Your dietician has joined'); }
     CUR.prevStatus = v.status;
+    CUR.head.classList.toggle('hidden', mode === 'waiting' || mode === 'missed');
     if (CUR.mode !== mode || mode !== 'chat') {
       headFor(v);
-      if (CUR.mode !== mode) { b.innerHTML = ''; CUR.msgs = null; CUR.footMode = ''; LAST = 0; SEEN = {}; }
+      if (CUR.mode !== mode) { b.innerHTML = ''; CUR.msgs = null; CUR.footMode = ''; CUR.waitBox = null; LAST = 0; SEEN = {}; }
       CUR.mode = mode;
     } else if (v.status === 'active' && !CUR.timer) headFor(v);
     if (mode === 'chat') return renderChat(v);
+    if (mode === 'missed') return renderMissed(v, b);
+    if (mode === 'waiting' && CUR.waitBox) return updateWaiting(v);
     b.innerHTML = '';
     if (v.status === 'pending') {
       b.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('shield') }), el('h2', { text: 'Waiting for payment' }),
@@ -536,15 +606,7 @@ window.DIETO_CONSULT = {
     } else if (v.mode === 'plan') {
       renderPlan(v, b);
     } else if (v.status === 'waiting') {
-      var left = Math.max(0, v.refund_wait - v.waited);
-      b.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('chat') }), el('h2', { text: 'Connecting you to a dietician…' }),
-        el('p', { text: 'Keep this screen open. Your ' + (v.free ? 'free ' : '') + v.paid_minutes + ' minutes start only when they join.' }),
-        el('p', { style: 'font-weight:700;color:var(--ink2)', text: 'Waiting ' + mmss(v.waited) }),
-        v.can_refund ? el('div', { style: 'display:grid;gap:8px;width:100%;max-width:320px;margin-top:8px' }, [
-          el('button', { class: 'btn ghost block', html: ic('refund') + ' Get a full refund', onclick: refund }),
-          el('p', { class: 'note', style: 'text-align:center', text: 'Or keep waiting. Someone may join any moment.' })])
-          : v.free ? el('p', { class: 'note', text: 'Free chats are answered after paid ones, so it can take a few minutes. If nobody is free within 20 minutes, your free chat stays available for later.' })
-          : el('p', { class: 'note', text: 'Nobody joined yet? You can get a full refund after ' + mmss(left) + '.' })]));
+      renderWaiting(v, b);
     } else if (v.status === 'booked') {
       var mins = Math.round((v.scheduled_at - v.now) / 60);
       b.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('cal') }), el('h2', { text: 'Booked for ' + fmtWhen(v.scheduled_at) }),
@@ -555,6 +617,142 @@ window.DIETO_CONSULT = {
       b.appendChild(el('div', { class: 'wait' }, [el('h2', { text: 'This chat was cancelled' }), el('p', { text: 'You were not charged.' }), el('a', { class: 'btn', href: '#', text: 'Start a new chat' })]));
     }
   }
+  /* waiting room: dark screen, rings, live count, share a report while you wait */
+  function renderWaiting(v, b) {
+    CUR.waitBox = {};
+    var w = el('div', { class: 'wait dark', style: 'justify-content:flex-start;padding-top:calc(18px + var(--safe-t))' });
+    w.appendChild(el('div', { style: 'display:flex;justify-content:space-between;width:100%;max-width:420px' }, [
+      el('a', { class: 'back', href: '#', 'aria-label': 'Back', html: ic('back'), style: 'width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center' }),
+      v.free ? el('span', { class: 'pill', style: 'align-self:center', text: 'Free chat' }) : el('span')]));
+    w.appendChild(el('div', { style: 'height:46px' }));
+    w.appendChild(el('div', { class: 'pulse', html: ic('chat') }));
+    w.appendChild(el('div', { style: 'height:16px' }));
+    w.appendChild(el('h2', { text: 'Finding your dietician…' }));
+    w.appendChild(el('p', { text: 'Keep this screen open. Your ' + (v.free ? 'free ' : '') + v.paid_minutes + ' minutes start only when they join.' }));
+    CUR.waitBox.chip = el('span', { class: 'wchip' }); w.appendChild(CUR.waitBox.chip);
+    var card = el('div', { class: 'wcard' });
+    card.appendChild(el('b', { html: ic('alert') + ' While you wait' }));
+    card.appendChild(el('p', { style: 'margin:0', text: 'Share a lab report or a photo of your meals. Your dietician sees it as soon as they join.' + (v.free ? ' Free chats are answered after paid ones.' : '') }));
+    card.appendChild(el('button', { class: 'btn ghost block', html: ic('clip') + ' Add a photo or report', onclick: openAttach }));
+    if (DietoAuth.native && !localStorage.getItem('dieto_push_token')) card.appendChild(el('button', { class: 'btn lime block', html: ic('bell') + ' Notify me when they join', onclick: function () { try { DietoAuth.registerPush('user'); } catch (e) {} this.remove(); } }));
+    CUR.waitBox.act = el('div', { style: 'display:grid;gap:8px' }); card.appendChild(CUR.waitBox.act);
+    w.appendChild(card);
+    b.appendChild(w);
+    updateWaiting(v);
+  }
+  function updateWaiting(v) {
+    var on = (DT || []).filter(function (d) { return d.online; }).length;
+    CUR.waitBox.chip.innerHTML = (on ? on + ' dietician' + (on > 1 ? 's' : '') + ' online · ' : '') + 'waiting <b>' + mmss(v.waited) + '</b>';
+    var a = CUR.waitBox.act, key = v.can_refund ? 'r' : v.free ? 'f' : 'c';
+    if (a.dataset.k === key) return; a.dataset.k = key; a.innerHTML = '';
+    if (v.can_refund) a.appendChild(el('button', { class: 'btn ghost block', html: ic('refund') + ' Stop waiting and get a full refund', onclick: refund }));
+    else if (!v.free) a.appendChild(el('p', { class: 'note', style: 'margin:0', text: 'If nobody joins within ' + (CFG ? CFG.auto_refund_minutes : 5) + ' minutes, we refund you automatically.' }));
+    if (v.free) a.appendChild(el('button', { class: 'btn ghost block', text: 'Cancel', onclick: async function () { await api('cancel', { session_id: CUR.id, key: CUR.key }).catch(function () {}); location.hash = ''; } }));
+  }
+  /* nobody answered: refunded automatically (paid) or free chat released */
+  function renderMissed(v, b) {
+    b.innerHTML = '';
+    var w = el('div', { style: 'flex:1;overflow:auto;padding:calc(28px + var(--safe-t)) 22px 24px;display:flex;flex-direction:column;gap:18px;max-width:520px;margin:0 auto;width:100%' });
+    w.appendChild(el('span', { class: 'ico', style: 'width:64px;height:64px;border-radius:22px', html: ic('clock') }));
+    w.appendChild(el('div', {}, [el('h2', { style: 'margin:0 0 6px;font-size:26px;letter-spacing:-.02em', text: 'Sorry, every dietician is busy' }),
+      el('p', { style: 'margin:0;color:var(--mute);line-height:1.55', text: v.free ? 'No one was free in time. Your free chat is still yours: try again a little later.' : 'No one could answer in time, so we’ve sent your money back.' })]));
+    if (!v.free) w.appendChild(el('div', { class: 'card dt', style: 'margin:0' }, [el('span', { style: 'width:44px;height:44px;border-radius:50%;background:var(--g700);color:#fff;display:grid;place-items:center;flex:none', html: ic('check') }),
+      el('div', { class: 'sp' }, [el('b', { text: rs(v.refund_amount || (CFG ? CFG.live.price : 99)) + ' refunded' }), el('small', { text: 'Back in your account in 5–7 working days' })])]));
+    var pref = 'any';
+    var nb = el('div', { style: 'background:var(--g900);color:#fff;border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:14px' });
+    nb.appendChild(el('b', { style: 'font-size:17px;display:flex;gap:10px;align-items:center', html: '<span style="color:var(--lime)">' + ic('bell') + '</span> Get a ping when someone’s free' }));
+    nb.appendChild(el('span', { style: 'font-size:13.5px;line-height:1.5;color:#CFE3D7', text: 'We’ll notify you the moment a dietician comes online.' }));
+    var chips = el('div', { class: 'chips' });
+    [['any', 'Anytime'], ['morning', 'Morning'], ['evening', 'Evening']].forEach(function (c) {
+      var bt = el('button', { class: 'chip', style: c[0] === pref ? 'background:var(--lime);border-color:var(--lime);color:var(--g900);font-weight:800' : 'background:transparent;border-color:rgba(255,255,255,.3);color:#fff', text: c[1],
+        onclick: function () { pref = c[0]; Array.prototype.forEach.call(chips.children, function (x, j) { var on = j === ['any', 'morning', 'evening'].indexOf(pref); x.style.cssText = on ? 'background:var(--lime);border-color:var(--lime);color:var(--g900);font-weight:800' : 'background:transparent;border-color:rgba(255,255,255,.3);color:#fff'; }); } });
+      chips.appendChild(bt);
+    });
+    nb.appendChild(chips);
+    var nbtn = el('button', { class: 'btn block', style: 'background:#fff;color:var(--g900);box-shadow:none', text: 'Notify me' });
+    nbtn.onclick = async function () {
+      try { await api('notify_me', { when: pref }); if (DietoAuth.native) { try { DietoAuth.registerPush('user'); } catch (e) {} } nbtn.textContent = 'Done. We’ll let you know'; nbtn.disabled = true; }
+      catch (e) { toast(e.status === 401 ? 'Please sign in first.' : e.message); }
+    };
+    nb.appendChild(nbtn);
+    if (!DietoAuth.native) nb.appendChild(el('span', { style: 'font-size:12.5px;color:#CFE3D7', text: 'Alerts come through the dietO app. On the website, check back later.' }));
+    w.appendChild(nb);
+    w.appendChild(el('a', { class: 'btn ghost block', href: '#', text: 'Back to home' }));
+    b.appendChild(w);
+  }
+
+  /* ---------- photos and PDFs ---------- */
+  var API_DIR = C.api.replace(/[^\/]*$/, '');
+  function fileHref(f) { return API_DIR + f.url; }
+  function kb(n) { return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+  function fileNode(m) {
+    var f = m.file, box = el('div', { class: 'm file ' + m.from });
+    if (/^image\//.test(f.mime)) box.appendChild(el('a', { href: fileHref(f), target: '_blank', rel: 'noopener' }, [el('img', { src: fileHref(f), alt: 'Shared photo', loading: 'lazy' })]));
+    else box.appendChild(el('a', { class: 'pdf', href: fileHref(f), target: '_blank', rel: 'noopener' }, [el('span', { class: 't', text: 'PDF' }), el('span', {}, [el('b', { text: f.name }), el('small', { text: kb(f.size) + ' · tap to open' })])]));
+    box.appendChild(el('time', { text: fmtTime(m.ts) }));
+    return box;
+  }
+  function shrink(file) {   // photos: max 1600 px, JPEG, so they send fast on mobile data
+    return new Promise(function (res) {
+      if (!/^image\/(jpeg|png|webp|heic|heif)/i.test(file.type) || (file.size < 400 * 1024 && /jpeg|png/.test(file.type))) return res(file);
+      var url = URL.createObjectURL(file), im = new Image();
+      im.onload = function () {
+        var k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+        c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        c.toBlob(function (bl) { res(bl && bl.size < file.size ? new File([bl], (file.name || 'photo').replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }) : file); }, 'image/jpeg', 0.85);
+      };
+      im.onerror = function () { URL.revokeObjectURL(url); res(file); };
+      im.src = url;
+    });
+  }
+  function upload(file, onp) {
+    return new Promise(function (res, rej) {
+      var fd = new FormData(); fd.append('file', file); fd.append('session_id', CUR.id); fd.append('key', CUR.key); if (DietoAuth.token()) fd.append('_u', DietoAuth.token());
+      var x = new XMLHttpRequest(); x.open('POST', C.api + '?route=upload');
+      x.upload.onprogress = function (e) { if (e.lengthComputable) onp(e.loaded / e.total); };
+      x.onload = function () { var d = {}; try { d = JSON.parse(x.responseText); } catch (e) {} if (x.status === 200) res(d); else rej(new Error(d.error || (x.status === 413 ? 'That file is too big. The limit is 10 MB.' : 'Upload failed. Please try again.'))); };
+      x.onerror = function () { rej(new Error('Upload failed. Check your internet and try again.')); };
+      x.send(fd);
+    });
+  }
+  function openAttach() {
+    if (!CUR) return;
+    var ov = el('div', { class: 'ov', onclick: function (e) { if (e.target === ov) close(); } });
+    var sh = el('div', { class: 'sheet', role: 'dialog', 'aria-label': 'Share with your dietician' });
+    function close() { ov.remove(); }
+    sh.appendChild(el('span', { class: 'handle' }));
+    sh.appendChild(el('div', {}, [el('h2', { style: 'margin:0 0 4px;font-size:22px;letter-spacing:-.02em', text: 'Share with your dietician' }), el('p', { style: 'margin:0;color:var(--mute);font-size:14px', text: 'Lab reports, prescriptions or photos of your meals.' })]));
+    var pick = function (accept, cap) { var i = el('input', { type: 'file', accept: accept, multiple: cap ? null : 'multiple', capture: cap || null, style: 'display:none' }); i.onchange = function () { add(Array.prototype.slice.call(i.files || [])); i.remove(); }; document.body.appendChild(i); i.click(); };
+    sh.appendChild(el('div', { class: 'att3' }, [
+      el('button', { style: 'background:var(--mint);color:var(--g700)', html: ic('cam') + 'Camera', onclick: function () { pick('image/*', 'environment'); } }),
+      el('button', { style: 'background:var(--warm);color:var(--warmink)', html: ic('img') + 'Photos', onclick: function () { pick('image/jpeg,image/png,image/webp,image/heic', ''); } }),
+      el('button', { style: 'background:var(--redbg);color:var(--red)', html: ic('pdf') + 'PDF report', onclick: function () { pick('application/pdf', ''); } })]));
+    var list = el('div', { style: 'display:flex;flex-direction:column;gap:10px' }); sh.appendChild(list);
+    sh.appendChild(el('p', { class: 'note', style: 'text-align:center;margin:0', html: ic('lock') + ' JPG, PNG or PDF · up to 10 MB · only your dietician sees it' }));
+    sh.appendChild(el('button', { class: 'linkbtn', text: 'Done', onclick: close }));
+    ov.appendChild(sh); document.body.appendChild(ov);
+    async function add(files) {
+      for (var k = 0; k < files.length && k < 8; k++) {
+        var f = files[k], isPdf = f.type === 'application/pdf';
+        var bar = el('span', { style: 'display:block;width:0;height:100%;border-radius:999px;background:var(--g700);transition:width .2s' });
+        var stt = el('small', { style: 'color:var(--mute);font-size:12px', text: 'Preparing…' });
+        list.appendChild(el('div', { style: 'display:flex;gap:12px;align-items:center;border:1.5px solid var(--line);border-radius:18px;padding:10px 12px' }, [
+          el('span', { style: 'width:40px;height:48px;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;' + (isPdf ? 'background:var(--redbg);color:var(--red)' : 'background:var(--mint);color:var(--g700)'), html: isPdf ? 'PDF' : ic('img') }),
+          el('span', { style: 'flex:1;display:flex;flex-direction:column;gap:6px;min-width:0' }, [el('b', { style: 'font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis', text: f.name || 'Photo' }),
+            el('span', { style: 'height:6px;border-radius:999px;background:var(--mint)' }, [bar]), stt])]));
+        try {
+          if (f.size > 10 * 1048576 && isPdf) throw new Error('That PDF is over 10 MB.');
+          var g = await shrink(f);
+          if (g.size > 10 * 1048576) throw new Error('That file is over 10 MB.');
+          stt.textContent = 'Uploading…';
+          await upload(g, function (p) { bar.style.width = Math.round(p * 100) + '%'; stt.textContent = 'Uploading · ' + Math.round(p * 100) + '%'; });
+          bar.style.width = '100%'; stt.textContent = 'Sent'; stt.style.color = 'var(--g700)'; stt.style.fontWeight = '700';
+        } catch (e) { stt.textContent = e.message; stt.style.color = 'var(--red)'; bar.style.background = 'var(--red)'; }
+      }
+      clearTimeout(POLL); if (CUR) { CUR.quiet = 0; refresh(); }
+    }
+  }
+
   function renderChat(v) {
     var b = CUR.body;
     if (!CUR.msgs) {
@@ -567,24 +765,23 @@ window.DIETO_CONSULT = {
     v.messages.forEach(function (m) {
       LAST = Math.max(LAST, m.id); if (SEEN[m.id]) return; SEEN[m.id] = 1;
       var pend = CUR.msgs.querySelector('[data-pending]'); if (m.from === 'c' && pend && pend.dataset.text === m.text) pend.remove();
-      CUR.msgs.appendChild(el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]));
+      CUR.msgs.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]));
     });
     if (atBottom || v.messages.length) CUR.msgs.scrollTop = CUR.msgs.scrollHeight;
-    // banner: extend
     CUR.banner.innerHTML = '';
     if (v.status === 'active' && v.remaining <= 60) {
       CUR.banner.appendChild(el('div', { class: 'banner' }, [el('span', { class: 'sp', text: 'Less than a minute left.' }),
         el('button', { class: 'btn sm', text: 'Continue · ' + rs(v.ext.price), onclick: extend })]));
     }
-    // footer: typing box, "continue now" offer, or end state
     var canCont = v.status === 'ended' && v.can_extend && !CUR.skipCont;
     var mode = v.status === 'active' ? 'input' : canCont ? 'cont' : 'done';
-    if (mode === 'cont' && CUR.contTimer) { var lft = Math.max(0, (v.ext_until || 0) - v.now); CUR.contTimer.textContent = 'This offer stays open for ' + mmss(lft) + '.'; }
+    if (mode === 'cont' && CUR.contTimer) { var lft = Math.max(0, (v.ext_until || 0) - v.now); CUR.contTimer.textContent = 'Offer open for ' + mmss(lft); }
     if (CUR.footMode !== mode) {
       CUR.footMode = mode; CUR.foot.innerHTML = '';
       if (mode === 'input') {
         var ta = el('textarea', { rows: '1', placeholder: 'Type your question…', maxlength: '2000', 'aria-label': 'Message' });
         var send = el('button', { class: 'send', 'aria-label': 'Send', html: ic('send') });
+        var att = el('button', { class: 'att', 'aria-label': 'Attach a photo or PDF', html: ic('clip'), onclick: openAttach });
         ta.addEventListener('input', function () { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; });
         ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !('ontouchstart' in window)) { e.preventDefault(); go(); } });
         send.addEventListener('click', go);
@@ -595,38 +792,28 @@ window.DIETO_CONSULT = {
           try { await api('send', { session_id: CUR.id, key: CUR.key, text: t }); clearTimeout(POLL); CUR.quiet = 0; refresh(); }
           catch (e) { tmp.remove(); ta.value = t; toast(e.message); }
         }
-        CUR.foot.appendChild(el('div', { class: 'bar' }, [ta, send]));
-        CUR.foot.appendChild(el('div', { style: 'text-align:center;padding:0 0 calc(6px + var(--safe-b));background:#fff' }, [el('button', { style: 'border:0;background:none;color:var(--mute);font-size:12.5px;font-weight:700;cursor:pointer', text: 'End chat', onclick: async function () { if (confirm('End this chat now? Unused time is not refunded.')) { await api('end', { session_id: CUR.id, key: CUR.key }).catch(function () {}); clearTimeout(POLL); refresh(); } } })]));
+        CUR.foot.appendChild(el('div', { class: 'bar' }, [att, ta, send]));
+        CUR.foot.appendChild(el('div', { style: 'text-align:center;padding:0 0 calc(6px + var(--safe-b));background:#fff' }, [el('button', { class: 'linkbtn', style: 'font-size:12.5px;padding:2px 8px 6px', text: 'End chat', onclick: async function () { if (confirm('End this chat now? Unused time is not refunded.')) { await api('end', { session_id: CUR.id, key: CUR.key }).catch(function () {}); clearTimeout(POLL); refresh(); } } })]));
         setTimeout(function () { try { ta.focus({ preventScroll: true }); } catch (e) {} }, 50);
       } else if (mode === 'cont') {
-        var dn = v.dietician ? v.dietician.name : 'your dietician';
-        var cb = el('div', { class: 'card cont', style: 'margin:0;border-radius:22px 22px 0 0;text-align:center;padding:20px 18px calc(16px + var(--safe-b));box-shadow:0 -8px 30px rgba(18,58,38,.12)' });
-        cb.appendChild(el('div', { style: 'font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g700)', text: v.free ? 'Free chat finished' : 'Time’s up' }));
-        cb.appendChild(el('h2', { style: 'margin:6px 0 4px;font-size:21px', text: v.free ? 'Your free ' + v.paid_minutes + ' minutes are over' : 'Want to keep going?' }));
-        cb.appendChild(el('p', { style: 'margin:0 0 14px;color:var(--mute);font-size:14.5px;line-height:1.5', text: 'Continue with ' + dn + ' for ' + v.ext.minutes + ' more minutes. Your chat carries on right where you left off.' }));
-        cb.appendChild(el('button', { class: 'btn block', style: 'font-size:17px;padding:16px', html: ic('zap') + ' Continue now · ' + rs(v.ext.price), onclick: extend }));
-        cb.appendChild(el('p', { class: 'note', style: 'margin:10px 0 0', text: 'Pay by UPI, card or wallet. ' + v.ext.minutes + ' minutes are added as soon as you pay.' }));
-        CUR.contTimer = el('p', { class: 'note', style: 'margin:4px 0 0' }); cb.appendChild(CUR.contTimer);
-        CUR.contTimer.textContent = 'This offer stays open for ' + mmss(Math.max(0, (v.ext_until || 0) - v.now)) + '.';
-        cb.appendChild(el('button', { style: 'border:0;background:none;color:var(--mute);font-size:13.5px;font-weight:700;cursor:pointer;margin-top:8px', text: 'Not now', onclick: function () { CUR.skipCont = true; CUR.footMode = ''; render(CUR.v); } }));
+        var d = v.dietician;
+        var cb = el('div', { class: 'sheet' });
+        cb.appendChild(el('span', { class: 'handle' }));
+        cb.appendChild(el('span', { class: 'pill', text: v.free ? 'Free chat finished' : 'Time’s up' }));
+        cb.appendChild(el('div', {}, [el('h2', { style: 'margin:0 0 6px;font-size:24px;letter-spacing:-.02em;line-height:1.2', text: v.free ? 'Your free ' + v.paid_minutes + ' minutes are over' : 'Want to keep going?' }),
+          el('p', { style: 'margin:0;color:var(--mute);font-size:14.5px;line-height:1.55', text: 'Keep talking to the same dietician. Your chat stays right where you left it.' })]));
+        cb.appendChild(el('div', { class: 'mini' }, [avatar(d || { name: 'd' }, true), el('div', { class: 'sp' }, [el('b', { style: 'display:block', text: d ? d.name : 'Your dietician' }), el('small', { style: 'color:var(--mute);font-size:12.5px', text: 'Still in your chat' })]),
+          el('div', { class: 'pr' }, [el('b', { text: rs(v.ext.price) }), el('small', { text: v.ext.minutes + ' more minutes' })])]));
+        cb.appendChild(el('button', { class: 'btn block', style: 'font-size:17px;padding:18px', html: 'Continue now · ' + rs(v.ext.price) + ' ' + ic('arrow'), onclick: extend }));
+        CUR.contTimer = el('span', { class: 'o' });
+        cb.appendChild(el('div', { class: 'offer' }, [el('span', { html: ic('lock') + ' UPI · Cards · Wallets' }), CUR.contTimer]));
+        CUR.contTimer.textContent = 'Offer open for ' + mmss(Math.max(0, (v.ext_until || 0) - v.now));
+        cb.appendChild(el('button', { class: 'linkbtn', text: 'Not now', onclick: function () { CUR.skipCont = true; CUR.footMode = ''; render(CUR.v); } }));
         CUR.foot.appendChild(cb);
       } else {
-        var box = el('div', { class: 'card', style: 'margin:0;border-radius:18px 18px 0 0;text-align:center;padding-bottom:calc(16px + var(--safe-b))' });
-        if (v.status === 'refunded') box.appendChild(el('p', { style: 'margin:0 0 10px;color:var(--mute)', text: 'This chat was refunded.' }));
-        else if (!v.rating) {
-          box.appendChild(el('b', { text: 'How was your chat?' }));
-          var stars = el('div', { class: 'stars' }); var pick = 0;
-          for (var i = 1; i <= 5; i++) (function (n) { stars.appendChild(el('button', { 'aria-label': n + ' stars', text: '★', onclick: async function () {
-            pick = n; Array.prototype.forEach.call(stars.children, function (s, j) { s.classList.toggle('on', j < n); });
-            try { await api('rate', { session_id: CUR.id, key: CUR.key, rating: n }); toast('Thanks for the feedback!'); } catch (e) {}
-          } })); })(i);
-          box.appendChild(stars);
-        } else box.appendChild(el('p', { style: 'margin:0 0 10px;color:var(--mute)', text: 'Thanks for rating this chat.' }));
-        box.appendChild(el('a', { class: 'btn block', href: '#', html: ic('plus') + ' Start a new chat' }));
-        CUR.foot.appendChild(box);
+        CUR.foot.appendChild(rateBox(v));
       }
     }
-    // live countdown between polls
     clearInterval(TICK);
     if (v.status === 'active') {
       var endAt = Date.now() + v.remaining * 1000;
@@ -634,11 +821,52 @@ window.DIETO_CONSULT = {
       tick(); TICK = setInterval(tick, 1000);
     } else {
       if (CUR.timer) { CUR.timer.remove(); CUR.timer = null; }
-      if (mode === 'cont' && CUR.contTimer) {   // count down the 3-minute "continue" window
+      if (mode === 'cont' && CUR.contTimer) {
         var until = Date.now() + Math.max(0, (v.ext_until || 0) - v.now) * 1000;
-        TICK = setInterval(function () { var r = Math.max(0, Math.round((until - Date.now()) / 1000)); if (CUR && CUR.contTimer) CUR.contTimer.textContent = 'This offer stays open for ' + mmss(r) + '.'; if (r <= 0) { clearInterval(TICK); clearTimeout(POLL); refresh(); } }, 1000);
+        TICK = setInterval(function () { var r = Math.max(0, Math.round((until - Date.now()) / 1000)); if (CUR && CUR.contTimer) CUR.contTimer.textContent = 'Offer open for ' + mmss(r); if (r <= 0) { clearInterval(TICK); clearTimeout(POLL); refresh(); } }, 1000);
       }
     }
+  }
+  /* after the chat: stars, quick tags, comment; 4–5 stars in the app → ask for a Play Store review */
+  var TAGS = ['Clear advice', 'Friendly', 'Quick replies', 'Local food tips', 'Understood my problem'];
+  function rateBox(v) {
+    var box = el('div', { class: 'sheet' });
+    box.appendChild(el('span', { class: 'handle' }));
+    if (v.status === 'refunded') { box.appendChild(el('p', { style: 'margin:0;color:var(--mute);text-align:center', text: 'This chat was refunded.' })); box.appendChild(el('a', { class: 'btn block', href: '#', html: ic('plus') + ' Start a new chat' })); return box; }
+    if (v.rating) { box.appendChild(el('p', { style: 'margin:0;color:var(--mute);text-align:center', text: 'Thanks for rating this chat.' })); box.appendChild(el('a', { class: 'btn block', href: '#', html: ic('plus') + ' Start a new chat' })); return box; }
+    var dn = v.dietician ? v.dietician.name : 'your dietician', pick = 0, tags = {};
+    box.appendChild(el('b', { style: 'font-size:18px;text-align:center', text: 'How was your chat with ' + dn + '?' }));
+    var lbl = el('span', { style: 'text-align:center;font-size:14px;font-weight:700;color:var(--warmink);min-height:1.2em' });
+    var stars = el('div', { class: 'stars', role: 'radiogroup', 'aria-label': 'Rating' });
+    var WORDS = ['', 'Poor', 'Not great', 'Okay', 'Good', 'Loved it'];
+    var extra = el('div', { class: 'hidden', style: 'display:flex;flex-direction:column;gap:12px' });
+    for (var i = 1; i <= 5; i++) (function (n) { stars.appendChild(el('button', { 'aria-label': n + ' star' + (n > 1 ? 's' : ''), html: '★', onclick: function () {
+      pick = n; Array.prototype.forEach.call(stars.children, function (s, j) { s.classList.toggle('on', j < n); }); lbl.textContent = WORDS[n]; extra.classList.remove('hidden');
+    } })); })(i);
+    box.appendChild(stars); box.appendChild(lbl);
+    var chips = el('div', { class: 'chips', style: 'justify-content:center' });
+    TAGS.forEach(function (t) { var c = el('button', { class: 'chip', text: t, onclick: function () { tags[t] = !tags[t]; c.classList.toggle('on', !!tags[t]); } }); chips.appendChild(c); });
+    extra.appendChild(chips);
+    var ta = el('textarea', { class: 'in', maxlength: '500', placeholder: 'Anything else? (optional)', style: 'min-height:70px' }); extra.appendChild(ta);
+    var sub = el('button', { class: 'btn block', text: 'Submit' }); extra.appendChild(sub);
+    box.appendChild(extra);
+    box.appendChild(el('a', { class: 'linkbtn', style: 'text-align:center;text-decoration:none', href: '#', text: 'Skip · start a new chat' }));
+    sub.onclick = async function () {
+      if (!pick) return;
+      sub.disabled = true;
+      try { await api('rate', { session_id: CUR.id, key: CUR.key, rating: pick, tags: Object.keys(tags).filter(function (k) { return tags[k]; }), review: ta.value.trim() }); }
+      catch (e) { sub.disabled = false; return toast(e.message); }
+      box.innerHTML = ''; box.appendChild(el('span', { class: 'handle' }));
+      box.appendChild(el('b', { style: 'font-size:18px;text-align:center', text: 'Thanks for the feedback!' }));
+      if (pick >= 4 && CFG && CFG.play_url && DietoAuth.native && !load('dieto_play_asked', 0)) {
+        store('dieto_play_asked', 1);
+        box.appendChild(el('div', { style: 'background:var(--g900);color:#fff;border-radius:20px;padding:14px 16px;display:flex;gap:12px;align-items:center' }, [
+          el('span', { style: 'flex:1;font-size:13.5px;line-height:1.45', text: 'Glad it helped! Would you rate dietO on Google Play?' }),
+          el('a', { class: 'btn sm lime', href: CFG.play_url, target: '_blank', rel: 'noopener', text: 'Rate app' })]));
+      }
+      box.appendChild(el('a', { class: 'btn block', href: '#', html: ic('plus') + ' Start a new chat' }));
+    };
+    return box;
   }
   async function extend() {
     try {
@@ -654,8 +882,163 @@ window.DIETO_CONSULT = {
     catch (e) { toast(e.message); }
   }
 
+  /* ---------- consent (asked once per account) ---------- */
+  function patchUser(p) { try { var a = JSON.parse(localStorage.getItem('dieto_user')); if (a && a.user) { Object.assign(a.user, p); localStorage.setItem('dieto_user', JSON.stringify(a)); } } catch (e) {} }
+  function page(title, backHash, sub) {
+    stopAll(); root.innerHTML = '';
+    var main = el('main');
+    var top = el('header', { class: 'top', style: 'padding-bottom:22px' }, [el('div', { class: 'row' }, [el('a', { class: 'back', href: backHash, 'aria-label': 'Back', html: ic('back') })]),
+      el('h1', { style: 'margin-top:14px', text: title }), sub ? el('p', { text: sub }) : null]);
+    root.appendChild(el('div', { class: 'app' }, [top, main]));
+    return main;
+  }
+  function consentScreen(done) {
+    var main = page('Your health data stays private', '#', 'Before you chat, here is what we keep and who can see it.');
+    var c = el('div', { class: 'card' }); main.appendChild(c);
+    var kv = el('div', { class: 'kv' });
+    [['pdf', '<b>What we keep:</b> your diet test, chats, plans and files you share.'], ['user', '<b>Who sees it:</b> only the dietician you chat with. We never sell it.'],
+     ['trash', '<b>Your control:</b> download or delete everything any time from Account.'], ['alert', 'dietO gives diet advice, not medical treatment. For medical problems, see a doctor.']]
+      .forEach(function (r) { kv.appendChild(el('div', {}, [el('span', { class: 'ri', html: ic(r[0]) }), el('span', { html: r[1] })])); });
+    c.appendChild(kv);
+    var cb = el('input', { type: 'checkbox' });
+    c.appendChild(el('label', { class: 'chk' }, [cb, el('span', { html: 'I agree to dietO using my health details to give me diet advice, as in the <a href="' + C.terms + '" target="_blank">terms and privacy policy</a>.' })]));
+    var err = el('p', { class: 'err hidden', role: 'alert' }); c.appendChild(err);
+    var go = el('button', { class: 'btn block', text: 'I agree, continue' }); c.appendChild(go);
+    c.appendChild(el('p', { class: 'note', style: 'text-align:center', text: 'Asked once. You can withdraw it in Account › Privacy.' }));
+    go.onclick = async function () {
+      if (!cb.checked) { err.textContent = 'Please tick the box to continue.'; err.classList.remove('hidden'); return; }
+      go.disabled = true;
+      try { var r = await api('consent', { agree: true }); patchUser({ consent: r.consent }); done(); }
+      catch (e) { go.disabled = false; err.textContent = e.message; err.classList.remove('hidden'); }
+    };
+  }
+
+  /* ---------- account: payments, invoices, privacy, delete ---------- */
+  function needSignIn(main, then) {
+    var c = el('div', { class: 'card' }); main.appendChild(c);
+    DietoAuth.widget(c, { title: 'Sign in to your account', sub: 'Use your mobile number. We’ll send a code on WhatsApp.', onDone: then });
+  }
+  function account() {
+    var AU = DietoAuth.user();
+    var main = page(AU ? (AU.name || 'Your account') : 'Your account', '#', AU ? '+91 ' + AU.phone : '');
+    if (!AU) return needSignIn(main, account);
+    var rows = el('div', { class: 'rows' });
+    function row(icon, t, sub, href, bad, onclick) {
+      var r = el(href ? 'a' : 'button', { href: href || null, class: bad ? 'bad' : null, onclick: onclick || null }, [el('span', { class: 'ri', style: bad ? 'background:var(--redbg);color:var(--red)' : '', html: ic(icon) }),
+        el('span', { class: 'sp' }, [t, sub ? el('small', { text: sub }) : null]), el('span', { html: ic('next'), style: 'color:var(--mute)' })]);
+      return r;
+    }
+    main.appendChild(el('div', { class: 'h', text: 'Account' }));
+    rows.appendChild(row('receipt', 'Payments and invoices', 'Download GST invoices', '#pay'));
+    rows.appendChild(row('chat', 'My chats and plans', 'All your dietician chats', '#'));
+    if (DietoAuth.native) rows.appendChild(row('bell', 'Notifications', localStorage.getItem('dieto_push_token') ? 'On' : 'Turn on to know when your dietician joins', null, false, function () { try { DietoAuth.registerPush('user'); toast('Notifications on'); } catch (e) {} }));
+    main.appendChild(rows);
+    main.appendChild(el('div', { class: 'h', text: 'Privacy' }));
+    var pr = el('div', { class: 'rows' });
+    pr.appendChild(row('lock', 'My data and consent', AU.consent ? 'You agreed on ' + new Date(AU.consent * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Not given yet', '#privacy'));
+    pr.appendChild(row('dl', 'Download my data', 'Everything we hold, as a file', null, false, downloadData));
+    pr.appendChild(row('trash', 'Delete my account', 'Removes your data for good', '#delete', true));
+    main.appendChild(pr);
+    main.appendChild(el('button', { class: 'btn ghost block', text: 'Sign out', onclick: async function () { await DietoAuth.signOut(); toast('Signed out'); location.hash = ''; } }));
+  }
+  async function downloadData() {
+    try { var r = await api('my_data'); var u = API_DIR + r.url; if (DietoAuth.native) location.href = u; else window.open(u, '_blank', 'noopener'); toast('Your data file is downloading'); }
+    catch (e) { toast(e.message); }
+  }
+  async function payments() {
+    var main = page('Payments and invoices', '#account');
+    if (!DietoAuth.user()) return needSignIn(main, payments);
+    main.appendChild(el('div', { class: 'empty', text: 'Loading…' }));
+    var r; try { r = await api('my_payments'); } catch (e) { main.innerHTML = ''; main.appendChild(el('div', { class: 'card empty', text: e.message })); return; }
+    main.innerHTML = '';
+    if (!r.payments.length) { main.appendChild(el('div', { class: 'card empty', text: 'No payments yet.' })); return; }
+    var rows = el('div', { class: 'rows' });
+    r.payments.forEach(function (p) {
+      var when = new Date(p.at * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      var amt = el('b', { style: p.status === 'refunded' ? 'color:var(--mute);text-decoration:line-through' : p.amount ? '' : 'color:var(--g700)', text: rs(p.amount) });
+      var sub = when + (p.status === 'refunded' ? ' · refunded' : p.invoice ? ' · ' + p.invoice : p.test ? ' · test payment' : p.amount ? '' : ' · no invoice');
+      rows.appendChild(el(p.invoice ? 'a' : 'div', { href: p.invoice ? '#inv=' + encodeURIComponent(p.invoice) : null, style: p.invoice ? '' : 'cursor:default' }, [
+        el('span', { class: 'sp' }, [p.item, el('small', { text: sub })]), amt, p.invoice ? el('span', { html: ic('next'), style: 'color:var(--mute)' }) : null]));
+    });
+    main.appendChild(rows);
+    main.appendChild(el('p', { class: 'note', text: 'Tap a payment to see its invoice. Refunds reach your account in 5–7 working days.' }));
+  }
+  async function invoice(no) {
+    var main = page('Invoice', '#pay');
+    main.appendChild(el('div', { class: 'empty', text: 'Loading…' }));
+    var r; try { r = await api('invoice', { no: no }); } catch (e) { main.innerHTML = ''; main.appendChild(el('div', { class: 'card empty', text: e.message })); return; }
+    var i = r.invoice; main.innerHTML = '';
+    var c = el('div', { class: 'card inv' }); main.appendChild(c);
+    function pz(x) { return '₹' + (x / 100).toFixed(2); }
+    c.appendChild(el('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start' }, [
+      el('div', {}, [el('b', { style: 'font-size:22px;letter-spacing:-.02em', html: 'diet<span style="color:var(--g700)">O</span>' }), el('div', { style: 'font-size:11.5px;color:var(--mute);line-height:1.5', html: esc(i.seller.name) + (i.gstin ? '<br>GSTIN: ' + esc(i.gstin) : '') })]),
+      el('span', { class: 'st active', text: 'Paid' })]));
+    c.appendChild(el('div', { class: 'g' }, [el('div', { html: '<span>Invoice</span><b>' + esc(i.no) + '</b>' }), el('div', { html: '<span>Date</span><b>' + new Date(i.date * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + '</b>' }),
+      el('div', { html: '<span>Billed to</span><b>' + esc(i.name) + '</b>' }), el('div', { html: '<span>Paid via</span><b>' + esc(i.via) + '</b>' })]));
+    c.appendChild(el('div', { style: 'border-top:1px dashed var(--line);padding-top:10px' }, [
+      el('div', { class: 'r' }, [el('span', { text: i.item }), el('span', { text: pz(i.base) })]),
+      i.rate > 0 ? el('div', { class: 'r', style: 'color:var(--mute)' }, [el('span', { text: 'CGST ' + i.rate / 2 + '%' }), el('span', { text: pz(i.cgst) })]) : null,
+      i.rate > 0 ? el('div', { class: 'r', style: 'color:var(--mute)' }, [el('span', { text: 'SGST ' + i.rate / 2 + '%' }), el('span', { text: pz(i.sgst) })]) : null,
+      el('div', { class: 'r t' }, [el('span', { text: 'Total' }), el('span', { text: pz(i.total) })])]));
+    c.appendChild(el('p', { class: 'note', text: i.rate > 0 ? 'Prices include GST.' : 'GST not charged.' }));
+    c.appendChild(el('a', { class: 'btn block', style: 'margin-top:12px', href: API_DIR + r.print_url, target: '_blank', rel: 'noopener', html: ic('dl') + ' Download PDF' }));
+  }
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function privacy() {
+    var AU = DietoAuth.user();
+    var main = page('My data and consent', '#account');
+    if (!AU) return needSignIn(main, privacy);
+    var c = el('div', { class: 'card' }); main.appendChild(c);
+    c.appendChild(el('div', { class: 'kv' }, [
+      el('div', {}, [el('span', { class: 'ri', html: ic('pdf') }), el('span', { html: '<b>What we keep:</b> your diet test, chats, plans and files you share. Shared photos and PDFs are deleted after ' + ((CFG && CFG.file_keep_days) || 90) + ' days.' })]),
+      el('div', {}, [el('span', { class: 'ri', html: ic('user') }), el('span', { html: '<b>Who sees it:</b> only the dietician you chat with, and dietO support if you ask us for help.' })]),
+      el('div', {}, [el('span', { class: 'ri', html: ic('receipt') }), el('span', { html: '<b>Invoices</b> are kept as tax law requires, even if you delete your account.' })])]));
+    c.appendChild(el('div', { class: 'sum', style: 'margin-top:10px' }, [el('span', { text: 'Consent' }), el('b', { text: AU.consent ? 'Given' : 'Not given' })]));
+    if (AU.consent) c.appendChild(el('button', { class: 'btn ghost block', text: 'Withdraw consent', onclick: async function () {
+      if (!confirm('Withdraw consent? You won’t be able to start new chats until you agree again. Your past chats stay until you delete your account.')) return;
+      try { await api('consent', { agree: false }); patchUser({ consent: 0 }); toast('Consent withdrawn'); privacy(); } catch (e) { toast(e.message); } } }));
+    main.appendChild(el('button', { class: 'btn ghost block', style: 'margin-top:6px', html: ic('dl') + ' Download my data', onclick: downloadData }));
+  }
+  function deleteAccount() {
+    var AU = DietoAuth.user();
+    var main = page('Delete your account?', '#account', 'This removes everything and can’t be undone.');
+    if (!AU) return needSignIn(main, deleteAccount);
+    var c = el('div', { class: 'card' }); main.appendChild(c);
+    c.appendChild(el('ul', { style: 'margin:0 0 12px;padding:14px 16px 14px 34px;background:var(--bg);border-radius:18px;display:grid;gap:8px;font-size:14px;line-height:1.45', html:
+      '<li>Your profile, diet test and plans</li><li>All chats, photos and reports you shared</li><li>Unused chat minutes (no refund)</li>' }));
+    c.appendChild(el('p', { class: 'note', style: 'margin:0 0 12px', text: 'Payment invoices are kept as tax law requires. They hold only your name, number and the amount.' }));
+    var box = el('div'); c.appendChild(box);
+    DietoAuth.widget(box, { phone: AU.phone, title: 'Confirm it’s you', sub: 'We’ll send a code to +91 ' + AU.phone + ' on WhatsApp.', onDone: function () { ready(); } });
+    function ready() {
+      box.innerHTML = '';
+      var err = el('p', { class: 'err hidden', role: 'alert' }); box.appendChild(err);
+      var del = el('button', { class: 'btn danger block', html: ic('trash') + ' Delete my account' }); box.appendChild(del);
+      del.onclick = async function () { go(false); };
+      async function go(force) {
+        del.disabled = true;
+        try { await api('delete_account', { force: force }); }
+        catch (e) {
+          del.disabled = false;
+          if (e.data && e.data.busy && confirm(e.message + '\n\nDelete anyway?')) return go(true);
+          if (e.data && e.data.reauth) return deleteAccount();
+          err.textContent = e.message; err.classList.remove('hidden'); return;
+        }
+        ['dieto_user', 'dieto_plan', 'dieto_consults', 'dieto_log', 'dieto_weights', 'dieto_push_token'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+        var m2 = page('Account deleted', '#');
+        m2.appendChild(el('div', { class: 'card empty' }, [el('div', { class: 'big', html: ic('check') }), el('div', { text: 'Your account and health data have been removed. Thank you for trying dietO.' })]));
+        m2.appendChild(el('a', { class: 'btn block', href: DietoAuth.href(C.home), text: 'Back to dietO' }));
+      }
+    }
+    main.appendChild(el('a', { class: 'btn ghost block', href: '#account', text: 'Keep my account' }));
+  }
+
   /* ---------- router ---------- */
-  function route() { var m = location.hash.match(/^#s=(\d+)/); if (m) session(+m[1]); else home(); }
+  function route() {
+    var h = location.hash, m = h.match(/^#s=(\d+)/), n = h.match(/^#inv=(.+)$/);
+    if (m) session(+m[1]); else if (n) invoice(decodeURIComponent(n[1]));
+    else if (h === '#account') account(); else if (h === '#pay') payments(); else if (h === '#privacy') privacy(); else if (h === '#delete') deleteAccount();
+    else home();
+  }
   window.addEventListener('hashchange', route);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && CUR) { clearTimeout(POLL); refresh(); } });
   route();
