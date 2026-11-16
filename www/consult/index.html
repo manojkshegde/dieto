@@ -35,6 +35,15 @@ main{flex:1;padding:16px 16px calc(24px + var(--safe-b))}
 .tabs button{border:0;background:none;padding:11px;border-radius:11px;font-weight:700;font-size:14.5px;color:var(--mute);cursor:pointer}
 .tabs button.on{background:var(--g700);color:#fff}
 .card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 12px rgba(18,58,38,.06);margin-bottom:12px}
+.plancard{display:flex;gap:14px;align-items:center;border:1.5px solid #cfe6d6}
+.plancard .ic{width:46px;height:46px;border-radius:14px;background:#e8f4ec;color:var(--g700);display:grid;place-items:center;flex:none}
+.plancard small{display:block;color:var(--mute);font-size:13px;line-height:1.45;margin-top:2px}
+.pday{background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px rgba(18,58,38,.05)}
+.pday h3{margin:0 0 8px;font-size:15px;color:var(--g700)}
+.pday .r{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:6px 0;border-top:1px solid #eef3ef;font-size:14.5px;line-height:1.45}
+.pday .r:first-of-type{border-top:0}.pday .r span{color:var(--mute);font-weight:700;font-size:13px}
+.pnotes{background:#fff7e5;border-radius:16px;padding:14px 16px;margin-bottom:12px;white-space:pre-wrap;line-height:1.55;font-size:14.5px}
+@media print{.chead,.chead *,button,.btn,.noprint{display:none!important}body,.app{background:#fff!important}.pday{box-shadow:none;border:1px solid #ddd;break-inside:avoid}}
 .h{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:18px 2px 10px}
 .dt{display:flex;gap:12px;align-items:center}
 .av{width:52px;height:52px;border-radius:50%;background:var(--mint2);color:var(--g700);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none;object-fit:cover;position:relative}
@@ -234,6 +243,9 @@ window.DIETO_CONSULT = {
     }
     if (!CFG.ready) main.appendChild(el('div', { class: 'card empty', text: 'Dietician chat is launching soon.' }));
     else if (TAB === 'live') liveList(main); else slotPicker(main);
+    if (CFG.ready && CFG.plan && CFG.plan.enabled) main.appendChild(el('div', { class: 'card plancard' }, [el('span', { class: 'ic', html: ic('cal') }),
+      el('div', { class: 'sp' }, [el('b', { text: 'Personalised 7-day diet plan' }), el('small', { text: 'A dietician writes it for your goal, health and food habits. Ready within ' + CFG.plan.hours + ' hours.' })]),
+      el('button', { class: 'btn sm', text: rs(CFG.plan.price), onclick: function () { checkout({ mode: 'plan' }); } })]));
     myList(main);
   }
   function liveList(main) {
@@ -317,19 +329,19 @@ window.DIETO_CONSULT = {
       api('poll', { session_id: m.id, key: m.key, after: 1e12 }).then(function (v) { st.textContent = STATUS[v.status] || v.status; st.className = 'st ' + v.status; }).catch(function () { st.textContent = '—'; });
     });
   }
-  var STATUS = { pending: 'Not paid', waiting: 'Waiting', booked: 'Booked', active: 'Live', ended: 'Ended', refunded: 'Refunded', cancelled: 'Cancelled' };
+  var STATUS = { pending: 'Not paid', waiting: 'Waiting', booked: 'Booked', active: 'Live', ended: 'Ended', refunded: 'Refunded', cancelled: 'Cancelled', plan_requested: 'Preparing your plan', plan_done: 'Plan ready' };
 
   /* ---------- checkout sheet ---------- */
   function checkout(o) {
     stopAll();
-    var pkg = o.mode === 'slot' ? CFG.slot : CFG.live;
+    var pkg = o.mode === 'plan' ? { price: CFG.plan.price, minutes: 0 } : o.mode === 'slot' ? CFG.slot : CFG.live;
     var prof = profile();
     root.innerHTML = '';
     var main = el('main');
     root.appendChild(el('div', { class: 'app' }, [el('header', { class: 'top' }, [
       el('div', { class: 'row' }, [el('button', { class: 'back', 'aria-label': 'Back', html: ic('back'), onclick: home })]),
-      el('h1', { text: o.mode === 'slot' ? 'Confirm your booking' : (o.dietician ? 'Chat with ' + o.dietician.name : 'Chat with the next available dietician') }),
-      el('p', { text: o.mode === 'slot' ? fmtWhen(o.slot.starts_at) + (o.dietician ? ' · ' + o.dietician.name : '') : 'Usually connects within a couple of minutes.' })
+      el('h1', { text: o.mode === 'plan' ? 'Get your personalised diet plan' : o.mode === 'slot' ? 'Confirm your booking' : (o.dietician ? 'Chat with ' + o.dietician.name : 'Chat with the next available dietician') }),
+      el('p', { text: o.mode === 'plan' ? 'A dietician writes your 7-day plan and sends it here within ' + CFG.plan.hours + ' hours.' : o.mode === 'slot' ? fmtWhen(o.slot.starts_at) + (o.dietician ? ' · ' + o.dietician.name : '') : 'Usually connects within a couple of minutes.' })
     ]), main]));
     var card = el('div', { class: 'card' }); main.appendChild(card);
     var AU = DietoAuth.user();
@@ -341,12 +353,12 @@ window.DIETO_CONSULT = {
     var nameIn = el('input', { class: 'in', autocomplete: 'given-name', value: (PLAN && PLAN.name) || AU.name || '' });
     var phoneIn = el('input', { class: 'in', type: 'tel', inputmode: 'numeric', maxlength: '10', autocomplete: 'tel-national', value: (PLAN && PLAN.phone) || '' });
     var emailIn = el('input', { class: 'in', type: 'email', autocomplete: 'email', value: (PLAN && PLAN.A && PLAN.A.email) || AU.email || '' });
-    var topic = el('textarea', { class: 'in', maxlength: '600', placeholder: 'e.g. My sugar levels are high after lunch. What should I change?' });
+    var topic = el('textarea', { class: 'in', maxlength: '600', placeholder: o.mode === 'plan' ? 'e.g. Vegetarian, no onion-garlic, I work night shifts, want to lose 5 kg' : 'e.g. My sugar levels are high after lunch. What should I change?' });
     card.appendChild(el('label', { class: 'f', text: 'Your name' })); card.appendChild(nameIn);
     card.appendChild(el('p', { class: 'note', style: 'margin:8px 2px 0', html: 'Signed in as <b>+91 ' + AU.phone + '</b>' }));
     phoneIn.value = AU.phone;
     if (o.mode === 'slot') { card.appendChild(el('label', { class: 'f', text: 'Email (for your booking confirmation)' })); card.appendChild(emailIn); }
-    card.appendChild(el('label', { class: 'f', text: 'What would you like to ask? (optional)' })); card.appendChild(topic);
+    card.appendChild(el('label', { class: 'f', text: o.mode === 'plan' ? 'Anything the dietician should know? (food habits, routine, goals)' : 'What would you like to ask? (optional)' })); card.appendChild(topic);
     var consent = el('input', { type: 'checkbox' });
     if (prof) {
       var lines = Object.keys(prof).map(function (k) { return k + ': ' + prof[k]; });
@@ -360,12 +372,12 @@ window.DIETO_CONSULT = {
     }
     var FREE = o.mode === 'live' && CFG.free_eligible;
     if (FREE) pkg = { price: 0, minutes: CFG.free.minutes };
-    card.appendChild(el('div', { class: 'sum' }, [el('span', { text: FREE ? 'Your first ' + pkg.minutes + '-minute chat' : pkg.minutes + '-minute chat' }), el('b', { text: FREE ? 'Free' : rs(pkg.price) })]));
+    card.appendChild(el('div', { class: 'sum' }, [el('span', { text: o.mode === 'plan' ? 'Personalised 7-day plan' : FREE ? 'Your first ' + pkg.minutes + '-minute chat' : pkg.minutes + '-minute chat' }), el('b', { text: FREE ? 'Free' : rs(pkg.price) })]));
     var err = el('p', { class: 'err hidden', role: 'alert' });
     var payLabel = FREE ? ic('zap') + ' Start my free chat' : ic('shield') + ' Pay ' + rs(pkg.price) + ' securely';
     var pay = el('button', { class: 'btn block', html: payLabel });
     card.appendChild(err); card.appendChild(pay);
-    card.appendChild(el('p', { class: 'note', html: (FREE ? 'Your first ' + pkg.minutes + ' minutes are on us (one free chat per mobile number). Want longer? Extend for ' + rs(CFG.ext.price) + ' per ' + CFG.ext.minutes + ' min. ' : 'Secure payment by ' + (CFG.provider === 'cashfree' ? 'Cashfree' : 'Razorpay') + ' (UPI, cards, wallets). ') + 'Timer starts only when the dietician joins. ' +
+    card.appendChild(el('p', { class: 'note', html: (FREE ? 'Your first ' + pkg.minutes + ' minutes are on us (one free chat per mobile number). Want longer? Extend for ' + rs(CFG.ext.price) + ' per ' + CFG.ext.minutes + ' min. ' : 'Secure payment by ' + (CFG.provider === 'cashfree' ? 'Cashfree' : 'Razorpay') + ' (UPI, cards, wallets). ') + (o.mode === 'plan' ? 'Your plan arrives on this page (and in the app) within ' + CFG.plan.hours + ' hours. If it doesn’t arrive within 48 hours, you can get a full refund. ' : 'Timer starts only when the dietician joins. ') +
       (o.mode === 'live' && !FREE ? 'If no one joins within ' + CFG.refund_wait_minutes + ' minutes, you can get a full refund. ' : '') +
       'This is nutrition guidance, not medical treatment. <a href="' + C.terms + '" target="_blank" style="color:var(--g700)">Terms &amp; refunds</a>' }));
     pay.addEventListener('click', async function () {
@@ -378,7 +390,7 @@ window.DIETO_CONSULT = {
       try {
         var r = await api('create', { mode: o.mode, dietician_id: o.dietician ? o.dietician.id : 0, slot_id: o.slot ? o.slot.id : 0, name: nameIn.value.trim(), phone: ph,
           email: emailIn.value.trim(), topic: topic.value.trim(), consent: true, profile: prof || {}, app_code: (PLAN && PLAN.code) || '' });
-        var list = mine(); list.push({ id: r.session_id, key: r.key, created: Date.now(), title: o.mode === 'slot' ? 'Booked · ' + fmtWhen(o.slot.starts_at) : (o.dietician ? 'Chat with ' + o.dietician.name : 'Dietician chat') });
+        var list = mine(); list.push({ id: r.session_id, key: r.key, created: Date.now(), title: o.mode === 'plan' ? 'Personalised diet plan' : o.mode === 'slot' ? 'Booked · ' + fmtWhen(o.slot.starts_at) : (o.dietician ? 'Chat with ' + o.dietician.name : 'Dietician chat') });
         store('dieto_consults', list.slice(-30));
         if (!r.free) await payOrder(r.session_id, r.key, r.order);
         if (r.free) CFG.free_eligible = false;
@@ -470,9 +482,32 @@ window.DIETO_CONSULT = {
     CUR.v = v; render(v);
     // check often while messages are flowing, slow down when the chat is quiet (saves server load)
     CUR.quiet = v.messages && v.messages.length ? 0 : (CUR.quiet || 0) + 1;
-    var wait = v.status === 'active' ? Math.min(6000, 2000 + CUR.quiet * 400) : v.status === 'waiting' ? 4000 : v.status === 'booked' ? 30000 : v.status === 'pending' ? 8000 : 0;
+    var wait = v.status === 'active' ? Math.min(6000, 2000 + CUR.quiet * 400) : v.status === 'waiting' ? 4000 : v.status === 'booked' ? 30000 : v.status === 'pending' ? 8000 : v.status === 'plan_requested' ? 60000 : 0;
     if (v.can_extend && v.status === 'ended') wait = 8000;
     if (wait) POLL = setTimeout(refresh, document.hidden ? Math.max(wait, v.status === 'active' ? 10000 : 20000) : wait);
+  }
+  function renderPlan(v, b) {
+    var wrap = el('div', { style: 'padding:16px;overflow:auto;flex:1' }); b.appendChild(wrap);
+    if (v.status === 'plan_requested') {
+      wrap.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('cal') }), el('h2', { text: 'Your dietician is preparing your plan' }),
+        el('p', { text: 'It usually arrives within ' + v.plan_hours + ' hours. You can close this page: it will be here when it’s ready' + (DietoAuth.native ? ', and we’ll notify you.' : '.') }),
+        v.can_refund ? el('button', { class: 'btn ghost', html: ic('refund') + ' Plan not arrived? Get a full refund', onclick: refund }) : null]));
+      return;
+    }
+    if (v.status !== 'plan_done' || !v.plan) { wrap.appendChild(el('div', { class: 'wait' }, [el('h2', { text: STATUS[v.status] || 'Plan' })])); return; }
+    var SL = { b: 'Breakfast', m: 'Mid-morning', l: 'Lunch', s: 'Evening snack', d: 'Dinner' };
+    wrap.appendChild(el('div', { style: 'margin:2px 2px 12px' }, [el('h2', { style: 'margin:0;font-size:20px', text: 'Your 7-day plan' }),
+      el('p', { style: 'margin:4px 0 0;color:var(--mute);font-size:13.5px', text: 'Written for you by ' + (v.dietician ? v.dietician.name : 'your dietician') + (v.plan.sent_at ? ' · ' + new Date(v.plan.sent_at * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '') })]));
+    if (v.plan.notes) wrap.appendChild(el('div', { class: 'pnotes' }, [el('b', { text: 'Notes from your dietician' }), el('div', { style: 'margin-top:6px', text: v.plan.notes })]));
+    v.plan.days.forEach(function (d, i) {
+      var box = el('div', { class: 'pday' }, [el('h3', { text: 'Day ' + (i + 1) })]);
+      Object.keys(SL).forEach(function (k) { if (d[k]) box.appendChild(el('div', { class: 'r' }, [el('span', { text: SL[k] }), el('div', { text: d[k] })])); });
+      wrap.appendChild(box);
+    });
+    wrap.appendChild(el('div', { class: 'noprint', style: 'display:grid;gap:8px;margin:6px 0 20px' }, [
+      el('button', { class: 'btn block', html: ic('shield') + ' Save as PDF / print', onclick: function () { window.print(); } }),
+      el('button', { class: 'btn ghost block', html: ic('chat') + ' Ask a dietician about it', onclick: function () { location.hash = ''; } })]));
+    wrap.appendChild(el('p', { class: 'note', text: 'This is nutrition guidance, not medical treatment. Check with your doctor before changing medicines or if you are pregnant.' }));
   }
   function headFor(v) {
     var h = CUR.head; h.innerHTML = '';
@@ -483,7 +518,7 @@ window.DIETO_CONSULT = {
     if (v.status === 'active') { CUR.timer = el('span', { class: 'timer', html: ic('clock') + '<span>' + mmss(v.remaining) + '</span>' }); h.appendChild(CUR.timer); }
   }
   function render(v) {
-    var mode = v.status === 'active' || v.status === 'ended' || v.status === 'refunded' ? 'chat' : v.status;
+    var mode = v.mode !== 'plan' && (v.status === 'active' || v.status === 'ended' || v.status === 'refunded') ? 'chat' : v.status;
     var b = CUR.body;
     if (CUR.prevStatus === 'waiting' && v.status === 'active') { try { navigator.vibrate && navigator.vibrate([120, 60, 120]); } catch (e) {} toast('Your dietician has joined'); }
     CUR.prevStatus = v.status;
@@ -498,6 +533,8 @@ window.DIETO_CONSULT = {
       b.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('shield') }), el('h2', { text: 'Waiting for payment' }),
         el('p', { text: 'If you already paid, this updates automatically in a few seconds.' }),
         el('button', { class: 'btn ghost', text: 'Cancel', onclick: async function () { await api('cancel', { session_id: CUR.id, key: CUR.key }).catch(function () {}); location.hash = ''; } })]));
+    } else if (v.mode === 'plan') {
+      renderPlan(v, b);
     } else if (v.status === 'waiting') {
       var left = Math.max(0, v.refund_wait - v.waited);
       b.appendChild(el('div', { class: 'wait' }, [el('div', { class: 'pulse', html: ic('chat') }), el('h2', { text: 'Connecting you to a dietician…' }),

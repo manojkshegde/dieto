@@ -54,6 +54,19 @@ svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;fill:none;stroke:
 .item .sp{flex:1;min-width:0}.item b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item small{display:block;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:999px;background:var(--mint2);color:var(--g700);white-space:nowrap}
 .pill.amber{background:#fff3d6;color:#8a6200}
+.ped{flex:1;overflow:auto;padding:18px 20px 30px}
+.ped .ph{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.ped .ph h2{margin:0;font-size:19px}.ped .ph small{color:var(--mute)}
+.ped .info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.ped .box{background:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 2px 8px rgba(18,58,38,.05);font-size:13.5px;line-height:1.5}
+.ped .box h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.ptbl{width:100%;border-collapse:separate;border-spacing:6px;table-layout:fixed}
+.ptbl th{font-size:12px;color:var(--mute);text-align:left;font-weight:800;padding:0 4px}
+.ptbl td.dl{font-weight:800;color:var(--g700);font-size:13px;width:52px}
+.ptbl textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line,#e3ebe5);border-radius:10px;padding:7px 8px;font:inherit;font-size:13px;resize:vertical;min-height:54px;background:#fff}
+.ptbl textarea:focus{outline:0;border-color:var(--g700)}
+.ped .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+@media(max-width:900px){.ped .info{grid-template-columns:1fr}.ptbl,.ptbl tbody,.ptbl tr,.ptbl td{display:block;width:auto}.ptbl thead{display:none}.ptbl td.dl{padding-top:10px}.ptbl td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--mute);font-weight:800;margin:4px 0 2px}}
 .none{color:var(--mute);font-size:13.5px;padding:6px 2px 10px}
 .main{display:flex;flex-direction:column;min-width:0;min-height:0}
 .blank{flex:1;display:grid;place-items:center;color:var(--mute);text-align:center;padding:30px;line-height:1.6}
@@ -170,7 +183,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     layout.appendChild(side); layout.appendChild(main);
     root.appendChild(top); root.appendChild(layout);
     S = { top: top, layout: layout, side: side, main: main, data: null };
-    main.appendChild(el('div', { class: 'blank', html: 'Turn on <b>Online</b> to receive live chats.<br>Booked chats appear under Upcoming.' }));
+    main.appendChild(el('div', { class: 'blank', html: '<div>Waiting clients appear on the left. Tap <b>Accept</b> to start.<br>Keep <b>Online</b> on to receive live chats. Booked chats appear under Upcoming.</div>' }));
     if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);   // phone alerts for new clients, even when the app is closed
     else if (window.Notification && Notification.permission === 'default') Notification.requestPermission().catch(function () {});
     poll();
@@ -198,14 +211,14 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     if (d.queue.length) title = '(' + d.queue.length + ') Client waiting · dietO';
     document.title = title;
     // side (form tabs only redraw when asked, so typing isn't interrupted)
-    if (!force && TAB !== 'chats') return;
+    if (!force && TAB !== 'chats' && TAB !== 'plans') return;
     var y = S.side.scrollTop; S.side.innerHTML = '';
     var tabs = el('div', { class: 'tabs' });
-    [['chats', 'Chats' + (d.queue.length ? ' (' + d.queue.length + ')' : '')], ['slots', 'My slots'], ['history', 'History'], ['account', 'Account']].forEach(function (t) {
+    [['chats', 'Chats' + (d.queue.length ? ' (' + d.queue.length + ')' : '')], ['plans', 'Plans' + ((d.plans || []).length ? ' (' + d.plans.length + ')' : '')], ['slots', 'Slots'], ['history', 'History'], ['account', 'Account']].forEach(function (t) {
       tabs.appendChild(el('button', { class: TAB === t[0] ? 'on' : '', text: t[1], onclick: function () { TAB = t[0]; draw(true); } }));
     });
     S.side.appendChild(tabs);
-    if (TAB === 'chats') sideChats(d); else if (TAB === 'slots') sideSlots(d); else if (TAB === 'history') sideHistory(); else sideAccount(d);
+    if (TAB === 'chats') sideChats(d); else if (TAB === 'plans') sidePlans(d); else if (TAB === 'slots') sideSlots(d); else if (TAB === 'history') sideHistory(); else sideAccount(d);
     S.side.scrollTop = y;
   }
   function sideChats(d) {
@@ -228,6 +241,63 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       sec.appendChild(el('div', { class: 'item' + (soon ? ' new' : '') }, [el('div', { class: 'sp' }, [el('b', { text: u.name }), el('small', { text: fmtWhen(u.scheduled_at) + (u.topic ? ' · ' + u.topic : '') })]),
         soon ? el('button', { class: 'btn sm', text: 'Start', onclick: function () { accept(u.id); } }) : el('span', { class: 'pill amber', text: 'Booked' })]));
     });
+  }
+  /* ---------- personalised plans ---------- */
+  function sidePlans(d) {
+    var sec = el('div', { class: 'sec' }); S.side.appendChild(sec);
+    sec.appendChild(el('h3', { text: 'Plan requests' }));
+    var list = d.plans || [];
+    if (!list.length) sec.appendChild(el('div', { class: 'none', text: 'No plan requests right now. New ones will appear here.' }));
+    list.forEach(function (q) {
+      var late = q.waited > 20 * 3600;
+      sec.appendChild(el('div', { class: 'item' + (PSEL === q.id ? ' sel' : late ? ' new' : ''), onclick: function () { openPlan(q.id); } }, [
+        el('div', { class: 'sp' }, [el('b', { text: q.name }), el('small', { text: 'Asked ' + ago(q.waited) + ' ago' + (q.topic ? ' · ' + q.topic : '') })]),
+        el('span', { class: 'pill' + (q.mine ? (q.draft ? ' amber' : '') : ''), text: q.mine ? (q.draft ? 'Draft saved' : 'Yours') : 'New' })]));
+    });
+    sec.appendChild(el('p', { class: 'none', style: 'margin-top:12px', text: 'Opening a request assigns it to you. You earn your share when you send the plan.' }));
+  }
+  function ago(sec) { return sec < 3600 ? Math.max(1, Math.round(sec / 60)) + ' min' : Math.round(sec / 3600) + ' h'; }
+  var PSEL = 0;
+  async function openPlan(id) {
+    clearTimeout(CHAT_T); clearInterval(TICK); SEL = 0; CH = null; PSEL = id;
+    S.layout.classList.add('chatting'); S.main.innerHTML = '';
+    S.main.appendChild(el('div', { class: 'blank', text: 'Opening…' }));
+    var v; try { v = await api('d_plan_open', { session_id: id }); } catch (e) { toast(e.message); PSEL = 0; S.main.innerHTML = ''; draw(true); return; }
+    draw(true);
+    S.main.innerHTML = '';
+    var ed = el('div', { class: 'ped' }); S.main.appendChild(ed);
+    ed.appendChild(el('div', { class: 'ph' }, [el('button', { class: 'btn sm ghost', text: '← Back', onclick: function () { PSEL = 0; S.layout.classList.remove('chatting'); S.main.innerHTML = ''; draw(true); } }),
+      el('div', { class: 'sp' }, [el('h2', { text: 'Personalised plan for ' + v.client.name }), el('small', { text: v.status === 'plan_done' ? 'Sent. You can still update it.' : 'Due within ' + v.plan_hours + ' hours of the request' })])]));
+    var info = el('div', { class: 'info' });
+    var b1 = el('div', { class: 'box' }, [el('h4', { text: 'What the client asked for' }), el('div', { text: v.client.topic || 'No extra notes.' })]);
+    var b2 = el('div', { class: 'box' }, [el('h4', { text: 'Diet test' })]);
+    var p = v.client.profile;
+    if (p && Object.keys(p).length) b2.appendChild(el('div', { text: Object.keys(p).map(function (k) { return k + ': ' + p[k]; }).join(' · ') }));
+    else b2.appendChild(el('div', { text: 'This client hasn’t taken the diet test. Message them on their chat if you need details: +91 ' + v.client.phone }));
+    info.appendChild(b1); info.appendChild(b2); ed.appendChild(info);
+    if (v.plan.from_ai) ed.appendChild(el('p', { class: 'none', style: 'margin:0 0 6px', text: 'Started from the client’s AI plan. Change anything you like.' }));
+    var SL = v.slots, keys = Object.keys(SL), cells = [];
+    var tbl = el('table', { class: 'ptbl' });
+    var hr = el('tr', {}, [el('th', { text: '' })]); keys.forEach(function (k) { hr.appendChild(el('th', { text: SL[k] })); });
+    tbl.appendChild(el('thead', {}, [hr]));
+    var tb = el('tbody');
+    for (var i = 0; i < 7; i++) {
+      var tr = el('tr', {}, [el('td', { class: 'dl', text: 'Day ' + (i + 1) })]); cells[i] = {};
+      keys.forEach(function (k) { var t = el('textarea', { rows: '2', maxlength: '300', placeholder: SL[k] }); t.value = (v.plan.days[i] && v.plan.days[i][k]) || ''; cells[i][k] = t; tr.appendChild(el('td', { 'data-l': SL[k] }, [t])); });
+      tb.appendChild(tr);
+    }
+    tbl.appendChild(tb); ed.appendChild(tbl);
+    var notes = el('textarea', { class: 'in', rows: '4', maxlength: '3000', placeholder: 'Notes & tips for the client: portions, water, what to avoid, swaps when eating out…' }); notes.value = v.plan.notes || '';
+    ed.appendChild(el('label', { style: 'display:block;font-weight:800;font-size:13px;margin:14px 0 6px', text: 'Notes for the client' })); ed.appendChild(notes);
+    var msg = el('span', { class: 'none', style: 'margin-right:auto' });
+    async function save(send) {
+      if (send && !confirm(v.status === 'plan_done' ? 'Send the updated plan to the client?' : 'Send this plan to ' + v.client.name + '? They will be notified.')) return;
+      var days = cells.map(function (c) { var o = {}; keys.forEach(function (k) { o[k] = c[k].value.trim(); }); return o; });
+      try { await api('d_plan_save', { session_id: id, days: days, notes: notes.value.trim(), send: send }); msg.textContent = send ? 'Sent to the client ✓' : 'Draft saved ✓'; toast(send ? 'Plan sent' : 'Draft saved'); if (send) { v.status = 'plan_done'; poll(); } }
+      catch (e) { toast(e.message); }
+    }
+    ed.appendChild(el('div', { class: 'acts' }, [msg, el('button', { class: 'btn ghost', text: 'Save draft', onclick: function () { save(false); } }),
+      el('button', { class: 'btn', text: v.status === 'plan_done' ? 'Send update' : 'Send plan to client', onclick: function () { save(true); } })]));
   }
   function sideSlots(d) {
     var card = el('div', { class: 'card' }); S.side.appendChild(card);
