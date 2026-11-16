@@ -362,7 +362,7 @@ window.DIETO_CONSULT = {
     var err = el('p', { class: 'err hidden', role: 'alert' });
     var pay = el('button', { class: 'btn block', html: ic('shield') + ' Pay ' + rs(pkg.price) + ' securely' });
     card.appendChild(err); card.appendChild(pay);
-    card.appendChild(el('p', { class: 'note', html: 'Payments by Razorpay (UPI, cards, wallets). Timer starts only when the dietician joins. ' +
+    card.appendChild(el('p', { class: 'note', html: 'Secure payment by ' + (CFG.provider === 'cashfree' ? 'Cashfree' : 'Razorpay') + ' (UPI, cards, wallets). Timer starts only when the dietician joins. ' +
       (o.mode === 'live' ? 'If no one joins within ' + CFG.refund_wait_minutes + ' minutes, you can get a full refund. ' : '') +
       'This is nutrition guidance, not medical treatment. <a href="' + C.terms + '" target="_blank" style="color:var(--g700)">Terms &amp; refunds</a>' }));
     pay.addEventListener('click', async function () {
@@ -379,6 +379,7 @@ window.DIETO_CONSULT = {
         store('dieto_consults', list.slice(-30));
         await payOrder(r.session_id, r.key, r.order);
         location.hash = '#s=' + r.session_id;
+        if (r.order && r.order.provider === 'cashfree' && DietoAuth.native) toast('Finish paying in the browser, then come back here.');
       } catch (e) { if (e.data && e.data.signin) return checkout(o); showErr(e.message); pay.disabled = false; pay.innerHTML = ic('shield') + ' Pay ' + rs(pkg.price) + ' securely'; }
     });
     function showErr(t) { err.textContent = t; err.classList.remove('hidden'); }
@@ -392,7 +393,31 @@ window.DIETO_CONSULT = {
       document.head.appendChild(s);
     });
   }
+  function loadCf() {
+    return new Promise(function (res, rej) {
+      if (window.Cashfree) return res();
+      var s = document.createElement('script'); s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'; s.onload = res; s.onerror = function () { rej(new Error('Could not load the payment window. Check your connection.')); };
+      document.head.appendChild(s);
+    });
+  }
   async function payOrder(sid, key, order) {
+    if (order.provider === 'cashfree' && !order.demo) {
+      if (DietoAuth.native) {
+        // in the app: pay on dieto.health in the phone's browser; the chat page picks up the payment when you come back
+        location.href = (DietoAuth.base || location.origin) + '/consult/pay.html#ps=' + encodeURIComponent(order.session) + '&m=' + order.mode;
+        return;
+      }
+      await loadCf();
+      var cf = window.Cashfree({ mode: order.mode });
+      var result = await cf.checkout({ paymentSessionId: order.session, redirectTarget: '_modal' });
+      // whatever the pop-up says, the server asks Cashfree for the real status
+      var v = await api('verify', { session_id: sid, key: key, order_id: order.id });
+      if (!v.paid) {
+        if (result && result.error) throw new Error((result.error.message && !/close|cancel|dropped/i.test(result.error.message) ? result.error.message + ' ' : '') + 'Payment not completed. You have not been charged.');
+        // e.g. UPI still confirming: the chat page keeps checking
+      }
+      return v;
+    }
     if (order.demo) {
       if (!confirm('TEST MODE\n\nSimulate a successful payment of ' + rs(order.amount / 100) + '?\n(No money is taken.)')) throw new Error('Payment cancelled.');
       return api('verify', { session_id: sid, key: key, order_id: order.id });
@@ -556,8 +581,9 @@ window.DIETO_CONSULT = {
   async function extend() {
     try {
       var o = await api('extend', { session_id: CUR.id, key: CUR.key });
-      await payOrder(CUR.id, CUR.key, o.order);
-      toast('Extended by ' + CUR.v.ext.minutes + ' minutes'); clearTimeout(POLL); CUR.footMode = ''; refresh();
+      var r = await payOrder(CUR.id, CUR.key, o.order);
+      toast(r === undefined ? 'Finish paying in the browser, then come back here.' : r && r.paid === false ? 'Confirming your payment…' : 'Extended by ' + CUR.v.ext.minutes + ' minutes');
+      clearTimeout(POLL); CUR.footMode = ''; refresh();
     } catch (e) { toast(e.message); }
   }
   async function refund() {
