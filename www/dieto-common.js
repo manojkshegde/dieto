@@ -3,6 +3,7 @@
 (function () {
   'use strict';
   var BASE = window.DIETO_BASE || '';                       // '' on the website, 'https://dieto.health' inside the app
+  try { var RF = (location.search.match(/[?&]ref=([A-Za-z0-9]{4,12})/) || [])[1]; if (RF) localStorage.setItem('dieto_ref', JSON.stringify(RF.toUpperCase())); } catch (e) {}
   var NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   var API = BASE + '/api/consult.php';
   var KEY = 'dieto_user';
