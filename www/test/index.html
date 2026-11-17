@@ -213,6 +213,22 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .cchip{border:1.5px solid var(--g600);background:#fff;color:var(--g800);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
 .cchip.pri{background:var(--g700);color:#fff;border-color:var(--g700)}
 .cbar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.cclip{width:44px;height:44px;border-radius:50%;border:0;background:#E3F1E8;color:#146C43;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.ahead{padding-top:calc(10px + env(safe-area-inset-top,0px))!important}
+@media(max-width:520px){.chat .ch{padding-top:calc(16px + env(safe-area-inset-top,0px))}}
+.meal.tap{cursor:pointer;border-radius:14px;transition:background .2s}.meal.tap:hover{background:#f6faf5}
+.msheet-ov{position:fixed;inset:0;z-index:90;background:rgba(11,31,23,.55);display:flex;align-items:flex-end;justify-content:center}
+.msheet{background:#fff;width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px}
+.mhandle{align-self:center;width:44px;height:5px;border-radius:99px;background:#DCE7E0}
+.msl{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#146C43}.msheet h3{margin:0;font-size:22px;letter-spacing:-.02em}
+.msheet h4{margin:6px 0 0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#4F6359}
+.mnut{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mnut div{background:#E3F1E8;border-radius:14px;padding:10px 4px;text-align:center}.mnut b{display:block;font-size:16px;color:#0B3B26}.mnut span{font-size:11.5px;color:#4F6359}
+.ming{display:flex;flex-wrap:wrap;gap:6px}.ming span{background:#F3F8F4;border:1px solid #DCE7E0;border-radius:99px;padding:5px 11px;font-size:13.5px}
+.mhow{margin:0;padding-left:20px;display:grid;gap:8px;font-size:14.5px;line-height:1.55}.mnote{margin:4px 0 0;font-size:12.5px;color:#4F6359}
+.pview{background:#0B3B26;color:#fff;border-radius:20px;padding:16px;margin:0 0 16px;display:grid;gap:12px}
+.pvi span{display:block;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C8F169}.pvi b{font-size:18px}
+.pvn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pvn div{background:rgba(255,255,255,.1);border-radius:14px;padding:10px 6px;text-align:center}.pvn b{display:block;font-size:18px}.pvn span{font-size:11.5px;color:#CFE3D7}
+.pvl{display:flex;gap:8px;align-items:center;font-size:13px;color:#CFE3D7}.pvl svg.i{width:16px;height:16px;color:#C8F169}
 .cbar input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:11px 15px;font-size:15px;outline:none;font-family:inherit;min-width:0}
 .cbar input:focus{border-color:var(--g600)}
 .cbar button{width:44px;height:44px;border-radius:50%;border:0;background:var(--g700);color:#fff;cursor:pointer;flex:none}
@@ -1111,7 +1127,7 @@ html.app-open body>*:not(#app):not(#chat) *,html.app-open body>*:not(#app):not(#
 <div class="chat hidden" id="chat" role="dialog" aria-label="dietO AI chat">
   <div class="ch"><div class="av"><svg style="color:#fff"><use href="#mark"/></svg></div><div><b>dietO AI</b><span id="chatSub">Your diet assistant · replies instantly</span></div><button class="x" id="chatX" aria-label="Close chat">×</button></div>
   <div class="cmsgs" id="cmsgs"></div>
-  <form class="cbar" id="cbar"><input id="cin" placeholder="Ask about diets, delivery, pricing…" autocomplete="off"><button aria-label="Send"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></form>
+  <form class="cbar" id="cbar"><button type="button" class="cclip" id="cclip" aria-label="Send a file"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg></button><input id="cin" placeholder="Ask about diets, delivery, pricing…" autocomplete="off"><button aria-label="Send"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></form>
 </div>
 
 <!-- ============ APP OVERLAY ============ -->
@@ -1194,8 +1210,97 @@ var DIETO = (function () {
     D('d09','d','egg',0,'asian',['highprotein'],['egg','soy'],'Egg & Veggie Fried Millet','🍳',480,24,56,17,'egg, foxtail millet, vegetables, soy sauce'),
     D('d10','d','veg',1,'cont',['highprotein','lowcarb'],['dairy'],'Paneer-Stuffed Bell Peppers with Soup','🫑',440,24,20,28,'paneer, bell pepper, tomato soup'),
     D('d11','d','nonveg',0,'north',['lowcarb','highprotein'],['dairy'],'Butter Chicken with Cauliflower Rice','🍗',520,40,14,34,'chicken, butter, cream, cauliflower'),
-    D('d12','d','vegan',1,'north',['lowgi','heart'],[],'Moong Dal Soup, Sautéed Veggies & Millet Roti','🥣',380,18,52,9,'moong dal, beans, zucchini, bajra')
+    D('d12','d','vegan',1,'north',['lowgi','heart'],[],'Moong Dal Soup, Sautéed Veggies & Millet Roti','🥣',380,18,52,9,'moong dal, beans, zucchini, bajra'),
+    // ---------- Local: Mangalorean, Udupi & Karnataka ----------
+    D('b15','b','vegan',0,'south',['lowgi','heart'],[],'Ragi Neer Dosa with Coconut Chutney','🫓',300,8,50,7,'rice, ragi flour, coconut, green chilli, coriander'),
+    D('b16','b','vegan',0,'south',['heart'],[],'Kotte Kadubu (Jackfruit-Leaf Idli) with Sambar','🍚',320,10,56,6,'rice, urad dal, toor dal, drumstick, onion, tamarind'),
+    D('b17','b','vegan',0,'south',['highprotein'],['nuts'],'Avalakki Upkari with Sprouts','🍛',300,11,48,7,'poha, moong sprouts, peanuts, onion, curry leaves, lemon'),
+    D('b18','b','vegan',0,'south',['lowgi','highprotein','heart'],[],'Pesarattu with Ginger Chutney','🫓',310,16,42,8,'green moong, ginger, green chilli, onion, coriander'),
+    D('b19','b','egg',0,'south',['highprotein'],['egg'],'Egg Neer Dosa Roll','🍳',350,20,38,12,'rice, egg, onion, tomato, coriander'),
+    D('l15','l','nonveg',0,'south',['highprotein','heart'],['fish'],'Mangalorean Fish Curry, Red Rice & Kosambari','🐟',560,38,58,18,'mackerel, coconut, byadgi chilli, tamarind, red rice, moong dal, cucumber'),
+    D('l16','l','vegan',0,'south',['lowgi','heart'],[],'Udupi Sambar, Red Rice & Tondekai Palya','🍛',520,16,86,10,'toor dal, ash gourd, drumstick, tamarind, red rice, ivy gourd, coconut'),
+    D('l17','l','nonveg',0,'south',['highprotein'],[],'Kori Sukka (light) with Neer Dosa & Salad','🍗',600,44,50,22,'chicken, coconut, byadgi chilli, coriander, rice, cucumber, carrot'),
+    D('l18','l','vegan',0,'south',['lowgi','highprotein'],['gluten'],'Kadle Manoli with Rotis & Salad','🥘',500,20,70,12,'black chana, ivy gourd, coconut, whole wheat, cucumber'),
+    D('l19','l','veg',0,'south',['heart'],['dairy'],'Majjige Huli, Red Rice & Beans Palya','🍲',480,15,78,11,'curd, ash gourd, coconut, red rice, beans'),
+    D('s12','s','vegan',0,'south',['lowgi','highprotein','heart'],[],'Moong Dal Kosambari','🥗',160,9,20,5,'moong dal, cucumber, carrot, coconut, lemon'),
+    D('s13','s','vegan',0,'south',['highprotein'],[],'Sprouts Usli','🫘',190,12,24,5,'moong sprouts, chana sprouts, onion, coconut, curry leaves'),
+    D('s14','s','vegan',0,'south',['heart'],['nuts'],'Kokum Sol Kadhi & Roasted Peanuts','🥤',180,6,12,12,'kokum, coconut milk, garlic, peanuts'),
+    D('d13','d','nonveg',0,'south',['highprotein','lowcarb'],['fish'],'Bangude Tawa Fry with Dal & Salad','🐟',480,40,22,24,'mackerel, byadgi chilli, turmeric, moong dal, cucumber, onion'),
+    D('d14','d','vegan',0,'south',['heart'],[],'Steamed Pathrode with Saaru','🌿',380,10,64,8,'colocasia leaves, rice, coconut, byadgi chilli, toor dal, tomato'),
+    D('d15','d','vegan',1,'south',['lowgi','heart'],[],'Ragi Mudde with Soppina Saaru','🥣',420,14,72,8,'ragi flour, spinach, toor dal, tomato, cumin'),
+    D('d16','d','veg',0,'south',['highprotein'],['dairy'],'Paneer Ghee Roast (light) with Millet Dosa','🧀',520,28,40,26,'paneer, ghee, byadgi chilli, curd, foxtail millet, urad dal')
   ];
+  // How to make each meal (short steps shown when a meal is tapped). Have a dietician review these.
+  var HOW = {
+    b01: ['Whisk besan with water, chopped onion, tomato, coriander and salt into a pourable batter.', 'Spread thin on a lightly oiled tawa and cook both sides till golden.', 'Serve with mint chutney.'],
+    b02: ['Soak moong dal 3 hours and grind with ginger and chilli.', 'Make thin cheelas on a non-stick pan.', 'Fill with crumbled paneer and capsicum, fold and serve.'],
+    b03: ['Rinse poha and let it soften.', 'Temper mustard, curry leaves and peanuts in a teaspoon of oil; add onion and peas.', 'Add poha, turmeric and salt, toss and finish with lemon.'],
+    b04: ['Mix ragi flour with a little rice flour, salt and water into a thin batter.', 'Make thin dosas on a hot tawa.', 'Serve with a bowl of vegetable sambar.'],
+    b05: ['Steam idlis from fermented rice-urad batter (about 10 minutes).', 'Make sambar with toor dal, vegetables and tamarind.', 'Serve 2–3 idlis with sambar and a small spoon of coconut chutney.'],
+    b06: ['Dry roast oats for 2 minutes.', 'Sauté onion, carrot and peas with mustard and curry leaves.', 'Add oats and hot water, cook covered till soft.'],
+    b07: ['Sauté onion, tomato and chilli in a teaspoon of oil.', 'Add beaten eggs with turmeric and salt; scramble till just set.', 'Serve with toasted multigrain bread.'],
+    b08: ['Whisk egg whites with chopped spinach, salt and pepper.', 'Cook in a non-stick pan and fold.', 'Serve with toast topped with mashed avocado.'],
+    b09: ['Spoon Greek yogurt into a bowl.', 'Top with berries, muesli, chia and flax.', 'Eat right away so the muesli stays crunchy.'],
+    b10: ['Cook chicken mince with onion, ginger-garlic and spices till dry.', 'Stuff into whole-wheat dough and roll out.', 'Cook on a tawa with very little oil; serve with curd.'],
+    b11: ['Crumble firm tofu.', 'Sauté onion and spinach, add tofu, turmeric, salt and pepper.', 'Serve on toasted multigrain bread.'],
+    b12: ['Soak moong dal 3 hours, grind with green chilli and salt.', 'Make thin dosas on a hot tawa.', 'Serve with coconut chutney.'],
+    b13: ['Roast jowar rava.', 'Temper mustard and curry leaves, add beans and peas (no onion-garlic).', 'Add rava and hot water, cook covered till soft.'],
+    b14: ['Whisk eggs with salt and pepper.', 'Pour into a buttered pan, add spinach and a little cheese.', 'Fold and cook till set.'],
+    l01: ['Grill paneer cubes with a little oil and spices.', 'Sauté capsicum and zucchini.', 'Serve over a cup of cooked brown rice.'],
+    l02: ['Pressure cook soaked rajma with onion-tomato masala.', 'Serve over brown rice.', 'Add a big cucumber-onion salad on the side.'],
+    l03: ['Cook dal and temper with cumin, garlic and chilli.', 'Make bhindi dry with very little oil.', 'Serve with 2 multigrain rotis.'],
+    l04: ['Marinate chicken in curd and tikka spices; grill or bake.', 'Cook quinoa (1 part to 2 parts water).', 'Serve together with cucumber raita.'],
+    l05: ['Cook sambar with toor dal, vegetables and tamarind.', 'Make a vegetable poriyal with coconut.', 'Serve with rice and a small cup of curd.'],
+    l06: ['Pressure cook millet, toor dal and mixed vegetables.', 'Add tamarind water and bisi bele powder; simmer.', 'Temper with a little ghee; serve with raita.'],
+    l07: ['Grind coconut, chillies and tamarind into a paste.', 'Simmer the paste, then add fish and cook 6–8 minutes.', 'Serve with red rice and vegetables.'],
+    l08: ['Boil eggs and peel.', 'Simmer them in an onion-tomato gravy.', 'Serve with jeera brown rice.'],
+    l09: ['Simmer green curry paste with light coconut milk and vegetables.', 'Add tofu cubes and cook 5 minutes.', 'Serve with brown rice.'],
+    l10: ['Stir-fry chicken strips on high heat.', 'Add vegetables and a little soy sauce.', 'Toss with boiled millet noodles.'],
+    l11: ['Cook boiled chana in a tomato-based masala with no onion or garlic.', 'Make cabbage sabzi.', 'Serve with 2 rotis.'],
+    l12: ['Toss cooked quinoa with chickpeas, cucumber, tomato and lemon.', 'Add herbs, salt and pepper.', 'Serve with 2 tbsp hummus.'],
+    l13: ['Season and grill chicken breast.', 'Toss lettuce, cucumber and tomato with a light dressing.', 'Slice chicken over the salad; serve with one slice of multigrain bread.'],
+    l14: ['Marinate paneer in curd and tikka spices; grill.', 'Toss with lettuce, onion, capsicum and lemon.', 'No bread or rice: this is the low-carb option.'],
+    s01: ['Dry roast makhana on low heat till crisp.', 'Add a few drops of ghee, salt and pepper.', 'Cool and store in a jar.'],
+    s02: ['Steam sprouts for 5 minutes.', 'Mix with onion, tomato, coriander, chaat masala and lemon.', 'Eat fresh.'],
+    s03: ['Spoon Greek yogurt into a bowl.', 'Top with a small handful of nuts and seeds.', 'Add cinnamon if you like it sweet.'],
+    s04: ['Boil eggs 9 minutes, cool and peel.', 'Halve and sprinkle chaat masala, pepper and salt.', 'Eat 2 halves or whole eggs as your plan says.'],
+    s05: ['Mix roasted chana and peanuts.', 'Add a pinch of chaat masala.', 'Keep to a small handful (about 30 g).'],
+    s06: ['Boil chickpeas till soft.', 'Temper mustard, curry leaves and chilli; add chickpeas.', 'Finish with grated coconut and lemon.'],
+    s07: ['Blend curd with water, roasted cumin, salt and mint.', 'Cut a small cup of seasonal fruit.', 'Have both together.'],
+    s08: ['Marinate chicken pieces in curd and tikka spices.', 'Grill or air-fry till cooked through.', 'Serve with mint chutney.'],
+    s09: ['Blend chickpeas, tahini, lemon and garlic into hummus.', 'Cut carrot, cucumber and capsicum sticks.', 'Dip and eat.'],
+    s10: ['Boil edamame pods 4–5 minutes.', 'Drain and sprinkle sea salt.', 'Pop the beans out of the pods to eat.'],
+    s11: ['Thread paneer and vegetables on skewers.', 'Brush with spiced curd.', 'Grill or bake 10 minutes.'],
+    d01: ['Pressure cook millet and moong dal with turmeric and vegetables.', 'Temper with cumin and a little ghee.', 'Serve with curd.'],
+    d02: ['Blanch and blend spinach.', 'Cook with onion-tomato masala; add paneer cubes.', 'Serve with 2 multigrain rotis.'],
+    d03: ['Season fish with lemon, salt and pepper; grill.', 'Sauté seasonal vegetables.', 'Serve with half a cup of quinoa.'],
+    d04: ['Marinate chicken in curd and tandoori spices; bake or grill.', 'Make a simple dal.', 'Serve with salad.'],
+    d05: ['Pressure cook lauki and chana dal with turmeric.', 'Temper with cumin (no onion-garlic for Jain).', 'Serve with jowar roti.'],
+    d06: ['Make thick dosas from fermented batter.', 'Top with onion, tomato, carrot and coriander while cooking.', 'Serve with sambar.'],
+    d07: ['Cook chicken in a roasted Chettinad masala with pepper and fennel.', 'Make millet dosas.', 'Serve together.'],
+    d08: ['Stir-fry tofu and broccoli on high heat.', 'Add garlic and a little soy sauce.', 'Serve with brown rice.'],
+    d09: ['Scramble eggs and set aside.', 'Stir-fry vegetables, add cooked millet and the egg.', 'Season with a little soy sauce and pepper.'],
+    d10: ['Stuff bell peppers with spiced paneer and vegetables.', 'Bake 20 minutes.', 'Serve with a bowl of clear vegetable soup.'],
+    d11: ['Cook chicken in a light tomato-butter gravy (go easy on cream).', 'Grate cauliflower and sauté 4 minutes for "rice".', 'Serve together.'],
+    d12: ['Cook moong dal into a thin soup with cumin and ginger.', 'Sauté beans and zucchini.', 'Serve with millet roti.'],
+    b15: ['Grind soaked rice and a little coconut into a very thin batter; mix in ragi flour.', 'Pour from the edges of a hot non-stick tawa to make a lacy dosa; cover 30 seconds.', 'Fold and serve with coconut chutney.'],
+    b16: ['Line cups made from jackfruit leaves (or idli moulds) with idli batter.', 'Steam 15–20 minutes.', 'Serve with vegetable sambar.'],
+    b17: ['Rinse thick poha; steam sprouts for 5 minutes.', 'Temper mustard, curry leaves and peanuts; add onion, poha, sprouts, turmeric and salt.', 'Finish with lemon and coriander.'],
+    b18: ['Soak whole green moong 6 hours, grind with ginger and chilli.', 'Make thin dosas, sprinkle chopped onion and coriander.', 'Serve with ginger chutney.'],
+    b19: ['Make a neer dosa.', 'Pour a beaten egg with onion and coriander on top while it cooks; flip once.', 'Roll up and serve.'],
+    l15: ['Grind coconut, roasted byadgi chillies, coriander and tamarind into a paste.', 'Simmer the paste with water 8 minutes, add fish and cook 6–8 minutes.', 'Serve with a cup of red rice and moong dal kosambari.'],
+    l16: ['Cook toor dal; boil ash gourd and drumstick with tamarind and sambar powder.', 'Combine and temper with mustard and curry leaves.', 'Serve with red rice and ivy gourd palya.'],
+    l17: ['Cook chicken covered with turmeric and salt till almost done.', 'Add roasted coconut and the ground sukka masala; toss on high heat till dry.', 'Serve with 2 neer dosas and a large salad.'],
+    l18: ['Cook ivy gourd with mustard and curry leaves; add boiled black chana.', 'Add coarse coconut-chilli masala and cook 5 minutes.', 'Serve with 2 rotis and salad.'],
+    l19: ['Boil ash gourd; add a ground coconut, chilli and soaked chana dal paste.', 'Turn off the heat and stir in beaten curd (don’t boil again).', 'Serve with red rice and beans palya.'],
+    s12: ['Soak moong dal 2 hours and drain.', 'Mix with cucumber, carrot, coconut and coriander.', 'Add salt and lemon just before eating.'],
+    s13: ['Steam mixed sprouts 5 minutes.', 'Temper mustard and curry leaves; sauté onion.', 'Add sprouts and salt, finish with coconut and lemon.'],
+    s14: ['Squeeze soaked kokum into water, strain and mix with thin coconut milk, garlic, cumin and salt.', 'Chill.', 'Have with a small handful of roasted peanuts.'],
+    d13: ['Rub mackerel with byadgi chilli paste, turmeric, salt and lemon; rest 15 minutes.', 'Cook on a hot tawa with a teaspoon of oil, 3–4 minutes a side.', 'Serve with a bowl of dal and salad.'],
+    d14: ['Spread spiced rice-coconut paste on colocasia leaves, roll and steam 30 minutes.', 'Make a thin tomato-dal saaru.', 'Slice the pathrode and serve with saaru.'],
+    d15: ['Boil water with salt, add ragi flour and stir hard into a smooth ball.', 'Cook spinach with toor dal, tomato and cumin into a thin saaru.', 'Serve the mudde with hot saaru.'],
+    d16: ['Marinate paneer in curd and ghee-roast masala; cook in a teaspoon of ghee till coated.', 'Make millet dosas.', 'Serve together with a salad.'],
+  };
   var SLOT_NAME = { b: 'Breakfast', l: 'Lunch', s: 'Evening snack', d: 'Dinner' };
   var SLOT_SHARE = { b: .25, l: .35, s: .10, d: .30 };
   var PREF_TYPES = { veg: ['vegan', 'veg'], nonveg: ['vegan', 'veg', 'egg', 'nonveg'], egg: ['vegan', 'veg', 'egg'], vegan: ['vegan'], jain: ['vegan', 'veg'] };
@@ -1364,7 +1469,7 @@ var DIETO = (function () {
   }
 
   return { MENU: MENU, SLOT_NAME: SLOT_NAME, calc: calc, bmiRead: bmiRead, buildDay: buildDay, buildWeek: buildWeek, pick: pick, portion: portion, eligible: eligible,
-    identity: identity, note: note, timelineText: timelineText, recommendTier: recommendTier, PREF_NAME: PREF_NAME, CUISINE_NAME: CUISINE_NAME, COND_TXT: COND_TXT, listTxt: listTxt };
+    HOW: HOW, identity: identity, note: note, timelineText: timelineText, recommendTier: recommendTier, PREF_NAME: PREF_NAME, CUISINE_NAME: CUISINE_NAME, COND_TXT: COND_TXT, listTxt: listTxt };
 })();
 </script>
 <script>
@@ -1550,7 +1655,6 @@ var DIETO = (function () {
       valid: function (v) { return v >= 13 && v <= 99 ? null : 'Please enter your age.'; } },
     { id: 'gender', sec: 'A', type: 'single', q: 'Gender', hint: 'Used in the metabolism formula.', key: 'gender', opts: [['female', 'Female', '👩'], ['male', 'Male', '👨'], ['other', 'Other', '🧑']] },
     { id: 'pincode', sec: 'A', type: 'pincode', q: 'What’s your pincode?', hint: function () { return LIVE ? 'We’ll check kitchen & delivery coverage right away.' : 'Delivery is launching soon. Your pincode helps us decide where to start.'; } },
-    { id: 'phone', sec: 'A', type: 'phone', q: function () { return 'Where should we send your plan, ' + first(A.name) + '?'; }, hint: 'So we can reach you about your plan and early access. No spam.' },
     { id: 'height', sec: 'B', type: 'height', q: 'How tall are you?' },
     { id: 'weight', sec: 'B', type: 'number', q: 'Current weight', key: 'kg', suffix: 'kg', ph: '72', dec: true, valid: function (v) { return v >= 30 && v <= 250 ? null : 'Please enter your weight in kg.'; } },
     { id: 'target', sec: 'B', type: 'target', q: 'Do you have a target weight?', hint: 'Optional. It sets your timeline.' },
@@ -1576,7 +1680,8 @@ var DIETO = (function () {
     { id: 'slots', sec: 'F', type: 'multi', q: function () { return LIVE ? 'Which meals do you want delivered?' : 'Which meals would you want us to deliver?'; }, hint: function () { return LIVE ? 'This sets your plan and price.' : 'This shapes your plan.'; }, key: 'slots', min: 1,
       opts: [['b', 'Breakfast', '🍳'], ['l', 'Lunch', '🍱'], ['s', 'Evening snack', '🍵'], ['d', 'Dinner', '🍲']] },
     { id: 'cheat', sec: 'F', type: 'single', q: 'Would you enjoy the occasional cheat meal?', hint: function () { return 'Standard & Premium plans include ' + C.cheatMealsPerCycle + ' per 30 days.'; }, key: 'cheat', grid: 2, opts: [['yes', 'Yes please', '🍕'], ['no', 'No, keep me on track', '🎯']] },
-    { id: 'budget', sec: 'F', type: 'single', q: 'Monthly budget comfort for meals', key: 'budget', opts: [['budget', 'Budget-friendly', '💰'], ['standard', 'Standard', '💳'], ['premium', 'Premium, no compromise', '💎']] }
+    { id: 'budget', sec: 'F', type: 'single', q: 'Monthly budget comfort for meals', key: 'budget', opts: [['budget', 'Budget-friendly', '💰'], ['standard', 'Standard', '💳'], ['premium', 'Premium, no compromise', '💎']] },
+    { id: 'phone', sec: 'F', type: 'phone', q: function () { return 'Your plan is ready, ' + first(A.name) + '! Where should we send it?'; }, hint: 'So we can reach you about your plan and early access. No spam.' },
   ];
   var OPT_ICON = {
     gender: { female: 'venus', male: 'mars', other: 'user' },
@@ -1786,6 +1891,13 @@ var DIETO = (function () {
       }
     },
     phone: function (s, w, foot) {
+      try {   // a preview of the result first, so people see what they get before giving their number
+        var pr = compute(), pv = h('div', { class: 'pview' });
+        pv.appendChild(h('div', { class: 'pvi', html: '<span>Your plan</span><b>' + esc(pr.identity) + '</b>' }));
+        if (!pr.hideNums) { pv.appendChild(h('div', { class: 'pvn' }, [h('div', { html: '<b>' + pr.kcal.toLocaleString('en-IN') + '</b><span>kcal a day</span>' }), h('div', { html: '<b>' + pr.p + ' g</b><span>protein</span>' }), h('div', { html: '<b>' + pr.bmi + '</b><span>BMI now</span>' })])); }
+        pv.appendChild(h('div', { class: 'pvl', html: ic('shield-check') + '<span>Your 7-day meal plan, timeline and tips unlock next</span>' }));
+        w.appendChild(pv);
+      } catch (e) {}
       var i = h('input', { class: 'inp', type: 'tel', inputmode: 'numeric', maxlength: '10', placeholder: '98765 43210', value: A.phone, autocomplete: 'tel-national' });
       var er = h('div', { class: 'err' });
       w.appendChild(h('div', { class: 'field' }, [h('div', { class: 'irow' }, [h('span', { class: 'pre', text: '+91' }), i]), er]));
@@ -1923,9 +2035,25 @@ var DIETO = (function () {
     var tile = h('div', { class: 'tile', html: x.meal.img ? '' : ic(dishIcon(x.meal)) });
     if (x.meal.img) tile.style.backgroundImage = 'url("' + x.meal.img + '")';
     var mm = R.hideNums ? 'Balanced portion · nutritionist-tuned' : x.kcal + ' kcal · ' + x.p + 'g protein · ' + x.c + 'g carbs';
-    var row = h('div', { class: 'meal' }, [tile, h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + (LIVE ? '<span class="dl' + (delivered ? '' : ' home') + '">' + (delivered ? 'DELIVERED' : 'AT HOME') + '</span>' : '') + '</div><div class="nm">' + esc(x.meal.name) + '</div><div class="mm">' + mm + '</div>' })]);
+    var row = h('div', { class: 'meal tap', role: 'button', tabindex: '0', 'aria-label': 'See details for ' + x.meal.name, onclick: function (e) { if (!e.target.closest('.sw')) mealSheet(x); } }, [tile, h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + (LIVE ? '<span class="dl' + (delivered ? '' : ' home') + '">' + (delivered ? 'DELIVERED' : 'AT HOME') + '</span>' : '') + '</div><div class="nm">' + esc(x.meal.name) + '</div><div class="mm">' + mm + '</div>' })]);
     row.appendChild(h('button', { class: 'sw', html: ic('refresh-cw') + 'Swap', onclick: function () { swapMeal(i); } }));
     return row;
+  }
+  function mealSheet(x) {
+    var m = x.meal, how = (E.HOW || {})[m.id] || [];
+    var fab = $('#cfab'), fabWas = fab.style.visibility; fab.style.visibility = 'hidden';
+    var ov = h('div', { class: 'msheet-ov', onclick: function (e) { if (e.target === ov) close(); } });
+    function close() { ov.remove(); fab.style.visibility = fabWas; }
+    var sh = h('div', { class: 'msheet', role: 'dialog', 'aria-label': m.name });
+    sh.appendChild(h('span', { class: 'mhandle' }));
+    sh.appendChild(h('div', { class: 'msl', text: E.SLOT_NAME[x.slot] }));
+    sh.appendChild(h('h3', { text: m.name }));
+    if (!R.hideNums) sh.appendChild(h('div', { class: 'mnut' }, [['kcal', x.kcal], ['protein', x.p + ' g'], ['carbs', x.c + ' g'], ['fat', x.f + ' g']].map(function (n) { return h('div', { html: '<b>' + n[1] + '</b><span>' + n[0] + '</span>' }); })));
+    if (m.ing) { sh.appendChild(h('h4', { text: 'Ingredients' })); sh.appendChild(h('div', { class: 'ming' }, String(m.ing).split(',').map(function (t) { return h('span', { text: t.trim() }); }))); }
+    if (how.length) { sh.appendChild(h('h4', { text: 'How to make it' })); sh.appendChild(h('ol', { class: 'mhow' }, how.map(function (t) { return h('li', { text: t }); }))); }
+    sh.appendChild(h('p', { class: 'mnote', text: R.hideNums ? 'Portions are tuned for you by our nutritionist.' : 'Portion sized for your ' + R.kcal.toLocaleString('en-IN') + ' kcal day.' }));
+    sh.appendChild(h('button', { class: 'btn btn-green btn-block', text: 'Close', onclick: close }));
+    ov.appendChild(sh); (document.documentElement.classList.contains('app-open') ? $('#app') : document.body).appendChild(ov); track('meal_details', { meal: m.id });
   }
   function swapMeal(i) {
     var cur = DAY[i]; if (cur.missing) return false;
@@ -2276,7 +2404,7 @@ var DIETO = (function () {
     else if (!chatInit) { chatInit = true; botSay('Hey! 👋 I’m the dietO AI. Tell me what’s going on and I’ll help, or I can just build your diet plan right now if you’d rather. Takes 2 minutes.', ['Build my plan', LIVE ? 'Do you deliver to me?' : 'When does delivery start?', 'Diets you support']); }
     setTimeout(function () { if (matchMedia('(min-width: 700px)').matches) $('#cin').focus(); }, 60);
   }
-  function closeChat() { chatOpen = false; chat.classList.add('hidden'); }
+  function closeChat() { chatOpen = false; chat.classList.add('hidden'); if (params.get('from') === 'app') location.href = window.DIETO_BASE ? '/app/index.html' : '/app/'; }
   function scroll() { cmsgs.scrollTop = cmsgs.scrollHeight; }
   function botSay(text, chips, delay) {
     var t = h('div', { class: 'cm b typing', html: '<i></i><i></i><i></i>' }); cmsgs.appendChild(t); scroll();
@@ -2292,6 +2420,12 @@ var DIETO = (function () {
     }, delay != null ? delay : Math.min(1100, 350 + text.length * 6));
   }
   function toastChat(text) { if (!chatOpen) openChat('system'); botSay(text); }
+  var CONSULT = window.DIETO_BASE ? '/consult/index.html' : '/consult/';
+  function toDietician(from) { track('chat_to_dietician', { from: from }); location.href = CONSULT; }
+  $('#cclip').onclick = function () {
+    track('chat_file_tap');
+    botSay('Lab reports, prescriptions and meal photos are reviewed by a real dietician, not by me. That keeps your health information private and the advice safe. Your first 5 minutes with a dietician are free.', ['Talk to a dietician', 'Not now']);
+  };
   $('#cbar').onsubmit = function (e) { e.preventDefault(); var v = $('#cin').value.trim(); if (!v) return; $('#cin').value = ''; userAsk(v); };
   function userAsk(text) {
     if (!chatOpen) openChat('ask');
@@ -2322,6 +2456,14 @@ var DIETO = (function () {
       return botSay('That sounds like it needs a doctor right away. Please contact your doctor or call 112 if it’s an emergency. I can help with food once you’re safe. 💚');
     if (/(insulin|dialysis|kidney (failure|disease)|ckd|post[- ]?surgery|chemo)/.test(s))
       return botSay('That’s one where your doctor’s guidance comes first, so I won’t guess. Our Clinical (RX) plans are built with a nutritionist and can follow your doctor’s prescription exactly. Want me to start your assessment so the nutritionist has everything?', NUDGE);
+    if (/talk to a (real )?(dietician|dietitian|doctor)|real (dietician|dietitian|doctor)/.test(s)) { botSay('Opening dietician chat…', null, 300); return setTimeout(function () { toDietician('chat'); }, 700); }
+    if (/^ ?not now ?$/.test(s)) return botSay('No problem. I’m here if you need me.');
+    if (/(pregnan|breastfeed|lactating|expecting a baby|trimester)/.test(s))
+      return botSay('Congratulations! 💚 During pregnancy and breastfeeding your needs change week to week, so please follow your gynaecologist’s advice first. I won’t set calorie targets for you. A dietician can plan safe, nourishing meals around your doctor’s advice.', ['Talk to a dietician', 'Not now']);
+    if (/(bleeding|vomiting blood|blood in|severe (headache|stomach)|sudden weight loss|can'?t keep (food|water) down|swelling in (my )?(legs|feet|face))/.test(s))
+      return botSay('Please see a doctor about this soon, or call 112 if it feels severe. These need a medical check before any diet change. I can help with food once you’re okay. 💚', ['Talk to a dietician']);
+    if (/(report|hba1c|creatinine|tsh|lipid|cholesterol (is|of)|sugar (is|of|level)|fasting (sugar|glucose)|uric acid|vitamin d|b12|haemoglobin|hemoglobin)/.test(s) && /\d/.test(s))
+      return botSay('Thanks for sharing your numbers. I can’t read medical reports safely. Please go through them with your doctor, and a dietician can turn their advice into meals you’ll actually eat. You can send them the report in the chat.', ['Talk to a dietician', 'Not now']);
     // --- coach mode ---
     if (coachMode && R) {
       if (/swap|change|replace|don'?t like|another/.test(s)) {

@@ -41,7 +41,7 @@ svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;stroke:currentCol
 .top .chip{font-size:11.5px;font-weight:800;background:var(--lime);padding:6px 11px;border-radius:999px;color:var(--g900)}
 .top h1{margin:18px 0 4px;font-size:25px;letter-spacing:-.02em;font-weight:800}
 .top p{margin:0;color:rgba(255,255,255,.78);font-size:14px}
-main{max-width:560px;margin:0 auto;padding:0 14px calc(96px + var(--safe-b))}
+main{max-width:560px;margin:0 auto;padding:0 14px calc(170px + var(--safe-b))}
 .lift{margin-top:-40px}
 .card{background:#fff;border-radius:24px;padding:18px;margin-top:12px;box-shadow:0 2px 10px rgba(11,59,38,.06)}
 .card h3{margin:0 0 10px;font-size:16px;display:flex;align-items:center;gap:8px}.card h3 svg.i{color:var(--g600);width:19px;height:19px}
@@ -126,6 +126,25 @@ nav a svg.i{width:23px;height:23px}nav a.on{color:var(--g700)}nav a.on svg.i{bac
 .rgrid .pk{position:absolute;top:10px;left:10px;background:var(--lime);color:var(--g900);font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px}
 .rsteps{margin:0;padding-left:20px;display:grid;gap:10px;line-height:1.55;font-size:14.5px}.ring2{display:flex;gap:8px;flex-wrap:wrap}.ring2 span{background:var(--mint);color:var(--g700);font-weight:700;font-size:12.5px;padding:5px 11px;border-radius:999px}
 .tog{display:flex;align-items:center;gap:12px}.tog .sp{flex:1}.tog button{width:52px;height:30px;border-radius:999px;border:0;background:#DCE7E0;position:relative;cursor:pointer;flex:none}.tog button::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}.tog button.on{background:var(--g700)}.tog button.on::after{transform:translateX(22px)}
+.bell{position:relative;width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;margin-left:8px;flex:none}.bell svg.i{width:20px;height:20px}.bell i{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:99px;background:var(--lime);color:var(--g900);font:800 11px/18px var(--font);font-style:normal;text-align:center;padding:0 4px}
+.fabs{position:fixed;right:14px;bottom:calc(84px + var(--safe-b));z-index:25;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.fab-ai{width:56px;height:56px;border-radius:50%;background:var(--g700);color:#fff;display:grid;place-items:center;box-shadow:0 12px 26px -10px rgba(11,59,38,.7)}.fab-ai svg.i{width:26px;height:26px}
+.fab-resume{display:flex;align-items:center;gap:10px;background:var(--lime);color:var(--g900);text-decoration:none;border-radius:99px;padding:10px 12px 10px 14px;box-shadow:0 12px 26px -10px rgba(11,59,38,.6);max-width:260px}.fab-resume b{display:block;font-size:14px}.fab-resume small{font-size:12px;font-weight:600}.fab-resume svg.i{width:18px;height:18px}
+.pulse-dot{width:10px;height:10px;border-radius:50%;background:#22A35A;box-shadow:0 0 0 4px rgba(34,163,90,.25);flex:none}
+.msheet-ov{position:fixed;inset:0;z-index:40;background:rgba(11,31,23,.55);display:flex;align-items:flex-end;justify-content:center}
+.msheet{background:#fff;width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:28px 28px 0 0;padding:12px 20px calc(20px + var(--safe-b));display:flex;flex-direction:column;gap:10px}
+.mhandle{align-self:center;width:44px;height:5px;border-radius:99px;background:var(--line)}
+.msl{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g700)}.msheet h3{margin:0;font-size:22px;letter-spacing:-.02em}
+.msheet h4{margin:6px 0 0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.mnut{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mnut div{background:var(--mint);border-radius:14px;padding:10px 4px;text-align:center}.mnut b{display:block;font-size:16px;color:var(--g900)}.mnut span{font-size:11.5px;color:var(--mute)}
+.ming{display:flex;flex-wrap:wrap;gap:6px}.ming span{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:13.5px}
+.mhow{margin:0;padding-left:20px;display:grid;gap:8px;font-size:14.5px;line-height:1.55}
+.stopt{display:flex;align-items:center;gap:12px;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:14px;font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;font-family:inherit}.stopt svg.i{width:22px;height:22px;color:var(--g700)}.stopt.on{border-color:var(--g700);background:var(--mint)}
+.meal.skip .nm{color:var(--mute)}.meal.skip .ck{background:#FDE8E6;border-color:#FDE8E6;color:var(--red)}.meal.swap .ck{background:#FFF4DE;border-color:#FFF4DE;color:#8A5A00}
+.mm u{text-decoration:none;color:var(--g700);font-weight:700}
+.adh{display:flex;gap:14px;align-items:center}.adhp{width:74px;height:74px;border-radius:22px;background:var(--g900);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}.adhp b{font-size:22px;color:var(--lime)}.adhp span{font-size:11px;color:#CFE3D7}
+.nitem{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}.nitem:first-child{border-top:0}.nitem b{display:block;font-size:14.5px}.nitem.new b::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g700);margin-left:6px;vertical-align:middle}
+.ni{width:38px;height:38px;border-radius:12px;background:var(--mint);color:var(--g700);display:grid;place-items:center;flex:none}.ni svg.i{width:19px;height:19px}
 .disc{font-size:11.5px;color:var(--mute);margin:16px 4px 0;line-height:1.5}
 </style>
 </head>
@@ -297,8 +316,97 @@ var DIETO = (function () {
     D('d09','d','egg',0,'asian',['highprotein'],['egg','soy'],'Egg & Veggie Fried Millet','🍳',480,24,56,17,'egg, foxtail millet, vegetables, soy sauce'),
     D('d10','d','veg',1,'cont',['highprotein','lowcarb'],['dairy'],'Paneer-Stuffed Bell Peppers with Soup','🫑',440,24,20,28,'paneer, bell pepper, tomato soup'),
     D('d11','d','nonveg',0,'north',['lowcarb','highprotein'],['dairy'],'Butter Chicken with Cauliflower Rice','🍗',520,40,14,34,'chicken, butter, cream, cauliflower'),
-    D('d12','d','vegan',1,'north',['lowgi','heart'],[],'Moong Dal Soup, Sautéed Veggies & Millet Roti','🥣',380,18,52,9,'moong dal, beans, zucchini, bajra')
+    D('d12','d','vegan',1,'north',['lowgi','heart'],[],'Moong Dal Soup, Sautéed Veggies & Millet Roti','🥣',380,18,52,9,'moong dal, beans, zucchini, bajra'),
+    // ---------- Local: Mangalorean, Udupi & Karnataka ----------
+    D('b15','b','vegan',0,'south',['lowgi','heart'],[],'Ragi Neer Dosa with Coconut Chutney','🫓',300,8,50,7,'rice, ragi flour, coconut, green chilli, coriander'),
+    D('b16','b','vegan',0,'south',['heart'],[],'Kotte Kadubu (Jackfruit-Leaf Idli) with Sambar','🍚',320,10,56,6,'rice, urad dal, toor dal, drumstick, onion, tamarind'),
+    D('b17','b','vegan',0,'south',['highprotein'],['nuts'],'Avalakki Upkari with Sprouts','🍛',300,11,48,7,'poha, moong sprouts, peanuts, onion, curry leaves, lemon'),
+    D('b18','b','vegan',0,'south',['lowgi','highprotein','heart'],[],'Pesarattu with Ginger Chutney','🫓',310,16,42,8,'green moong, ginger, green chilli, onion, coriander'),
+    D('b19','b','egg',0,'south',['highprotein'],['egg'],'Egg Neer Dosa Roll','🍳',350,20,38,12,'rice, egg, onion, tomato, coriander'),
+    D('l15','l','nonveg',0,'south',['highprotein','heart'],['fish'],'Mangalorean Fish Curry, Red Rice & Kosambari','🐟',560,38,58,18,'mackerel, coconut, byadgi chilli, tamarind, red rice, moong dal, cucumber'),
+    D('l16','l','vegan',0,'south',['lowgi','heart'],[],'Udupi Sambar, Red Rice & Tondekai Palya','🍛',520,16,86,10,'toor dal, ash gourd, drumstick, tamarind, red rice, ivy gourd, coconut'),
+    D('l17','l','nonveg',0,'south',['highprotein'],[],'Kori Sukka (light) with Neer Dosa & Salad','🍗',600,44,50,22,'chicken, coconut, byadgi chilli, coriander, rice, cucumber, carrot'),
+    D('l18','l','vegan',0,'south',['lowgi','highprotein'],['gluten'],'Kadle Manoli with Rotis & Salad','🥘',500,20,70,12,'black chana, ivy gourd, coconut, whole wheat, cucumber'),
+    D('l19','l','veg',0,'south',['heart'],['dairy'],'Majjige Huli, Red Rice & Beans Palya','🍲',480,15,78,11,'curd, ash gourd, coconut, red rice, beans'),
+    D('s12','s','vegan',0,'south',['lowgi','highprotein','heart'],[],'Moong Dal Kosambari','🥗',160,9,20,5,'moong dal, cucumber, carrot, coconut, lemon'),
+    D('s13','s','vegan',0,'south',['highprotein'],[],'Sprouts Usli','🫘',190,12,24,5,'moong sprouts, chana sprouts, onion, coconut, curry leaves'),
+    D('s14','s','vegan',0,'south',['heart'],['nuts'],'Kokum Sol Kadhi & Roasted Peanuts','🥤',180,6,12,12,'kokum, coconut milk, garlic, peanuts'),
+    D('d13','d','nonveg',0,'south',['highprotein','lowcarb'],['fish'],'Bangude Tawa Fry with Dal & Salad','🐟',480,40,22,24,'mackerel, byadgi chilli, turmeric, moong dal, cucumber, onion'),
+    D('d14','d','vegan',0,'south',['heart'],[],'Steamed Pathrode with Saaru','🌿',380,10,64,8,'colocasia leaves, rice, coconut, byadgi chilli, toor dal, tomato'),
+    D('d15','d','vegan',1,'south',['lowgi','heart'],[],'Ragi Mudde with Soppina Saaru','🥣',420,14,72,8,'ragi flour, spinach, toor dal, tomato, cumin'),
+    D('d16','d','veg',0,'south',['highprotein'],['dairy'],'Paneer Ghee Roast (light) with Millet Dosa','🧀',520,28,40,26,'paneer, ghee, byadgi chilli, curd, foxtail millet, urad dal')
   ];
+  // How to make each meal (short steps shown when a meal is tapped). Have a dietician review these.
+  var HOW = {
+    b01: ['Whisk besan with water, chopped onion, tomato, coriander and salt into a pourable batter.', 'Spread thin on a lightly oiled tawa and cook both sides till golden.', 'Serve with mint chutney.'],
+    b02: ['Soak moong dal 3 hours and grind with ginger and chilli.', 'Make thin cheelas on a non-stick pan.', 'Fill with crumbled paneer and capsicum, fold and serve.'],
+    b03: ['Rinse poha and let it soften.', 'Temper mustard, curry leaves and peanuts in a teaspoon of oil; add onion and peas.', 'Add poha, turmeric and salt, toss and finish with lemon.'],
+    b04: ['Mix ragi flour with a little rice flour, salt and water into a thin batter.', 'Make thin dosas on a hot tawa.', 'Serve with a bowl of vegetable sambar.'],
+    b05: ['Steam idlis from fermented rice-urad batter (about 10 minutes).', 'Make sambar with toor dal, vegetables and tamarind.', 'Serve 2–3 idlis with sambar and a small spoon of coconut chutney.'],
+    b06: ['Dry roast oats for 2 minutes.', 'Sauté onion, carrot and peas with mustard and curry leaves.', 'Add oats and hot water, cook covered till soft.'],
+    b07: ['Sauté onion, tomato and chilli in a teaspoon of oil.', 'Add beaten eggs with turmeric and salt; scramble till just set.', 'Serve with toasted multigrain bread.'],
+    b08: ['Whisk egg whites with chopped spinach, salt and pepper.', 'Cook in a non-stick pan and fold.', 'Serve with toast topped with mashed avocado.'],
+    b09: ['Spoon Greek yogurt into a bowl.', 'Top with berries, muesli, chia and flax.', 'Eat right away so the muesli stays crunchy.'],
+    b10: ['Cook chicken mince with onion, ginger-garlic and spices till dry.', 'Stuff into whole-wheat dough and roll out.', 'Cook on a tawa with very little oil; serve with curd.'],
+    b11: ['Crumble firm tofu.', 'Sauté onion and spinach, add tofu, turmeric, salt and pepper.', 'Serve on toasted multigrain bread.'],
+    b12: ['Soak moong dal 3 hours, grind with green chilli and salt.', 'Make thin dosas on a hot tawa.', 'Serve with coconut chutney.'],
+    b13: ['Roast jowar rava.', 'Temper mustard and curry leaves, add beans and peas (no onion-garlic).', 'Add rava and hot water, cook covered till soft.'],
+    b14: ['Whisk eggs with salt and pepper.', 'Pour into a buttered pan, add spinach and a little cheese.', 'Fold and cook till set.'],
+    l01: ['Grill paneer cubes with a little oil and spices.', 'Sauté capsicum and zucchini.', 'Serve over a cup of cooked brown rice.'],
+    l02: ['Pressure cook soaked rajma with onion-tomato masala.', 'Serve over brown rice.', 'Add a big cucumber-onion salad on the side.'],
+    l03: ['Cook dal and temper with cumin, garlic and chilli.', 'Make bhindi dry with very little oil.', 'Serve with 2 multigrain rotis.'],
+    l04: ['Marinate chicken in curd and tikka spices; grill or bake.', 'Cook quinoa (1 part to 2 parts water).', 'Serve together with cucumber raita.'],
+    l05: ['Cook sambar with toor dal, vegetables and tamarind.', 'Make a vegetable poriyal with coconut.', 'Serve with rice and a small cup of curd.'],
+    l06: ['Pressure cook millet, toor dal and mixed vegetables.', 'Add tamarind water and bisi bele powder; simmer.', 'Temper with a little ghee; serve with raita.'],
+    l07: ['Grind coconut, chillies and tamarind into a paste.', 'Simmer the paste, then add fish and cook 6–8 minutes.', 'Serve with red rice and vegetables.'],
+    l08: ['Boil eggs and peel.', 'Simmer them in an onion-tomato gravy.', 'Serve with jeera brown rice.'],
+    l09: ['Simmer green curry paste with light coconut milk and vegetables.', 'Add tofu cubes and cook 5 minutes.', 'Serve with brown rice.'],
+    l10: ['Stir-fry chicken strips on high heat.', 'Add vegetables and a little soy sauce.', 'Toss with boiled millet noodles.'],
+    l11: ['Cook boiled chana in a tomato-based masala with no onion or garlic.', 'Make cabbage sabzi.', 'Serve with 2 rotis.'],
+    l12: ['Toss cooked quinoa with chickpeas, cucumber, tomato and lemon.', 'Add herbs, salt and pepper.', 'Serve with 2 tbsp hummus.'],
+    l13: ['Season and grill chicken breast.', 'Toss lettuce, cucumber and tomato with a light dressing.', 'Slice chicken over the salad; serve with one slice of multigrain bread.'],
+    l14: ['Marinate paneer in curd and tikka spices; grill.', 'Toss with lettuce, onion, capsicum and lemon.', 'No bread or rice: this is the low-carb option.'],
+    s01: ['Dry roast makhana on low heat till crisp.', 'Add a few drops of ghee, salt and pepper.', 'Cool and store in a jar.'],
+    s02: ['Steam sprouts for 5 minutes.', 'Mix with onion, tomato, coriander, chaat masala and lemon.', 'Eat fresh.'],
+    s03: ['Spoon Greek yogurt into a bowl.', 'Top with a small handful of nuts and seeds.', 'Add cinnamon if you like it sweet.'],
+    s04: ['Boil eggs 9 minutes, cool and peel.', 'Halve and sprinkle chaat masala, pepper and salt.', 'Eat 2 halves or whole eggs as your plan says.'],
+    s05: ['Mix roasted chana and peanuts.', 'Add a pinch of chaat masala.', 'Keep to a small handful (about 30 g).'],
+    s06: ['Boil chickpeas till soft.', 'Temper mustard, curry leaves and chilli; add chickpeas.', 'Finish with grated coconut and lemon.'],
+    s07: ['Blend curd with water, roasted cumin, salt and mint.', 'Cut a small cup of seasonal fruit.', 'Have both together.'],
+    s08: ['Marinate chicken pieces in curd and tikka spices.', 'Grill or air-fry till cooked through.', 'Serve with mint chutney.'],
+    s09: ['Blend chickpeas, tahini, lemon and garlic into hummus.', 'Cut carrot, cucumber and capsicum sticks.', 'Dip and eat.'],
+    s10: ['Boil edamame pods 4–5 minutes.', 'Drain and sprinkle sea salt.', 'Pop the beans out of the pods to eat.'],
+    s11: ['Thread paneer and vegetables on skewers.', 'Brush with spiced curd.', 'Grill or bake 10 minutes.'],
+    d01: ['Pressure cook millet and moong dal with turmeric and vegetables.', 'Temper with cumin and a little ghee.', 'Serve with curd.'],
+    d02: ['Blanch and blend spinach.', 'Cook with onion-tomato masala; add paneer cubes.', 'Serve with 2 multigrain rotis.'],
+    d03: ['Season fish with lemon, salt and pepper; grill.', 'Sauté seasonal vegetables.', 'Serve with half a cup of quinoa.'],
+    d04: ['Marinate chicken in curd and tandoori spices; bake or grill.', 'Make a simple dal.', 'Serve with salad.'],
+    d05: ['Pressure cook lauki and chana dal with turmeric.', 'Temper with cumin (no onion-garlic for Jain).', 'Serve with jowar roti.'],
+    d06: ['Make thick dosas from fermented batter.', 'Top with onion, tomato, carrot and coriander while cooking.', 'Serve with sambar.'],
+    d07: ['Cook chicken in a roasted Chettinad masala with pepper and fennel.', 'Make millet dosas.', 'Serve together.'],
+    d08: ['Stir-fry tofu and broccoli on high heat.', 'Add garlic and a little soy sauce.', 'Serve with brown rice.'],
+    d09: ['Scramble eggs and set aside.', 'Stir-fry vegetables, add cooked millet and the egg.', 'Season with a little soy sauce and pepper.'],
+    d10: ['Stuff bell peppers with spiced paneer and vegetables.', 'Bake 20 minutes.', 'Serve with a bowl of clear vegetable soup.'],
+    d11: ['Cook chicken in a light tomato-butter gravy (go easy on cream).', 'Grate cauliflower and sauté 4 minutes for "rice".', 'Serve together.'],
+    d12: ['Cook moong dal into a thin soup with cumin and ginger.', 'Sauté beans and zucchini.', 'Serve with millet roti.'],
+    b15: ['Grind soaked rice and a little coconut into a very thin batter; mix in ragi flour.', 'Pour from the edges of a hot non-stick tawa to make a lacy dosa; cover 30 seconds.', 'Fold and serve with coconut chutney.'],
+    b16: ['Line cups made from jackfruit leaves (or idli moulds) with idli batter.', 'Steam 15–20 minutes.', 'Serve with vegetable sambar.'],
+    b17: ['Rinse thick poha; steam sprouts for 5 minutes.', 'Temper mustard, curry leaves and peanuts; add onion, poha, sprouts, turmeric and salt.', 'Finish with lemon and coriander.'],
+    b18: ['Soak whole green moong 6 hours, grind with ginger and chilli.', 'Make thin dosas, sprinkle chopped onion and coriander.', 'Serve with ginger chutney.'],
+    b19: ['Make a neer dosa.', 'Pour a beaten egg with onion and coriander on top while it cooks; flip once.', 'Roll up and serve.'],
+    l15: ['Grind coconut, roasted byadgi chillies, coriander and tamarind into a paste.', 'Simmer the paste with water 8 minutes, add fish and cook 6–8 minutes.', 'Serve with a cup of red rice and moong dal kosambari.'],
+    l16: ['Cook toor dal; boil ash gourd and drumstick with tamarind and sambar powder.', 'Combine and temper with mustard and curry leaves.', 'Serve with red rice and ivy gourd palya.'],
+    l17: ['Cook chicken covered with turmeric and salt till almost done.', 'Add roasted coconut and the ground sukka masala; toss on high heat till dry.', 'Serve with 2 neer dosas and a large salad.'],
+    l18: ['Cook ivy gourd with mustard and curry leaves; add boiled black chana.', 'Add coarse coconut-chilli masala and cook 5 minutes.', 'Serve with 2 rotis and salad.'],
+    l19: ['Boil ash gourd; add a ground coconut, chilli and soaked chana dal paste.', 'Turn off the heat and stir in beaten curd (don’t boil again).', 'Serve with red rice and beans palya.'],
+    s12: ['Soak moong dal 2 hours and drain.', 'Mix with cucumber, carrot, coconut and coriander.', 'Add salt and lemon just before eating.'],
+    s13: ['Steam mixed sprouts 5 minutes.', 'Temper mustard and curry leaves; sauté onion.', 'Add sprouts and salt, finish with coconut and lemon.'],
+    s14: ['Squeeze soaked kokum into water, strain and mix with thin coconut milk, garlic, cumin and salt.', 'Chill.', 'Have with a small handful of roasted peanuts.'],
+    d13: ['Rub mackerel with byadgi chilli paste, turmeric, salt and lemon; rest 15 minutes.', 'Cook on a hot tawa with a teaspoon of oil, 3–4 minutes a side.', 'Serve with a bowl of dal and salad.'],
+    d14: ['Spread spiced rice-coconut paste on colocasia leaves, roll and steam 30 minutes.', 'Make a thin tomato-dal saaru.', 'Slice the pathrode and serve with saaru.'],
+    d15: ['Boil water with salt, add ragi flour and stir hard into a smooth ball.', 'Cook spinach with toor dal, tomato and cumin into a thin saaru.', 'Serve the mudde with hot saaru.'],
+    d16: ['Marinate paneer in curd and ghee-roast masala; cook in a teaspoon of ghee till coated.', 'Make millet dosas.', 'Serve together with a salad.'],
+  };
   var SLOT_NAME = { b: 'Breakfast', l: 'Lunch', s: 'Evening snack', d: 'Dinner' };
   var SLOT_SHARE = { b: .25, l: .35, s: .10, d: .30 };
   var PREF_TYPES = { veg: ['vegan', 'veg'], nonveg: ['vegan', 'veg', 'egg', 'nonveg'], egg: ['vegan', 'veg', 'egg'], vegan: ['vegan'], jain: ['vegan', 'veg'] };
@@ -467,7 +575,7 @@ var DIETO = (function () {
   }
 
   return { MENU: MENU, SLOT_NAME: SLOT_NAME, calc: calc, bmiRead: bmiRead, buildDay: buildDay, buildWeek: buildWeek, pick: pick, portion: portion, eligible: eligible,
-    identity: identity, note: note, timelineText: timelineText, recommendTier: recommendTier, PREF_NAME: PREF_NAME, CUISINE_NAME: CUISINE_NAME, COND_TXT: COND_TXT, listTxt: listTxt };
+    HOW: HOW, identity: identity, note: note, timelineText: timelineText, recommendTier: recommendTier, PREF_NAME: PREF_NAME, CUISINE_NAME: CUISINE_NAME, COND_TXT: COND_TXT, listTxt: listTxt };
 })();
 </script>
 <script>
@@ -639,29 +747,31 @@ window.DIETO_RECIPES = [
     var logo = h('img', { class: 'logo', src: C.logoUrl, alt: 'dietO' });
     logo.onerror = function () { logo.replaceWith(h('span', { class: 'wm', text: 'dietO' })); };
     row.appendChild(logo);
-    if (R) row.appendChild(h('span', { class: 'chip', text: R.identity }));
+    if (R) row.appendChild(h('span', { class: 'chip', style: 'margin-left:auto', text: R.identity }));
+    bell(row);
     t.appendChild(row); t.appendChild(h('h1', { text: title })); if (sub) t.appendChild(h('p', { text: sub }));
     return t;
   }
   function greet() { var hr = new Date().getHours(); return hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening'; }
   function mealRow(x, dayIdx, i, checkable, dstr) {
     if (x.missing) return h('div', { class: 'meal' }, [h('div', { class: 'tile', html: ic('chef-hat') }), h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + '</div><div class="nm">Designed by our nutritionist</div>' })]);
-    var log = dstr ? dayLog(dstr) : null, done = log && log.done[x.slot];
-    var row = h('div', { class: 'meal' + (done ? ' done' : '') });
+    var log = dstr ? dayLog(dstr) : null, st = log ? mstate(log.done[x.slot]) : '', done = st === 'done';
+    var row = h('div', { class: 'meal' + (st ? ' ' + st : '') });
     row.appendChild(h('div', { class: 'tile', html: x.meal.img ? '' : ic(dishIcon(x.meal)), style: x.meal.img ? 'background-image:url("' + x.meal.img + '")' : false }));
-    var mi = h('div', { class: 'mi', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + '</div><div class="nm">' + esc(x.meal.name) + '</div><div class="mm">' + (R.hideNums ? 'Balanced portion' : x.kcal + ' kcal · ' + x.p + 'g protein') + '</div>' });
+    var mi = h('div', { class: 'mi', role: 'button', tabindex: '0', style: 'cursor:pointer', html: '<div class="sl">' + E.SLOT_NAME[x.slot] + (st === 'skip' ? ' · skipped' : st === 'swap' ? ' · ate something else' : '') + '</div><div class="nm">' + esc(x.meal.name) + '</div><div class="mm">' + (R.hideNums ? 'Balanced portion' : x.kcal + ' kcal · ' + x.p + 'g protein') + ' · <u>details</u></div>' });
+    mi.addEventListener('click', function (e) { if (!e.target.closest('.sw')) mealSheet(x, dstr); });
     var sw = h('button', { class: 'sw', html: ic('refresh-cw') + 'Swap', onclick: function () { if (swap(dayIdx, i)) render(); } });
     mi.appendChild(sw); row.appendChild(mi);
     if (checkable) {
-      row.appendChild(h('button', { class: 'ck', 'aria-label': 'Mark as eaten', html: ic('circle-check'), onclick: function () {
-        var l = dayLog(dstr); l.done[x.slot] = !l.done[x.slot]; LOG[dstr] = l; store('dieto_log', LOG); render();
+      row.appendChild(h('button', { class: 'ck', 'aria-label': st ? 'Change' : 'Mark this meal', html: ic(st === 'skip' ? 'circle-x' : st === 'swap' ? 'repeat' : 'circle-check'), onclick: function () {
+        if (!st) setMeal(dstr, x.slot, 'done'); else statusSheet(x, dstr);
       } }));
     }
     return row;
   }
   function streak() {
     var n = 0, d = new Date(), plannedSlots = function (idx) { return P.WEEK[idx].filter(function (x) { return !x.missing; }).map(function (x) { return x.slot; }); };
-    var complete = function (date) { var idx = ((dayDiff(parseYmd(P.start), date) % 7) + 7) % 7, l = dayLog(ymd(date)); return plannedSlots(idx).every(function (s) { return l.done[s]; }); };
+    var complete = function (date) { var idx = ((dayDiff(parseYmd(P.start), date) % 7) + 7) % 7, l = dayLog(ymd(date)); return plannedSlots(idx).every(function (s) { return mstate(l.done[s]) === 'done' || mstate(l.done[s]) === 'swap'; }); };
     if (!complete(d)) d.setDate(d.getDate() - 1);
     while (n < 365 && dayDiff(parseYmd(P.start), d) >= 0 && complete(d)) { n++; d.setDate(d.getDate() - 1); }
     return n;
@@ -672,7 +782,7 @@ window.DIETO_RECIPES = [
     var di = todayIdx(), day = P.WEEK[di], dstr = ymd(new Date()), log = dayLog(dstr);
     root.appendChild(header(greet() + ', ' + first(P.name), new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) + ' · Day ' + (di + 1) + ' of your plan'));
     var m = h('main', { class: 'lift' });
-    var eaten = day.filter(function (x) { return !x.missing && log.done[x.slot]; });
+    var eaten = day.filter(function (x) { return !x.missing && mstate(log.done[x.slot]) === 'done'; });
     var et = eaten.reduce(function (s, x) { return { k: s.k + x.kcal, p: s.p + x.p }; }, { k: 0, p: 0 });
     var planned = day.filter(function (x) { return !x.missing; }).length;
     var frac = R.hideNums ? eaten.length / Math.max(1, planned) : Math.min(1, et.k / R.kcal);
@@ -686,8 +796,9 @@ window.DIETO_RECIPES = [
     var mc = h('div', { class: 'card' }, [h('h3', { html: ic('utensils') + 'Today’s meals' })]);
     var list = h('div'); day.forEach(function (x, i) { list.appendChild(mealRow(x, di, i, true, dstr)); }); mc.appendChild(list);
     var b = boostFor(day); if (b) mc.appendChild(h('div', { class: 'boost', html: ic('dumbbell') + '<span>' + esc(b) + '</span>' }));
-    mc.appendChild(h('p', { class: 'sub', style: 'margin:10px 0 0', text: 'Tap the tick when you’ve eaten a meal.' }));
+    mc.appendChild(h('p', { class: 'sub', style: 'margin:10px 0 0', text: 'Tap the tick when you’ve eaten a meal (tap again to mark skipped or replaced). Tap a meal for its recipe.' }));
     m.appendChild(mc);
+    adherenceCard(m);
     var wc = h('div', { class: 'card' }, [h('h3', { html: ic('droplet') + 'Water · ' + log.water + ' of 8 glasses' })]);
     var wrow = h('div', { class: 'water' });
     for (var g = 1; g <= 8; g++) (function (g) {
@@ -794,6 +905,7 @@ window.DIETO_RECIPES = [
     m.appendChild(sc);
     var bmi = Math.round(now / Math.pow(A.cm / 100, 2) * 10) / 10, br = E.bmiRead(bmi);
     if (!R.hideNums) m.appendChild(h('div', { class: 'card', html: '<h3>' + ic('compass') + 'BMI now: ' + bmi + '</h3><p style="margin:0;color:var(--ink2);font-size:14.5px"><b>' + esc(br.label) + '.</b> ' + esc(br.text) + '</p>' }));
+    adherenceCard(m);
     mealPhotoCard(m);
     if (WTS.length) {
       var hc = h('div', { class: 'card' }, [h('h3', { html: ic('chart-line') + 'History' })]);
@@ -949,6 +1061,114 @@ window.DIETO_RECIPES = [
     c.appendChild(h('div', { class: 'irow' }, [inp, go])); c.appendChild(msg);
     m.appendChild(c);
   }
+  /* ---------- meal status: eaten / skipped / ate something else ---------- */
+  function mstate(v) { return v === true || v === 'done' ? 'done' : v === 'skip' ? 'skip' : v === 'swap' ? 'swap' : ''; }
+  function setMeal(dstr, slot, st) { var l = dayLog(dstr); if (st) l.done[slot] = st; else delete l.done[slot]; LOG[dstr] = l; store('dieto_log', LOG); syncProgress(); render(); }
+  function adherence() {
+    var start = parseYmd(P.start), out = { planned: 0, done: 0, swap: 0, skip: 0 };
+    for (var k = 0; k < 7; k++) {
+      var d = new Date(); d.setDate(d.getDate() - k); if (dayDiff(start, d) < 0) break;
+      var idx = ((dayDiff(start, d) % 7) + 7) % 7, l = dayLog(ymd(d)), isToday = k === 0;
+      P.WEEK[idx].forEach(function (x) { if (x.missing) return; var st = mstate(l.done[x.slot]); if (isToday && !st) return; out.planned++; if (st) out[st]++; });
+    }
+    out.pct = out.planned ? Math.round(100 * (out.done + out.swap * 0.5) / out.planned) : null;
+    return out;
+  }
+  function adherenceCard(m) {
+    var a = adherence(); if (a.pct == null) return;
+    m.appendChild(h('div', { class: 'card adh' }, [h('div', { class: 'adhp', html: '<b>' + a.pct + '%</b><span>followed</span>' }),
+      h('div', { style: 'flex:1' }, [h('b', { style: 'display:block', text: 'This week' }), h('span', { class: 'sub', text: a.done + ' eaten · ' + a.swap + ' replaced · ' + a.skip + ' skipped' }),
+        h('div', { class: 't', style: 'margin-top:8px;height:9px;border-radius:99px;background:var(--mint);overflow:hidden' }, [h('i', { style: 'display:block;height:100%;border-radius:99px;background:var(--g700);width:' + a.pct + '%' })])])]));
+  }
+  function statusSheet(x, dstr) {
+    var cur = mstate(dayLog(dstr).done[x.slot]);
+    sheet(function (sh, close) {
+      sh.appendChild(h('div', { class: 'msl', text: E.SLOT_NAME[x.slot] })); sh.appendChild(h('h3', { text: x.meal.name }));
+      [['done', 'circle-check', 'I ate it'], ['swap', 'repeat', 'I ate something else'], ['skip', 'circle-x', 'I skipped it']].forEach(function (o) {
+        sh.appendChild(h('button', { class: 'stopt' + (cur === o[0] ? ' on' : ''), html: ic(o[1]) + o[2], onclick: function () { close(); setMeal(dstr, x.slot, o[0]); } }));
+      });
+      if (cur) sh.appendChild(h('button', { class: 'btn btn-o', text: 'Clear', onclick: function () { close(); setMeal(dstr, x.slot, ''); } }));
+    });
+  }
+  /* ---------- bottom sheet + meal details ---------- */
+  function sheet(fill) {
+    var ov = h('div', { class: 'msheet-ov', onclick: function (e) { if (e.target === ov) close(); } }), sh = h('div', { class: 'msheet', role: 'dialog' });
+    function close() { ov.remove(); }
+    sh.appendChild(h('span', { class: 'mhandle' })); fill(sh, close); ov.appendChild(sh); document.body.appendChild(ov);
+  }
+  function mealSheet(x, dstr) {
+    var m = x.meal, how = (E.HOW || {})[m.id] || [];
+    var rec = (window.DIETO_RECIPES || []).filter(function (r) { return r.name.toLowerCase().split(' ').filter(function (w) { return w.length > 4 && m.name.toLowerCase().indexOf(w) >= 0; }).length >= 2; })[0];
+    sheet(function (sh, close) {
+      sh.appendChild(h('div', { class: 'msl', text: E.SLOT_NAME[x.slot] })); sh.appendChild(h('h3', { text: m.name }));
+      if (!R.hideNums) sh.appendChild(h('div', { class: 'mnut' }, [['kcal', x.kcal], ['protein', x.p + ' g'], ['carbs', x.c + ' g'], ['fat', x.f + ' g']].map(function (n) { return h('div', { html: '<b>' + n[1] + '</b><span>' + n[0] + '</span>' }); })));
+      if (m.ing) { sh.appendChild(h('h4', { text: 'Ingredients' })); sh.appendChild(h('div', { class: 'ming' }, String(m.ing).split(',').map(function (t) { return h('span', { text: t.trim() }); }))); }
+      if (how.length) { sh.appendChild(h('h4', { text: 'How to make it' })); sh.appendChild(h('ol', { class: 'mhow' }, how.map(function (t) { return h('li', { text: t }); }))); }
+      if (rec) sh.appendChild(h('a', { class: 'btn btn-o', href: '#r=' + rec.id, html: ic('book-open') + 'Full recipe', onclick: close }));
+      sh.appendChild(h('p', { class: 'sub', style: 'margin:0', text: R.hideNums ? 'Portions are tuned for you by our nutritionist.' : 'Portion sized for your ' + R.kcal.toLocaleString('en-IN') + ' kcal day.' }));
+      if (dstr) sh.appendChild(h('div', { class: 'row2' }, [h('button', { class: 'btn btn-g', html: ic('circle-check') + 'I ate it', onclick: function () { close(); setMeal(dstr, x.slot, 'done'); } }), h('button', { class: 'btn btn-o', text: 'Other options', onclick: function () { close(); statusSheet(x, dstr); } })]));
+      else sh.appendChild(h('button', { class: 'btn btn-o', text: 'Close', onclick: close }));
+    });
+  }
+
+  /* ---------- floating buttons: resume a dietician chat, ask dietO AI ---------- */
+  var MYS = null, MYS_AT = 0, UNREAD = 0;
+  function fabs() {
+    var old = document.getElementById('fabs'); if (old) old.remove();
+    var f = h('div', { id: 'fabs', class: 'fabs' }); document.body.appendChild(f);
+    var ai = h('a', { class: 'fab-ai', href: (C.site || '/') + (String(C.site || '/').indexOf('?') >= 0 ? '&' : '?') + 'chat=1&from=app', 'aria-label': 'Ask dietO AI', html: ic('sparkles') });
+    f.appendChild(ai);
+    if (!DietoAuth.token()) return;
+    var draw = function () {
+      var live = (MYS || []).filter(function (x) { return (x.status === 'active' || x.status === 'waiting') && x.mode !== 'plan'; })[0];
+      if (live) f.insertBefore(h('a', { class: 'fab-resume', href: DietoAuth.href('/consult/#s=' + live.id), html: '<span class="pulse-dot"></span><span><b>' + (live.status === 'active' ? 'Resume chat' : 'Back to the queue') + '</b><small>' + esc(live.dietician || 'Your dietician') + '</small></span>' + ic('chevron-right') }), ai);
+    };
+    if (MYS && Date.now() - MYS_AT < 30000) return draw();
+    DietoAuth.api('my_sessions', {}).then(function (r) { MYS = r.sessions; MYS_AT = Date.now(); draw(); }).catch(function () {});
+  }
+  /* ---------- notifications: inbox + preferences ---------- */
+  function bell(row) {
+    if (!DietoAuth.token()) return;
+    var b = h('a', { class: 'bell', href: '#inbox', 'aria-label': 'Notifications', html: ic('bell') + (UNREAD ? '<i>' + Math.min(UNREAD, 9) + '</i>' : '') });
+    row.appendChild(b);
+  }
+  function refreshUnread() { if (!DietoAuth.token()) return; DietoAuth.api('inbox', {}).then(function (r) { if (r.unread !== UNREAD) { UNREAD = r.unread; var b = document.querySelector('.bell'); if (b) b.innerHTML = ic('bell') + (UNREAD ? '<i>' + Math.min(UNREAD, 9) + '</i>' : ''); } }).catch(function () {}); }
+  async function viewInbox() {
+    root.appendChild(header('Notifications', 'Updates from your dietician, your plan and reminders'));
+    var m = h('main', { class: 'lift' }); root.appendChild(m);
+    var c = h('div', { class: 'card' }, [h('p', { class: 'sub', text: 'Loading…' })]); m.appendChild(c);
+    if (!DietoAuth.token()) { c.innerHTML = '<p class="sub">Sign in (in Me) to see your notifications.</p>'; return; }
+    try {
+      var r = await DietoAuth.api('inbox', { read_all: true }); UNREAD = 0; c.innerHTML = '';
+      if (!r.items.length) c.appendChild(h('p', { class: 'sub', style: 'margin:0', text: 'Nothing yet. Chat updates, plan alerts and reminders will show here.' }));
+      var ICON = { chat: 'message-circle', plan: 'clipboard-list', meal: 'utensils', water: 'droplet', progress: 'scale', account: 'wallet' };
+      r.items.forEach(function (n) {
+        var url = n.url ? (n.url.indexOf('/app/') === 0 ? n.url.replace('/app/', '') || '#today' : DietoAuth.href(n.url)) : '#today';
+        c.appendChild(h('a', { class: 'nitem' + (n.read ? '' : ' new'), href: url }, [h('span', { class: 'ni', html: ic(ICON[n.cat] || 'bell') }),
+          h('span', { style: 'flex:1;min-width:0' }, [h('b', { text: n.title }), h('span', { class: 'sub', style: 'display:block', text: n.body }), h('small', { class: 'sub', text: new Date(n.at * 1000).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) })])]));
+      });
+    } catch (e) { c.innerHTML = ''; c.appendChild(h('p', { class: 'sub', text: e.message })); }
+    m.appendChild(h('a', { class: 'btn btn-o', style: 'margin-top:12px', href: '#me', html: ic('bell') + 'Notification settings' }));
+  }
+  var NCATS = [['chat', 'Dietician chat updates', 'When your dietician joins or replies'], ['plan', 'Diet plan updates', 'When your plan is ready or updated'], ['meal', 'Meal reminders', '8 am, 1 pm and 8 pm, with that meal'], ['water', 'Water reminders', '11 am, 3 pm and 6 pm'], ['progress', 'Progress reminders', 'A weekly weigh-in nudge on Sunday morning']];
+  function notifCard(m) {
+    var c = h('div', { class: 'card', id: 'notifs' }, [h('h3', { html: ic('bell') + 'Notifications' })]); m.appendChild(c);
+    if (!DietoAuth.token()) { c.appendChild(h('p', { class: 'sub', style: 'margin:0', text: 'Sign in below to choose your notifications.' })); return; }
+    if (!DietoAuth.native) c.appendChild(h('p', { class: 'sub', style: 'margin:-4px 0 8px', text: 'Phone alerts work in the dietO app. Here you’ll see them in your inbox.' }));
+    var box = h('div'); c.appendChild(box);
+    DietoAuth.api('notif_prefs', {}).then(function (r) {
+      var P2 = r.prefs;
+      NCATS.forEach(function (n) {
+        var b = h('button', { class: P2[n[0]] ? 'on' : '', 'aria-label': n[1], 'aria-pressed': P2[n[0]] ? 'true' : 'false' });
+        b.onclick = async function () {
+          var v = !P2[n[0]]; b.classList.toggle('on', v); b.setAttribute('aria-pressed', v ? 'true' : 'false');
+          try { var s2 = {}; s2[n[0]] = v; P2 = (await DietoAuth.api('notif_prefs', { set: s2 })).prefs; if (v && DietoAuth.native) DietoAuth.registerPush('user'); }
+          catch (e) { b.classList.toggle('on', !v); toast(e.message); }
+        };
+        box.appendChild(h('div', { class: 'tog', style: 'padding:10px 0;border-top:1px solid var(--line)' }, [h('span', { class: 'sp', html: '<b style="display:block;font-size:14.5px">' + n[1] + '</b><span class="sub">' + n[2] + '</span>' }), b]));
+      });
+    }).catch(function (e) { box.appendChild(h('p', { class: 'sub', text: e.message })); });
+  }
   var deferredPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; if (location.hash === '#me') render(); });
   window.addEventListener('appinstalled', function () { ping({ app_installed: 'Yes' }); toast('dietO installed'); });
@@ -996,7 +1216,7 @@ window.DIETO_RECIPES = [
       ['dieto_plan', 'dieto_log', 'dieto_weights'].forEach(function (k) { localStorage.removeItem(k); }); P = null; location.hash = ''; render();
     };
     list.appendChild(del); lc.appendChild(list); m.appendChild(lc);
-    remindCard(m);
+    notifCard(m);
     waitlistCard(m);
     root.appendChild(m);
   }
@@ -1038,7 +1258,7 @@ window.DIETO_RECIPES = [
     root.appendChild(o);
   }
 
-  var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe, grocery: viewGrocery, recipes: viewRecipes };
+  var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe, grocery: viewGrocery, recipes: viewRecipes, inbox: viewInbox };
   function render() {
     root.innerHTML = '';
     if (!P || !P.WEEK || !P.R) { viewOnboard(); return; }
@@ -1049,10 +1269,13 @@ window.DIETO_RECIPES = [
     if (!VIEWS[v]) v = 'today';
     $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + (v === 'grocery' || v === 'recipes' ? 'week' : v)); });
     VIEWS[v]();
+    fabs();
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', render);
   render();
+  refreshUnread(); setInterval(function () { if (!document.hidden) { refreshUnread(); MYS_AT = 0; if (P) fabs(); } }, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && P) { MYS_AT = 0; fabs(); refreshUnread(); } });
   // once-a-day "last seen" ping so you can see active users in Brevo / the admin dashboard
   if (P && P.phone && localStorage.getItem('dieto_seen') !== ymd(new Date())) { ping({}); try { localStorage.setItem('dieto_seen', ymd(new Date())); } catch (e) {} }
   if ('serviceWorker' in navigator && !DietoAuth.native) navigator.serviceWorker.register('/sw.js').catch(function () {});
