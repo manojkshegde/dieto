@@ -63,7 +63,7 @@ write('test/index.html', t)
 write('consult/index.html', inject_base(read('consult/index.html')))
 write('consult/terms.html', read('consult/terms.html'))
 os.makedirs(os.path.join(WWW, 'legal'), exist_ok=True)
-for f in ['privacy.html', 'terms.html', 'refunds.html', 'contact.html']:
+for f in ['privacy.html', 'terms.html', 'refunds.html', 'contact.html', 'delete-account.html']:
     write('legal/' + f, read('legal/' + f))
 write('dietician/index.html', inject_base(read('dietician/index.html')))
 
