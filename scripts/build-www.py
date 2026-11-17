@@ -66,7 +66,7 @@ write('dietician/index.html', inject_base(read('dietician/index.html')))
 
 # shared script, logo, icons
 shutil.copy(os.path.join(SRC, 'dieto-common.js'), os.path.join(WWW, 'dieto-common.js'))
-for extra in ['Logo.png', 'Graphic.png']:
+for extra in ['Logo.png', 'Logo-light.png', 'Graphic.png']:
     if os.path.exists(os.path.join(SRC, extra)):
         shutil.copy(os.path.join(SRC, extra), os.path.join(WWW, extra))
 shutil.copytree(os.path.join(SRC, 'icons'), os.path.join(WWW, 'icons'))
