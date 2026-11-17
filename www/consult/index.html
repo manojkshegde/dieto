@@ -183,7 +183,7 @@ textarea.in{resize:vertical;min-height:88px}
 <script>
 window.DIETO_CONSULT = {
   api: (window.DIETO_BASE || '') + '/api/consult.php',
-  logoUrl: '/Logo.png',
+  logoUrl: '/Logo-light.png',
   home: '/app/',          // "back" from the chat home
   terms: '/consult/terms.html'
 };
@@ -526,7 +526,7 @@ window.DIETO_CONSULT = {
     return new Promise(function (resolve, reject) {
       var rz = new window.Razorpay({
         key: order.key, order_id: order.id, amount: order.amount, currency: order.currency, name: 'dietO', description: order.description,
-        image: location.origin + C.logoUrl, prefill: order.prefill, theme: { color: '#22704a' },
+        image: location.origin + '/Logo.png', prefill: order.prefill, theme: { color: '#22704a' },
         handler: function (r) { api('verify', { session_id: sid, key: key, order_id: r.razorpay_order_id, payment_id: r.razorpay_payment_id, signature: r.razorpay_signature }).then(resolve, reject); },
         modal: { ondismiss: function () { reject(new Error('Payment cancelled. You have not been charged.')); } }
       });

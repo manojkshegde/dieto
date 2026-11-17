@@ -33,7 +33,7 @@ svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;fill:none;stroke:
 .login .in{margin-bottom:10px}.login .btn{width:100%;padding:13px}
 .err{color:var(--red);font-weight:600;margin-top:10px;text-align:center}
 .top{background:var(--g800);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.top img{height:24px}.top .who{font-weight:700}.top .sp{flex:1}
+.top img{height:30px}.top .who{font-weight:700}.top .sp{flex:1}
 .sw{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:800;background:rgba(255,255,255,.1);padding:7px 12px 7px 8px;border-radius:999px;border:0;color:#fff}
 .sw i{width:40px;height:23px;border-radius:999px;background:rgba(255,255,255,.25);position:relative;transition:background .2s}
 .sw i::after{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .2s}
@@ -223,7 +223,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     var d = S.data, me = d.me;
     // top bar
     S.top.innerHTML = '';
-    S.top.appendChild(el('img', { src: C.logoUrl, alt: 'dietO', onerror: 'this.remove()' }));
+    S.top.appendChild(el('img', { src: '/Logo-light.png', alt: 'dietO', onerror: 'this.remove()' }));
     S.top.appendChild(el('span', { class: 'who', text: me.name }));
     var sw = el('button', { class: 'sw' + (me.online_flag ? ' on' : ''), 'aria-pressed': me.online_flag ? 'true' : 'false' }, [el('i'), me.online_flag ? 'Online' : 'Offline']);
     sw.addEventListener('click', async function () { beep(); await api('d_online', { online: !me.online_flag }).catch(function (e) { toast(e.message); }); poll(); });

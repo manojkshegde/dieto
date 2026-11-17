@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 window.DIETO_APP = {
-  logoUrl: '/Logo.png',
+  logoUrl: '/Logo-light.png',   // white wordmark for the dark green headers
   api: (window.DIETO_BASE || '') + '/api/dieto-lead.php',      // same endpoint as the website (save / restore / pdf / leads)
   site: window.DIETO_BASE ? '/test/index.html' : '/'   // the diet test (website home page)
 };
@@ -1224,7 +1224,7 @@ window.DIETO_RECIPES = [
   function viewOnboard() {
     navEl.classList.add('hidden');
     var o = h('div', { class: 'onb' });
-    var logo = h('img', { src: C.logoUrl, alt: 'dietO' }); logo.onerror = function () { logo.replaceWith(h('div', { class: 'wm', style: 'font-size:34px;font-weight:800;color:var(--g700);margin-bottom:20px', text: 'dietO' })); };
+    var logo = h('img', { src: '/Logo.png', alt: 'dietO' }); logo.onerror = function () { logo.replaceWith(h('div', { class: 'wm', style: 'font-size:34px;font-weight:800;color:var(--g700);margin-bottom:20px', text: 'dietO' })); };
     o.appendChild(logo);
     o.appendChild(h('h1', { text: 'Your diet plan, in your pocket' }));
     o.appendChild(h('p', { text: 'Take the free 2-minute AI diet test to build your plan, or sign in to open the plan you already have.' }));
