@@ -56,7 +56,7 @@ window.DIETO_CONFIG = {
   leadWebhookUrl: 'https://dieto.health/api/dieto-lead.php', // Brevo lead endpoint (PHP) on the same domain as this page — receives every funnel stage
   aiEndpoint: '',                    // optional: '/api/dieto-lead.php?route=chat' (needs anthropic_api_key in dieto-config.php)
   onCheckout: null,                  // function(order) → Promise<{ok:true}>; wire Razorpay/UPI here. null = demo success
-  termsUrl: '#', privacyUrl: '#',
+  termsUrl: '/legal/terms.html', privacyUrl: '/legal/privacy.html',
   whatsappNumber: '',                // e.g. '919800000000' for WhatsApp check-ins / support
   instagramUrl: 'https://www.instagram.com/dieto_by_blackspace/', // footer, nav and early-access links
 

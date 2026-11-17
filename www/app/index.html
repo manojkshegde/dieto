@@ -1205,6 +1205,7 @@ window.DIETO_RECIPES = [
     list.appendChild(h('a', { href: DietoAuth.href('/consult/'), html: ic('message-circle') + 'Chat with a dietician' }));
     if (au) {
       list.appendChild(h('a', { href: DietoAuth.href('/consult/#account'), html: ic('user') + 'Account, invoices and privacy' }));
+      list.appendChild(h('a', { href: DietoAuth.href('/legal/privacy.html'), html: ic('book-open') + 'Privacy, terms and refunds' }));
       list.appendChild(h('a', { href: DietoAuth.href('/consult/#refer'), html: ic('gift') + 'Invite friends, get free minutes' }));
       list.appendChild(h('a', { href: DietoAuth.href('/consult/#lang'), html: ic('languages') + 'Language' }));
     }
