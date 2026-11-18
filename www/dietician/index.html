@@ -160,7 +160,7 @@ label.f{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12
 .meal .kc{width:96px;border:1.5px solid var(--line);border-radius:999px;padding:6px 10px;font-size:13px;text-align:right;outline:0;background:#F2F9E6;font-weight:700}
 .meal textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;resize:vertical;min-height:58px;outline:0;font-size:14px}
 .meal textarea:focus,.meal .kc:focus{border-color:var(--g6)}
-.dtot{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(11,59,38,.05);margin-bottom:14px;font-weight:800}
+.meal-grid+.dtot{margin-top:4px}.dtot{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(11,59,38,.05);margin-bottom:14px;font-weight:800}
 .dtot .sp{flex:1}.dtot.ok{background:var(--mint);color:var(--g)}.dtot.off{background:#FFF1D6;color:#8A5A00}
 .pthread{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto;background:var(--bg);border-radius:16px;padding:10px}.pthread .m{max-width:92%;font-size:13.5px}
 .rv{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}.rv:first-of-type{border-top:0}.rv .sp{flex:1;min-width:0;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -172,6 +172,44 @@ label.f{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12
 .login .in{margin-bottom:10px}.login .btn{width:100%;padding:14px}
 .err{color:var(--red);font-weight:600;margin-top:10px;text-align:center}
 @media(min-width:561px){.app{border-radius:0}}
+.toast.tap{cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.cnt{min-width:22px;height:22px;border-radius:11px;background:var(--g);color:#fff;font-size:12px;font-weight:800;display:inline-grid;place-items:center;padding:0 6px}
+.li.unread{box-shadow:0 0 0 2px var(--g)}.li.unread small{color:var(--ink);font-weight:700}
+.others{flex:none;display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:#fff;border-bottom:1px solid var(--line);scrollbar-width:none}.others::-webkit-scrollbar{display:none}
+.others button{flex:none;border:0;background:var(--bg);border-radius:999px;padding:6px 12px;font-size:12.5px;display:flex;gap:6px;align-items:center;color:var(--ink2)}
+.others button.un{background:var(--mint);color:var(--deep);box-shadow:inset 0 0 0 1.5px var(--g)}.others .cnt{min-width:18px;height:18px;font-size:11px}
+.others .wq{background:#FFF1D6;color:#8A5A00;font-weight:800}
+.clist{display:none}.clh{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:6px 4px 10px}
+.clist .li{padding:10px}.clist .li.cur{background:var(--mint)!important;box-shadow:inset 0 0 0 2px var(--g)}.clist .li .ava{width:38px;height:38px;font-size:13px}
+.nlogo,.nav .dsk{display:none}.cwrap{flex:1;min-height:0;display:flex}.cmain{flex:1;min-width:0;display:flex;flex-direction:column}.cside{display:none}
+@media(min-width:900px){
+  html,body{background:var(--bg)}
+  .app{max-width:none;flex-direction:row;box-shadow:none}
+  .nav,.nav.hidden{order:-1;display:flex!important;flex-direction:column;width:236px;flex:none;background:var(--deep);border:0;padding:20px 12px;gap:4px;overflow-y:auto}
+  .nlogo{display:flex;align-items:center;gap:10px;padding:4px 10px 22px}.nlogo img{height:28px}
+  .nav button,.nav .dsk{display:flex;flex:none;flex-direction:row;gap:12px;padding:12px 14px;font-size:14.5px;color:#CFE3D7;justify-content:flex-start;border-radius:14px}
+  .nav button:hover{background:rgba(255,255,255,.08)}
+  .nav button.on{background:var(--lime);color:var(--deep)}
+  .nav .badge{position:static;margin-left:auto}
+  .nav .nout{margin-top:auto}
+  .scr{min-width:0}
+  .hd{border-radius:0;padding:22px max(32px,calc((100% - 1100px)/2)) 22px}
+  .hd .brand img,.hd .brand .tagp{display:none}
+  .hd h1{font-size:24px}
+  .body{padding:24px max(32px,calc((100% - 1100px)/2)) 40px}
+  .stats{gap:14px}.stats>div{padding:18px 16px}.stats b{font-size:26px}.stats small{font-size:13px}
+  .qa{gap:14px}.qa button{padding:20px 10px;font-size:13.5px}
+  .wait .big{font-size:56px}
+  .toast{bottom:28px}
+  .foot{padding:14px max(32px,calc((100% - 1100px)/2))}.foot .btn{flex:0 0 auto;min-width:220px}.foot .btn:last-child{margin-left:auto}
+  .mobonly{display:none!important}
+  .cside{display:block;width:380px;flex:none;border-left:1px solid var(--line);overflow-y:auto;padding:18px;background:var(--bg)}
+  .chd{padding:14px 20px}.msgs{padding:20px 28px}.m{max-width:62%}
+  .over{left:236px}
+  .meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.meal-grid .meal{margin:0}
+}
+@media(min-width:1200px){.clist{display:block;width:300px;flex:none;border-right:1px solid var(--line);overflow-y:auto;padding:16px 12px;background:var(--bg)}.others{display:none!important}.cside{width:340px}}
+@media(min-width:1500px){.cside{width:400px}}
 @media (max-width:380px){.stats b{font-size:17px}.qa button{font-size:11px}}
 </style>
 </head>
@@ -185,7 +223,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
 (function () {
   'use strict';
   var C = window.DIETO_DIETICIAN, root = document.getElementById('root');
-  var TOKEN = localStorage.getItem('dieto_dtoken') || '', S = null, CH = null, STATE_T = null, CHAT_T = null, TICK = null, PLAN_T = null, KNOWN = {}, AUDIO = null, HIST = null, OVER = null;
+  var LASTC = {}, TOKEN = localStorage.getItem('dieto_dtoken') || '', S = null, CH = null, STATE_T = null, CHAT_T = null, TICK = null, PLAN_T = null, KNOWN = {}, AUDIO = null, HIST = null, OVER = null;
   var ICONS = { back: '<path d="M15 18l-6-6 6-6"/>', send: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', x: '<path d="M18 6L6 18M6 6l12 12"/>', plus: '<path d="M12 5v14M5 12h14"/>',
     home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>', chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
@@ -216,7 +254,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     if (!r.ok) throw new Error(d.error || 'Something went wrong.');
     return d;
   }
-  function toast(t) { var x = el('div', { class: 'toast', text: t }); document.body.appendChild(x); setTimeout(function () { x.remove(); }, 3000); }
+  function toast(t, fn) { var x = el('div', { class: 'toast' + (fn ? ' tap' : ''), text: t }); if (fn) x.addEventListener('click', function () { x.remove(); fn(); }); document.body.appendChild(x); setTimeout(function () { x.remove(); }, fn ? 6000 : 3000); }
   function rs(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
   function mmss(s) { s = Math.max(0, s | 0); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
   function fmtTime(ts) { return new Date(ts * 1000).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' }); }
@@ -258,13 +296,22 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
 
   /* ---------- shell: screens, stack and bottom nav ---------- */
   var TABS = [['home', 'Home', 'home'], ['chats', 'Chats', 'chat'], ['bookings', 'Bookings', 'cal'], ['profile', 'Profile', 'user']];
-  var STACK = [{ n: 'home' }], LAST = null;
+  var STACK = [{ n: 'home' }], LAST = null, SKIPPOP = 0;
+  var DTABS = [['plans', 'Diet plans', 'plan', 1], ['availability', 'Availability', 'clock', 1], ['earnings', 'Earnings', 'wallet', 1], ['history', 'Chat history', 'hist', 1]];
+  function root_(n) {
+    if (STACK.length === 1 && top().n === n && !OVER) { var b = S.scr.querySelector('.body'); if (b) b.scrollTop = 0; return; }
+    var depth = STACK.length - 1 + (OVER ? 1 : 0);
+    STACK = [{ n: n }]; render();
+    if (depth > 0) { SKIPPOP = 1; try { history.go(-depth); } catch (e) { SKIPPOP = 0; } }
+  }
   function start() {
     root.innerHTML = '';
     var scr = el('div', { class: 'scr' }), nav = el('nav', { class: 'nav' });
     root.appendChild(scr); root.appendChild(nav);
     S = { scr: scr, nav: nav, data: null, chip: {} };
-    TABS.forEach(function (t) { nav.appendChild(el('button', { 'data-t': t[0], onclick: function () { if (top().n === t[0]) { var b = S.scr.querySelector('.body'); if (b) b.scrollTop = 0; return; } STACK = [{ n: t[0] }]; render(); } }, [ico(t[2]), el('span', { text: t[1] })])); });
+    nav.appendChild(el('div', { class: 'nlogo' }, [el('img', { src: '/Logo-light.png', alt: 'dietO', onerror: 'this.remove()' }), el('span', { class: 'tagp', text: 'Dietitian' })]));
+    TABS.concat(DTABS).forEach(function (t) { nav.appendChild(el('button', { 'data-t': t[0], class: t[3] ? 'dsk' : '', onclick: function () { root_(t[0]); } }, [ico(t[2]), el('span', { text: t[1] })])); });
+    nav.appendChild(el('button', { class: 'dsk nout', onclick: function () { if (confirm('Log out? You will go offline.')) signOut(); } }, [ico('out'), el('span', { text: 'Log out' })]));
     try { history.replaceState({ d: 1 }, ''); } catch (e) {}
     if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);
     else if (window.Notification && Notification.permission === 'default') Notification.requestPermission().catch(function () {});
@@ -274,7 +321,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   function top() { return STACK[STACK.length - 1]; }
   function go(n, arg) { STACK.push({ n: n, a: arg }); try { history.pushState({ d: STACK.length }, ''); } catch (e) {} render(); }
   function back() { if (OVER) { closeOver(); return; } if (STACK.length > 1) { try { history.back(); } catch (e) { STACK.pop(); render(); } } }
-  window.addEventListener('popstate', function () { if (!S) return; if (OVER) { OVER.remove(); OVER = null; return; } if (STACK.length > 1) { STACK.pop(); render(); } });
+  window.addEventListener('popstate', function () { if (SKIPPOP) { SKIPPOP = 0; return; } if (!S) return; if (OVER) { OVER.remove(); OVER = null; return; } if (STACK.length > 1) { STACK.pop(); render(); } });
   function closeOver() { if (!OVER) return; try { history.back(); } catch (e) { OVER.remove(); OVER = null; } }
   function openOver(node) { if (OVER) OVER.remove(); OVER = node; root.appendChild(node); try { history.pushState({ o: 1 }, ''); } catch (e) {} }
   var LIVE = { home: 1, chats: 1, bookings: 1, plans: 1, availability: 0 };
@@ -287,7 +334,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     S.scr.innerHTML = '';
     var isTab = TABS.some(function (x) { return x[0] === t.n; });
     S.nav.classList.toggle('hidden', !isTab);
-    [].forEach.call(S.nav.children, function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t.n); });
+    [].forEach.call(S.nav.querySelectorAll('button[data-t]'), function (b) { b.classList.toggle('on', b.getAttribute('data-t') === STACK[0].n); });
     if (!S.data) return;
     (SCREENS[t.n] || SCREENS.home)(t.a);
   }
@@ -302,15 +349,20 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     if (first && d.queue.length) beep();
     document.title = d.queue.length ? '(' + d.queue.length + ') Client waiting · dietO' : 'dietO · Dietitian';
     var nb = S.nav.querySelector('[data-t=chats]'), old = nb.querySelector('.badge'); if (old) old.remove();
-    var n = d.queue.length + d.active.length; if (n) nb.appendChild(el('span', { class: 'badge', text: String(n) }));
+    d.active.forEach(function (a) {
+      if (LASTC[a.id] != null && a.last_c > LASTC[a.id] && !(CH && CH.id === a.id && !document.hidden)) { notify(a.name + ': ' + (a.last || 'sent a file')); if (!first) toast(a.name + ': ' + (a.last || 'sent a file').slice(0, 50) + ' · tap to open', function () { openChat(a.id); }); }
+      LASTC[a.id] = a.last_c;
+    });
+    var n = d.queue.length + d.active.filter(function (a) { return a.unread && !(CH && CH.id === a.id); }).length; if (n) nb.appendChild(el('span', { class: 'badge', text: String(n) }));
     if (first) { render(); return; }
+    if (CH && CH.others) drawOthers();
     var t = top();
     if (LIVE[t.n] && !OVER && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))) { var b = S.scr.querySelector('.body'), y = b ? b.scrollTop : 0; render(); b = S.scr.querySelector('.body'); if (b) b.scrollTop = y; }
   }
   function hdr(title, o) {
     o = o || {};
     var h = el('div', { class: 'hd' }), row = el('div', { class: 'row' });
-    if (o.back !== false) row.appendChild(el('button', { class: 'hb', 'aria-label': 'Back', html: ic('back'), onclick: o.onBack || back }));
+    if (o.back !== false && (STACK.length > 1 || o.onBack)) row.appendChild(el('button', { class: 'hb', 'aria-label': 'Back', html: ic('back'), onclick: o.onBack || back }));
     row.appendChild(el('h1', { text: title }));
     if (o.right) row.appendChild(o.right);
     h.appendChild(row);
@@ -345,7 +397,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     var h = el('div', { class: 'hd' });
     h.appendChild(el('div', { class: 'row' }, [el('div', { class: 'brand' }, [el('img', { src: '/Logo-light.png', alt: 'dietO', onerror: 'this.remove()' }), el('span', { class: 'tagp', text: 'Dietitian' })]),
       el('button', { class: 'hb', 'aria-label': 'Plan requests', html: ic('plan'), onclick: function () { go('plans'); } }, (d.plans || []).length ? [el('span', { class: 'dot' })] : []),
-      el('button', { class: 'ava', style: 'border:0', 'aria-label': 'Profile', onclick: function () { STACK = [{ n: 'profile' }]; render(); } }, [inits(me.name)])]));
+      el('button', { class: 'ava', style: 'border:0', 'aria-label': 'Profile', onclick: function () { root_('profile'); } }, [inits(me.name)])]));
     h.appendChild(el('h1', { style: 'margin-top:16px;font-size:22px;white-space:normal', text: greet + ', ' + (/^\s*dr\b/i.test(me.name) ? 'Dr. ' : '') + bare(me.name).split(' ')[0] }));
     h.appendChild(el('p', { text: me.online_flag ? 'You’re online and available for live chats.' : 'You’re offline. Turn on Online to get live chats.' }));
     h.appendChild(el('div', { class: 'onl' }, [el('span', {}, [el('span', { style: 'display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:' + (me.online_flag ? '#7CE08F' : '#9DB3A7') }), me.online_flag ? 'Online' : 'Offline']), onlineSwitch()]));
@@ -355,14 +407,15 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       .map(function (s) { return el('div', {}, [ico(s[0]), el('b', { text: String(s[1]) }), el('small', { text: s[2] })]); })));
     if (d.queue.length) {
       b.appendChild(el('div', { class: 'wait' }, [el('div', { style: 'flex:1' }, [el('b', { text: d.queue.length + (d.queue.length === 1 ? ' patient' : ' patients') + ' waiting to chat' }), el('p', { text: 'Start a consultation now.' }),
-        el('button', { class: 'btn deep sm', html: 'View queue ' + ic('chev'), onclick: function () { S.chip.chats = 'waiting'; STACK = [{ n: 'chats' }]; render(); } })]), ico('users', 'big')]));
+        el('button', { class: 'btn deep sm', html: 'View queue ' + ic('chev'), onclick: function () { S.chip.chats = 'waiting'; root_('chats'); } })]), ico('users', 'big')]));
     } else b.appendChild(el('div', { class: 'wait calm' }, [el('div', { style: 'flex:1' }, [el('b', { text: 'No one waiting right now' }), el('p', { style: 'margin:2px 0 0', text: me.online_flag ? 'New chats will beep and show here.' : 'Turn on Online above to receive live chats.' })])]));
-    d.active.forEach(function (a) { b.appendChild(el('button', { class: 'li', style: 'margin-top:10px', onclick: function () { openChat(a.id); } }, [ava(a.name, 1), el('div', { class: 'sp' }, [el('b', { text: a.name }), el('small', { text: 'Live chat · ' + mmss(a.remaining) + ' left' })]), el('span', { class: 'pill', text: 'Active' })])); });
+    if (d.active.length > 1) b.appendChild(sh(d.active.length + ' chats in progress'));
+    d.active.forEach(function (a) { var x = activeItem(a); x.style.marginTop = '10px'; b.appendChild(x); });
     if ((d.plans || []).length) {
       var mine = d.plans.filter(function (p) { return p.mine; }).length;
       b.appendChild(el('button', { class: 'li', style: 'margin-top:10px', onclick: function () { go('plans'); } }, [el('div', { class: 'ava', html: ic('plan') }), el('div', { class: 'sp' }, [el('b', { text: d.plans.length + ' diet plan request' + (d.plans.length > 1 ? 's' : '') }), el('small', { text: mine ? mine + ' assigned to you' : 'Open one to start the plan' })]), ico('chev')]));
     }
-    b.appendChild(sh(today.length ? 'Today’s bookings' : 'Next bookings', d.upcoming.length ? 'See all' : '', function () { STACK = [{ n: 'bookings' }]; render(); }));
+    b.appendChild(sh(today.length ? 'Today’s bookings' : 'Next bookings', d.upcoming.length ? 'See all' : '', function () { root_('bookings'); }));
     var list = (today.length ? today : d.upcoming).slice(0, 3);
     if (!list.length) b.appendChild(el('div', { class: 'card none', text: 'No bookings yet. Add open times so clients can book you.' }));
     list.forEach(function (u) { b.appendChild(bookingItem(u)); });
@@ -370,6 +423,12 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     b.appendChild(el('div', { class: 'qa' }, [['plan', 'Diet plans', function () { go('plans'); }, (d.plans || []).length], ['cal', 'Manage availability', function () { go('availability'); }], ['chart', 'View earnings', function () { go('earnings'); }], ['hist', 'Chat history', function () { go('history'); }]]
       .map(function (q) { return el('button', { onclick: q[2] }, [ico(q[0]), el('span', { text: q[1] }), q[3] ? el('span', { class: 'badge', text: String(q[3]) }) : null]); })));
   };
+  function activeItem(a) {
+    var un = a.unread && a.last_from === 'c';
+    return el('button', { class: 'li' + (un ? ' unread' : ''), onclick: function () { openChat(a.id); } }, [ava(a.name, 1), el('div', { class: 'sp' }, [el('b', { text: a.name }),
+      el('small', { text: a.last ? (a.last_from === 'd' ? 'You: ' : '') + a.last : (a.last_from ? 'Sent a file' : 'Live chat in progress') })]),
+      el('div', { class: 'end' }, [el('span', { text: mmss(a.remaining) + ' left' }), un ? el('span', { class: 'cnt', text: String(a.unread) }) : el('span', { class: 'pill', text: 'Active' })])]);
+  }
   function bookingItem(u) {
     var d = S.data, soon = u.scheduled_at - d.now <= 600;
     return el('div', { class: 'li' + (soon ? ' hot' : '') }, [ava(u.name), el('div', { class: 'sp' }, [el('b', { text: u.name }), el('small', { text: u.topic || 'Booked chat' }), el('small', { html: ic('cal') + ' ' + fmtWhen(u.scheduled_at) })]),
@@ -385,7 +444,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     b.appendChild(chips('chats', [['all', 'All'], ['active', 'Active (' + d.active.length + ')'], ['waiting', 'Waiting (' + d.queue.length + ')'], ['done', 'Completed']]));
     var any = false;
     if (f === 'all' || f === 'waiting') d.queue.forEach(function (q) { any = true; b.appendChild(queueItem(q)); });
-    if (f === 'all' || f === 'active') d.active.forEach(function (a) { any = true; b.appendChild(el('button', { class: 'li', onclick: function () { openChat(a.id); } }, [ava(a.name, 1), el('div', { class: 'sp' }, [el('b', { text: a.name }), el('small', { text: 'Live chat in progress' })]), el('div', { class: 'end' }, [el('span', { text: mmss(a.remaining) + ' left' }), el('span', { class: 'pill', text: 'Active' })])])); });
+    if (f === 'all' || f === 'active') d.active.forEach(function (a) { any = true; b.appendChild(activeItem(a)); });
     if (f === 'all' || f === 'done') {
       if (!HIST) { loadHist(); if (f === 'done') b.appendChild(el('div', { class: 'none', text: 'Loading…' })); }
       else HIST.filter(function (r) { return r.status !== 'active' && r.mode !== 'plan'; }).slice(0, f === 'all' ? 8 : 60).forEach(function (r) { any = true; b.appendChild(histItem(r)); });
@@ -558,7 +617,23 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     try { var v = await api('d_accept', { session_id: id }); toast('Chat started'); HIST = null; openChat(id, v); poll(); }
     catch (e) { toast(e.message); poll(); }
   }
-  function openChat(id, first) { go('chat', { id: id, first: first }); }
+  function openChat(id, first) {
+    if (top().n === 'chat') { if (CH && CH.id === id && !first) return; STACK[STACK.length - 1] = { n: 'chat', a: { id: id, first: first } }; render(); return; }
+    go('chat', { id: id, first: first });
+  }
+  /* other chats while one is open: strip on phones, list column on wide screens */
+  function drawOthers() {
+    if (!CH || !CH.others || !S.data) return;
+    var d = S.data, oth = d.active.filter(function (a) { return a.id !== CH.id; });
+    CH.others.innerHTML = '';
+    oth.forEach(function (a) { var un = a.unread && a.last_from === 'c'; CH.others.appendChild(el('button', { class: un ? 'un' : '', onclick: function () { openChat(a.id); } }, [el('b', { text: a.name.split(' ')[0] }), ' ' + mmss(a.remaining), un ? el('span', { class: 'cnt', text: String(a.unread) }) : null])); });
+    if (d.queue.length) CH.others.appendChild(el('button', { class: 'wq', onclick: function () { S.chip.chats = 'waiting'; root_('chats'); } }, [d.queue.length + ' waiting']));
+    CH.others.classList.toggle('hidden', !CH.others.childNodes.length);
+    var L = CH.list; if (!L) return; L.innerHTML = '';
+    L.appendChild(el('div', { class: 'clh', text: 'Chats in progress (' + d.active.length + ')' }));
+    d.active.forEach(function (a) { var x = activeItem(a); if (a.id === CH.id) x.classList.add('cur'); L.appendChild(x); });
+    if (d.queue.length) { L.appendChild(el('div', { class: 'clh', text: 'Waiting (' + d.queue.length + ')' })); d.queue.forEach(function (q) { L.appendChild(queueItem(q)); }); }
+  }
   SCREENS.chat = function (a) {
     CH = { id: a.id, last: 0, seen: {}, built: false, files: [] };
     S.scr.appendChild(el('div', { class: 'empty', style: 'margin:auto', text: 'Opening chat…' }));
@@ -575,7 +650,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       CH.built = true;
       var head = el('div', { class: 'chd' }, [el('button', { class: 'hb', 'aria-label': 'Back', html: ic('back'), onclick: back }), ava(v.client.name),
         el('div', { class: 'sp' }, [el('b', { text: v.client.name }), el('small', { text: v.client.topic ? v.client.topic.slice(0, 60) : (v.mode === 'slot' ? 'Booked chat' : 'Live chat') })]),
-        el('button', { class: 'hb', 'aria-label': 'Patient profile', html: ic('user'), onclick: function () { patientProfile(); } })]);
+        el('button', { class: 'hb mobonly', 'aria-label': 'Patient profile', html: ic('user'), onclick: function () { patientProfile(); } })]);
       CH.tbar = el('div', { class: 'tbar' }); CH.timer = el('span', { class: 'sp' });
       CH.endBtn = el('button', { class: 'end', text: 'End chat', onclick: async function () { if (confirm('End this chat now?')) { await api('d_end', { session_id: CH.id }).catch(function () {}); HIST = null; clearTimeout(CHAT_T); chatPoll(); poll(); } } });
       CH.tbar.appendChild(el('span', { html: ic('clock') })); CH.tbar.appendChild(CH.timer); CH.tbar.appendChild(CH.endBtn);
@@ -589,7 +664,13 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       CH.bar = el('div', { class: 'bar' }, [el('button', { class: 'circ', 'aria-label': 'Share a photo or PDF', html: ic('clip'), onclick: attach }), CH.ta, el('button', { class: 'circ go', html: ic('send'), 'aria-label': 'Send', onclick: send })]);
       CH.done = el('div', { class: 'cdone hidden' });
       S.scr.innerHTML = '';
-      [head, CH.tbar, CH.alert, CH.msgs, CH.quick, CH.bar, CH.done].forEach(function (x) { S.scr.appendChild(x); });
+      var cm = el('div', { class: 'cmain' }); CH.side = el('aside', { class: 'cside' });
+      [head, CH.tbar, CH.alert, CH.msgs, CH.quick, CH.bar, CH.done].forEach(function (x) { cm.appendChild(x); });
+      CH.others = el('div', { class: 'others hidden' }); cm.insertBefore(CH.others, CH.alert);
+      CH.list = el('aside', { class: 'clist' });
+      S.scr.appendChild(el('div', { class: 'cwrap' }, [CH.list, cm, CH.side]));
+      drawOthers();
+      CH.sideFiles = -1;
     }
     var atBottom = CH.msgs.scrollHeight - CH.msgs.scrollTop - CH.msgs.clientHeight < 80;
     v.messages.forEach(function (m) {
@@ -600,6 +681,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       if (m.file) CH.files.push(Object.assign({ ts: m.ts, from: m.from }, m.file));
     });
     CH.primed = true;
+    if (CH.side && CH.sideFiles !== CH.files.length) { var keep = CH.side.querySelector('.tabs .on'), tabk = keep ? keep.getAttribute('data-k') : null, nf = CH.side.querySelector('.pnote'); if (!(nf && document.activeElement === nf)) { CH.sideFiles = CH.files.length; patientProfile(null, tabk, CH.side); } }
     if (atBottom || v.messages.length) CH.msgs.scrollTop = CH.msgs.scrollHeight;
     var active = v.status === 'active';
     CH.bar.classList.toggle('hidden', !active); CH.quick.classList.toggle('hidden', !active); CH.endBtn.classList.toggle('hidden', !active);
@@ -639,21 +721,22 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     try { await api('d_send', { session_id: CH.id, text: t }); clearTimeout(CHAT_T); CH.quiet = 0; chatPoll(); } catch (e) { tmp.remove(); CH.ta.value = t; toast(e.message); }
   }
   /* patient profile: Overview / Diet test / Reports / History */
-  function patientProfile(src, startTab) {
+  function patientProfile(src, startTab, into) {
     var v = src || CH.v, files = src ? (src.files || []) : CH.files, sid = v.id;
     var ov = el('div', { class: 'over' }), tab = startTab || 'ov';
+    if (into) { ov = into; ov.innerHTML = ''; }
     var p = Object.assign({}, v.client.profile || {}), h = v.history || {};
     var cm = parseFloat(p.Height), kg = parseFloat(p.Weight), bmi = p.BMI || (cm > 90 && kg > 20 ? (kg / Math.pow(cm / 100, 2)).toFixed(1) : '');
     var right = el('button', { class: 'hb', 'aria-label': 'Call', html: ic('phone'), onclick: function () { location.href = 'tel:+91' + v.client.phone; } });
-    ov.appendChild(hdr('Patient Profile', { onBack: closeOver, right: v.client.phone ? right : null }));
-    var b = el('div', { class: 'body' }); ov.appendChild(b);
+    if (!into) ov.appendChild(hdr('Patient Profile', { onBack: closeOver, right: v.client.phone ? right : null }));
+    var b = into ? ov : el('div', { class: 'body' }); if (!into) ov.appendChild(b);
     var meta = [p.Gender || p.Sex, p.Age ? p.Age + ' years' : null, p.City || p.Location].filter(Boolean).join(' · ');
     b.appendChild(el('div', { class: 'card', style: 'display:flex;gap:14px;align-items:center' }, [el('div', { class: 'ava', style: 'width:58px;height:58px;font-size:20px', text: inits(v.client.name) }),
       el('div', { style: 'flex:1;min-width:0' }, [el('b', { style: 'font-size:17px;display:block', text: v.client.name }), el('small', { style: 'color:var(--mute);display:block', text: meta || (v.client.phone ? '+91 ' + v.client.phone : '') }),
         el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin-top:6px' }, [h.care ? el('span', { class: 'pill', text: 'dietO Care' }) : null, h.lang ? el('span', { class: 'pill amber', text: 'Prefers ' + h.lang }) : null])]),
-      src ? null : el('button', { class: 'btn sm lime', html: ic('chat') + ' Chat', onclick: closeOver })]));
+      src || into ? null : el('button', { class: 'btn sm lime', html: ic('chat') + ' Chat', onclick: closeOver })]));
     var tb = el('div', { class: 'tabs' }), box = el('div'); b.appendChild(tb); b.appendChild(box);
-    [['ov', 'Overview'], ['dt', 'Diet Test'], ['rp', 'Reports'], ['hi', 'History']].forEach(function (t) { tb.appendChild(el('button', { class: tab === t[0] ? 'on' : '', text: t[1], onclick: function () { tab = t[0]; [].forEach.call(tb.children, function (x) { x.classList.remove('on'); }); this.classList.add('on'); draw(); } })); });
+    [['ov', 'Overview'], ['dt', 'Diet Test'], ['rp', 'Reports'], ['hi', 'History']].forEach(function (t) { tb.appendChild(el('button', { class: tab === t[0] ? 'on' : '', 'data-k': t[0], text: t[1], onclick: function () { tab = t[0]; [].forEach.call(tb.children, function (x) { x.classList.remove('on'); }); this.classList.add('on'); draw(); } })); });
     function draw() {
       box.innerHTML = '';
       if (tab === 'ov') {
@@ -701,7 +784,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       }
     }
     draw();
-    openOver(ov);
+    if (!into) openOver(ov);
   }
   function alertBox(parent, h, insert) {
     if (!h || !h.alerts || !h.alerts.length) return;
@@ -812,12 +895,13 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       days.forEach(function (dd, i) { dc.appendChild(el('button', { class: (i === day ? 'on' : '') + (dayFilled(dd) ? ' ok' : ''), text: 'Day ' + (i + 1), onclick: function () { day = i; view(); } })); });
       var dd = days[day], tot = el('div', { class: 'dtot' });
       function sumUp() { var t = dayKcal(dd); tot.className = 'dtot' + (t && target ? (Math.abs(t - target) > target * 0.12 ? ' off' : ' ok') : ''); tot.innerHTML = ''; tot.appendChild(el('span', { class: 'sp', text: 'Day ' + (day + 1) + ' total' })); tot.appendChild(el('span', { text: (t ? t.toLocaleString('en-IN') + ' kcal' : '—') + (target ? ' / ' + target.toLocaleString('en-IN') : '') })); }
+      var mg = el('div', { class: 'meal-grid' }); b.appendChild(mg);
       keys.forEach(function (k) {
         var t = el('textarea', { rows: '2', maxlength: '300', placeholder: 'e.g. 2 idli + sambar + 1 boiled egg', 'aria-label': SL[k] + ', day ' + (day + 1) }); t.value = dd[k] || '';
         var kc = el('input', { class: 'kc', type: 'number', inputmode: 'numeric', min: '0', max: '3000', placeholder: 'kcal', 'aria-label': SL[k] + ' kcal' }); kc.value = dd[k + '_k'] || '';
         t.addEventListener('input', function () { dd[k] = t.value; dirty = true; [].forEach.call(dc.children, function (bt, i) { bt.classList.toggle('ok', dayFilled(days[i])); }); });
         kc.addEventListener('input', function () { var n = parseInt(kc.value, 10); if (n > 0) dd[k + '_k'] = n; else delete dd[k + '_k']; dirty = true; sumUp(); });
-        b.appendChild(el('div', { class: 'meal' }, [el('div', { class: 'mh' }, [el('b', { text: SL[k] }), kc]), t]));
+        mg.appendChild(el('div', { class: 'meal' }, [el('div', { class: 'mh' }, [el('b', { text: SL[k] }), kc]), t]));
       });
       sumUp(); b.appendChild(tot);
       var row = el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap' });
