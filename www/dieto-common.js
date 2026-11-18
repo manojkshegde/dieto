@@ -178,6 +178,36 @@
     base: BASE
   };
   window.DietoAuth = Auth;
+
+  /* Shared photos open in an in-app viewer; PDFs open in the in-app browser (app) or a new tab (web). Never leaves the app. */
+  function viewer(src) {
+    var ov = document.createElement('div');
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Photo');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(5,15,10,.96);display:flex;align-items:center;justify-content:center;touch-action:pinch-zoom;overflow:auto';
+    var img = document.createElement('img'); img.src = src; img.alt = 'Photo';
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;display:block';
+    var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.innerHTML = '&times;';
+    x.style.cssText = 'position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:30px;line-height:40px;cursor:pointer';
+    function close() { ov.remove(); document.removeEventListener('keydown', esc); }
+    function esc(e) { if (e.key === 'Escape') close(); }
+    ov.addEventListener('click', function (e) { if (e.target === ov || e.target === x) close(); });
+    document.addEventListener('keydown', esc);
+    ov.appendChild(img); ov.appendChild(x); document.body.appendChild(ov);
+  }
+  Auth.viewer = viewer;
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href*="route=file"]'); if (!a) return;
+    var isImg = !!a.querySelector('img') || a.dataset.kind === 'image';
+    if (isImg) { e.preventDefault(); viewer(a.querySelector('img') ? a.querySelector('img').src : a.href); return; }
+    var B = NATIVE && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser;
+    if (B) { e.preventDefault(); B.open({ url: a.href, presentationStyle: 'popover', toolbarColor: '#0B3B26' }).catch(function () { location.href = a.href; }); }
+  }, true);
+
+  /* Keep chat screens above the on-screen keyboard: --vvh follows the visible height. */
+  if (window.visualViewport) {
+    var setVH = function () { document.documentElement.style.setProperty('--vvh', Math.round(window.visualViewport.height) + 'px'); };
+    window.visualViewport.addEventListener('resize', setVH); setVH();
+  }
   // keep the push token registered for a signed-in user on every app start
   if (NATIVE && Auth.token()) Auth.registerPush('user');
 })();

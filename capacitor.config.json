@@ -23,6 +23,10 @@
       "style": "DARK",
       "backgroundColor": "#1d5a3a",
       "overlaysWebView": false
+    },
+    "Keyboard": {
+      "resize": "native",
+      "resizeOnFullScreen": true
     }
   }
 }

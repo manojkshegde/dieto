@@ -73,5 +73,6 @@ for extra in ['Logo.png', 'Logo-light.png', 'Graphic.png']:
     if os.path.exists(os.path.join(SRC, extra)):
         shutil.copy(os.path.join(SRC, extra), os.path.join(WWW, extra))
 shutil.copytree(os.path.join(SRC, 'icons'), os.path.join(WWW, 'icons'))
-shutil.copytree(os.path.join(SRC, 'fonts'), os.path.join(WWW, 'fonts'))   # Plus Jakarta Sans, built in so screens don't wait for Google Fonts
+shutil.copytree(os.path.join(SRC, 'fonts'), os.path.join(WWW, 'fonts'))
+if os.path.isdir(os.path.join(SRC, 'img')): shutil.copytree(os.path.join(SRC, 'img'), os.path.join(WWW, 'img'))   # recipe photos   # Plus Jakarta Sans, built in so screens don't wait for Google Fonts
 print('www/ built from', SRC, 'for', SITE)

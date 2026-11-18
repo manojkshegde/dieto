@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="dietO">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="robots" content="noindex">
-<link rel="preload" href="/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin><style>a,button,img{-webkit-touch-callout:none}button,nav,label{-webkit-user-select:none;user-select:none}html,body{overscroll-behavior-y:none}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
+<link rel="preload" href="/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin><style>@media (max-width:820px){input,textarea,select{font-size:16px!important}}html{-webkit-text-size-adjust:100%;overflow-x:hidden}a,button,img{-webkit-touch-callout:none}button,nav,label{-webkit-user-select:none;user-select:none}html,body{overscroll-behavior-y:none}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
 <script>
 window.DIETO_APP = {
   logoUrl: '/Logo-light.png',   // white wordmark for the dark green headers
@@ -1000,7 +1000,8 @@ window.DIETO_RECIPES = [
 
   /* ---------- recipes ---------- */
   var RTAG = 'All';
-  function rimg(r) { return 'background:radial-gradient(circle at 38% 45%,' + r.col[0] + ' 0 22%,transparent 23%),radial-gradient(circle at 62% 55%,#fff 0 16%,transparent 17%),linear-gradient(135deg,' + r.col[1] + ',' + r.col[1] + ')'; }
+  // a real photo shows automatically once /img/recipes/<id>.jpg exists; until then, the coloured artwork underneath shows
+  function rimg(r) { return 'background:url(/img/recipes/' + r.id + '.jpg) center/cover no-repeat,radial-gradient(circle at 38% 45%,' + r.col[0] + ' 0 22%,transparent 23%),radial-gradient(circle at 62% 55%,#fff 0 16%,transparent 17%),linear-gradient(135deg,' + r.col[1] + ',' + r.col[1] + ')'; }
   function viewRecipes() {
     var RC = window.DIETO_RECIPES || [];
     root.appendChild(header('Healthy recipes', 'Home-style Mangalorean, Udupi and Karnataka food'));
@@ -1163,8 +1164,39 @@ window.DIETO_RECIPES = [
           try { var s2 = {}; s2[n[0]] = v; P2 = (await DietoAuth.api('notif_prefs', { set: s2 })).prefs; if (v && DietoAuth.native) DietoAuth.registerPush('user'); }
           catch (e) { b.classList.toggle('on', !v); toast(e.message); }
         };
-        box.appendChild(h('div', { class: 'tog', style: 'padding:10px 0;border-top:1px solid var(--line)' }, [h('span', { class: 'sp', html: '<b style="display:block;font-size:14.5px">' + n[1] + '</b><span class="sub">' + n[2] + '</span>' }), b]));
+        var row = h('div', { class: 'tog', style: 'padding:10px 0;border-top:1px solid var(--line)' }, [h('span', { class: 'sp', html: '<b style="display:block;font-size:14.5px">' + n[1] + '</b><span class="sub">' + (n[0] === 'meal' || n[0] === 'water' ? 'At the times you choose' : n[2]) + '</span>' }), b]);
+        box.appendChild(row);
+        if (n[0] === 'meal' || n[0] === 'water') { var tb = h('div'); box.appendChild(tb); timesFor(n[0], tb); b.addEventListener('click', function () { setTimeout(function () { timesFor(n[0], tb); }, 400); }); }
       });
+      // reminder times: meal (breakfast/lunch/dinner) and water (up to 8 times a day)
+      function hhmm(v) { return String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0'); }
+      function mins(t) { var a = String(t || '').split(':'); return a.length === 2 ? (+a[0]) * 60 + (+a[1]) : null; }
+      async function saveTimes(set) { try { P2 = (await DietoAuth.api('notif_prefs', { set: set })).prefs; toast('Reminder time saved'); } catch (e) { toast(e.message); } }
+      function timesFor(kind, tb) {
+        tb.innerHTML = ''; if (!P2[kind]) return;
+        var wrap = h('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;padding:0 0 12px' }); tb.appendChild(wrap);
+        var inp = 'border:1.5px solid var(--line);border-radius:12px;padding:8px 10px;font:inherit;background:#fff;color:var(--ink)';
+        if (kind === 'meal') {
+          [['b', 'Breakfast'], ['l', 'Lunch'], ['d', 'Dinner']].forEach(function (m) {
+            var t = h('input', { type: 'time', step: '300', value: hhmm(P2.meal_times[m[0]]), style: inp, 'aria-label': m[1] + ' reminder time' });
+            t.onchange = function () { var v = mins(t.value); if (v == null) return; var mt = Object.assign({}, P2.meal_times); mt[m[0]] = v; saveTimes({ meal_times: mt }); };
+            wrap.appendChild(h('label', { style: 'display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--mute)' }, [h('span', { text: m[1] }), t]));
+          });
+        } else {
+          (P2.water_times || []).forEach(function (v, i) {
+            var t = h('input', { type: 'time', step: '300', value: hhmm(v), style: inp, 'aria-label': 'Water reminder ' + (i + 1) });
+            t.onchange = function () { var x = mins(t.value); if (x == null) return; var w = P2.water_times.slice(); w[i] = x; saveTimes({ water_times: w }); };
+            var del = h('button', { type: 'button', 'aria-label': 'Remove this time', style: 'border:0;background:none;color:var(--mute);font-size:20px;cursor:pointer;padding:0 4px', html: '&times;' });
+            del.onclick = async function () { if (P2.water_times.length < 2) return toast('Keep at least one time, or turn water reminders off.'); var w = P2.water_times.slice(); w.splice(i, 1); await saveTimes({ water_times: w }); timesFor('water', tb); };
+            wrap.appendChild(h('span', { style: 'display:inline-flex;align-items:center' }, [t, del]));
+          });
+          if ((P2.water_times || []).length < 8) {
+            var add = h('button', { type: 'button', class: 'btn btn-o', style: 'width:auto;padding:8px 14px', text: '+ Add time' });
+            add.onclick = async function () { var w = (P2.water_times || []).slice(), last = w.length ? w[w.length - 1] : 600; w.push(Math.min(1435, last + 120)); await saveTimes({ water_times: w }); timesFor('water', tb); };
+            wrap.appendChild(add);
+          }
+        }
+      }
     }).catch(function (e) { box.appendChild(h('p', { class: 'sub', text: e.message })); });
   }
   var deferredPrompt = null;
