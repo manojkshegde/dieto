@@ -1180,7 +1180,7 @@ window.DIETO_CONSULT = {
     pr.appendChild(row('dl', 'Download my data', 'Everything we hold, as a file', null, false, downloadData));
     pr.appendChild(row('trash', 'Delete my account', 'Removes your data for good', '#delete', true));
     main.appendChild(pr);
-    main.appendChild(el('button', { class: 'btn ghost block', text: 'Sign out', onclick: async function () { await DietoAuth.signOut(); toast('Signed out'); location.hash = ''; } }));
+    main.appendChild(el('button', { class: 'btn ghost block', text: 'Sign out', onclick: async function (ev) { var b = ev.currentTarget; b.disabled = true; b.textContent = 'Signing out…'; stopAll(); await DietoAuth.signOut(); location.href = DietoAuth.native ? '/app/index.html' : '/consult/'; } }));
   }
   async function downloadData() {
     try { var r = await api('my_data'); var u = API_DIR + r.url; if (DietoAuth.native) location.href = u; else window.open(u, '_blank', 'noopener'); toast('Your data file is downloading'); }

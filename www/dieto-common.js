@@ -51,7 +51,14 @@
       if (!r.ok) { var e = new Error(d.error || 'Something went wrong. Please try again.'); e.status = r.status; e.data = d; throw e; }
       return d;
     },
-    signOut: async function () { try { await Auth.api('logout'); } catch (e) {} save(null); },
+    /* Signs out on the server (and stops this phone's notifications for the account), then clears everything this account left on the phone. */
+    signOut: async function () {
+      var dev = ''; try { dev = localStorage.getItem('dieto_push_token') || ''; } catch (e) {}
+      try { await Promise.race([Auth.api('logout', { _dev: dev }), new Promise(function (r) { setTimeout(r, 5000); })]); } catch (e) {}
+      save(null);
+      try { Object.keys(localStorage).forEach(function (k) { if (/^dieto_/.test(k) && k !== 'dieto_push_token' && k !== 'dieto_seen') localStorage.removeItem(k); }); } catch (e) {}
+      Auth._roles = {};
+    },
     /* Renders a phone → OTP sign-in box into `box`. onDone({user, plan, code}) runs after a successful sign-in. */
     widget: function (box, opts) {
       opts = opts || {};

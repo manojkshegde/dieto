@@ -1189,7 +1189,7 @@ window.DIETO_RECIPES = [
     if (au) {
       acc.appendChild(h('h3', { html: ic('user') + 'Signed in' }));
       acc.appendChild(h('p', { class: 'sub', style: 'margin:-4px 0 10px', text: '+91 ' + au.phone + ' · your plan and dietician chats are saved to this number.' }));
-      acc.appendChild(h('button', { class: 'btn btn-o', text: 'Sign out', onclick: async function () { await DietoAuth.signOut(); toast('Signed out'); render(); } }));
+      acc.appendChild(h('button', { class: 'btn btn-o', text: 'Sign out', onclick: async function (ev) { var b = ev.currentTarget; b.disabled = true; b.textContent = 'Signing out…'; await DietoAuth.signOut(); P = null; LOG = {}; WTS = []; location.hash = ''; render(); toast('Signed out'); } }));
     } else {
       acc.appendChild(h('h3', { html: ic('user') + 'Save your plan to your number' }));
       var aw = h('div'); acc.appendChild(aw);
