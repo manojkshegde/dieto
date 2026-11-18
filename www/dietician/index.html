@@ -10,131 +10,173 @@
 <link rel="icon" type="image/png" href="/icons/favicon-64.png">
 <link rel="preload" href="/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin><style>@media (max-width:820px){input,textarea,select{font-size:16px!important}}html{-webkit-text-size-adjust:100%;overflow-x:hidden}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
 <style>
-:root{--g900:#0B3B26;--g800:#0B3B26;--g700:#146C43;--g600:#1C8452;--lime:#C8F169;--lime2:#C8F169;--mint:#E3F1E8;--mint2:#E3F1E8;
-  --ink:#0F1F17;--ink2:#3D4F46;--mute:#4F6359;--line:#DCE7E0;--bg:#F3F8F4;--amber:#E8A317;--red:#A12D20;
-  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--safe-b:env(safe-area-inset-bottom)}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14.5px}
-button,input,textarea,select{font-family:inherit;font-size:15px}
-svg.i{width:1.1em;height:1.1em;flex:none;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:root{--deep:#0B3B26;--g:#146C43;--g6:#1C8452;--lime:#C8F169;--mint:#E3F1E8;--bg:#F3F8F4;--ink:#0F1F17;--ink2:#3D4F46;--mute:#4F6359;--line:#DCE7E0;--amber:#E8A317;--red:#A12D20;--bub:#DFF3C9;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--sb:env(safe-area-inset-bottom);--st:env(safe-area-inset-top)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#E7EFE9;color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;font-size:14.5px}
+button,input,textarea,select{font-family:inherit;font-size:15px;color:inherit}
+button{cursor:pointer}
+svg.i{width:1.15em;height:1.15em;flex:none;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .hidden{display:none!important}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;font-weight:800;cursor:pointer;background:var(--g700);color:#fff;text-decoration:none}
-.btn.ghost{background:#fff;color:var(--g700);box-shadow:inset 0 0 0 1.5px var(--line)}
-.btn.sm{padding:8px 14px;font-size:13.5px;border-radius:999px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 18px;font-weight:800;background:var(--g);color:#fff;text-decoration:none;white-space:nowrap}
+.btn.deep{background:var(--deep)}.btn.lime{background:var(--lime);color:var(--deep)}
+.btn.ghost{background:#fff;color:var(--g);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.sm{padding:8px 14px;font-size:13.5px}.btn.wide{width:100%;padding:15px}
 .btn.red{background:#FDE8E6;color:var(--red)}
 .btn[disabled]{opacity:.5;pointer-events:none}
-.in{width:100%;padding:12px 13px;border-radius:12px;border:1.5px solid var(--line);background:#fff;outline:0}
-.in:focus{border-color:var(--g600)}
-.login{max-width:380px;margin:12vh auto;background:#fff;border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(18,58,38,.1)}
-.login img{height:34px;display:block;margin:0 auto 12px}
-.login h1{text-align:center;margin:0 0 4px;font-size:21px}.login p{text-align:center;color:var(--mute);margin:0 0 18px}
-.login .in{margin-bottom:10px}.login .btn{width:100%;padding:13px}
-.err{color:var(--red);font-weight:600;margin-top:10px;text-align:center}
-.top{background:var(--g800);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.top img{height:30px}.top .who{font-weight:700}.top .sp{flex:1}
-.sw{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:800;background:rgba(255,255,255,.1);padding:7px 12px 7px 8px;border-radius:999px;border:0;color:#fff}
-.sw i{width:40px;height:23px;border-radius:999px;background:rgba(255,255,255,.25);position:relative;transition:background .2s}
-.sw i::after{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .2s}
-.sw.on{background:var(--lime);color:var(--g900)}.sw.on i{background:var(--g900)}.sw.on i::after{transform:translateX(17px)}
-.earn{display:flex;gap:14px;font-size:12.5px;color:#cfe6d4}.earn b{color:#fff;font-size:14px}
-.top a{color:#cfe6d4;font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
-.layout{display:grid;grid-template-columns:340px 1fr;height:calc(100vh - 52px);height:calc(100dvh - 52px)}
-.side{border-right:1px solid var(--line);overflow-y:auto;background:#fff}
-.tabs{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:2}
-.tabs button{flex:1;border:0;background:none;padding:12px 6px;font-weight:700;color:var(--mute);cursor:pointer;border-bottom:2.5px solid transparent;font-size:13.5px}
-.tabs button.on{color:var(--g700);border-bottom-color:var(--g700)}
-.sec{padding:12px 14px}
-.sec h3{margin:6px 0 10px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute)}
-.item{display:flex;gap:10px;align-items:center;padding:12px;border-radius:18px;background:var(--bg);margin-bottom:8px;cursor:pointer;border:2px solid transparent}
-.item.sel{border-color:var(--g600);background:var(--mint)}
-.item.new{background:#FFF4DE;animation:glow 1.4s ease-in-out infinite}
-@keyframes glow{50%{box-shadow:0 0 0 4px rgba(242,177,52,.25)}}
-.item .sp{flex:1;min-width:0}.item b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item small{display:block;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pill{font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:999px;background:var(--mint2);color:var(--g700);white-space:nowrap}
-.pill.amber{background:#fff3d6;color:#8a6200}
-.ped{flex:1;overflow:auto;padding:18px 20px 30px}
-.ped .ph{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.ped .ph h2{margin:0;font-size:19px}.ped .ph small{color:var(--mute)}
-.ped .info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.ped .box{background:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 2px 8px rgba(18,58,38,.05);font-size:13.5px;line-height:1.5}
-.ped .box h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
-.ptbl{width:100%;border-collapse:separate;border-spacing:6px;table-layout:fixed}
-.ptbl th{font-size:12px;color:var(--mute);text-align:left;font-weight:800;padding:0 4px}
-.ptbl td.dl{font-weight:800;color:var(--g700);font-size:13px;width:52px}
-.ptbl textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line,#e3ebe5);border-radius:10px;padding:7px 8px;font:inherit;font-size:13px;resize:vertical;min-height:54px;background:#fff}
-.ptbl textarea:focus{outline:0;border-color:var(--g700)}
-.ped .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
-@media(max-width:900px){.ped .info{grid-template-columns:1fr}.ptbl,.ptbl tbody,.ptbl tr,.ptbl td{display:block;width:auto}.ptbl thead{display:none}.ptbl td.dl{padding-top:10px}.ptbl td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--mute);font-weight:800;margin:4px 0 2px}}
-.none{color:var(--mute);font-size:13.5px;padding:6px 2px 10px}
-.main{display:flex;flex-direction:column;min-width:0;min-height:0}
-.blank{flex:1;display:grid;place-items:center;color:var(--mute);text-align:center;padding:30px;line-height:1.6}
-.chead{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line)}
-.chead .sp{flex:1;min-width:0}.chead b{font-size:16px}
-.timer{font-variant-numeric:tabular-nums;font-weight:800;background:var(--mint);color:var(--g700);padding:7px 12px;border-radius:999px}
-.timer.low{background:var(--amber);color:var(--g900)}
-.cbody{flex:1;display:grid;grid-template-columns:1fr 290px;min-height:0}
-.msgs{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
-.m{max-width:75%;padding:11px 14px;border-radius:20px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
-.m.d{align-self:flex-end;background:var(--g700);color:#fff;border-bottom-right-radius:5px}
-.m.c{align-self:flex-start;background:#fff;box-shadow:0 1px 4px rgba(18,58,38,.08);border-bottom-left-radius:5px}
-.m.sys{align-self:center;color:var(--g700);background:var(--mint);font-weight:700;font-size:12px;text-align:center;padding:5px 12px;border-radius:999px}
-.m.file{padding:6px}.m.file img{display:block;max-width:240px;max-height:280px;border-radius:15px;background:#EEF3EF}
+.in{width:100%;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line);background:#fff;outline:0}
+.in:focus{border-color:var(--g6)}
+textarea.in{resize:vertical}
+label.f{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12px 0 6px}
+.toast{position:fixed;left:50%;bottom:calc(90px + var(--sb));transform:translateX(-50%);background:var(--deep);color:#fff;padding:11px 16px;border-radius:14px;font-weight:600;z-index:99;max-width:90vw;text-align:center}
+/* app frame */
+.app{max-width:560px;margin:0 auto;height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(11,59,38,.08)}
+.scr{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.body{flex:1;overflow-y:auto;padding:16px 16px 24px;-webkit-overflow-scrolling:touch}
+.hd{background:var(--deep);color:#fff;padding:calc(14px + var(--st)) 16px 16px;border-radius:0 0 26px 26px;flex:none;position:relative;z-index:1}
+.hd .row{display:flex;align-items:center;gap:12px}
+.hd h1{margin:0;font-size:20px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd p{margin:6px 0 0;color:#CFE3D7;font-size:13.5px;line-height:1.45}
+.hb{width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;flex:none;position:relative}
+.hb .dot{position:absolute;top:6px;right:7px;width:9px;height:9px;border-radius:50%;background:var(--lime)}
+.hpill{border:1.5px solid rgba(255,255,255,.5);background:none;color:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px}
+.brand{display:flex;align-items:center;gap:10px;flex:1}.brand img{height:26px}
+.tagp{background:var(--lime);color:var(--deep);font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:999px}
+.ava{width:44px;height:44px;border-radius:50%;background:var(--mint);color:var(--g);display:grid;place-items:center;font-weight:800;flex:none;position:relative;font-size:15px;overflow:hidden}
+.ava img{width:100%;height:100%;object-fit:cover}
+.ava.on::after{content:"";position:absolute;right:1px;bottom:1px;width:11px;height:11px;border-radius:50%;background:#2DBE6C;border:2px solid #fff}
+.hd .ava{background:var(--lime);color:var(--deep)}
+.onl{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:800}
+.sw{width:50px;height:28px;border-radius:999px;border:0;background:rgba(255,255,255,.3);position:relative;transition:background .2s;flex:none}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw.on{background:var(--lime)}.sw.on::after{transform:translateX(22px);background:var(--deep)}
+.sw.lt{background:#C9D6CE}.sw.lt.on{background:var(--g)}.sw.lt.on::after{background:#fff}
+/* nav */
+.nav{flex:none;display:flex;background:#fff;border-top:1px solid var(--line);padding:6px 6px calc(6px + var(--sb))}
+.nav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0;color:var(--mute);font-size:12px;font-weight:700;border-radius:16px;position:relative}
+.nav button svg.i{width:22px;height:22px}
+.nav button.on{color:var(--deep);background:var(--mint)}
+.badge{position:absolute;top:2px;left:calc(50% + 4px);min-width:18px;height:18px;border-radius:9px;background:var(--g);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 5px}
+.nav .badge{background:var(--red)}
+/* cards & lists */
+.card{background:#fff;border-radius:22px;padding:16px;box-shadow:0 2px 12px rgba(11,59,38,.05);margin-bottom:14px}
+.card h3,.sh{margin:0 0 12px;font-size:16px;display:flex;align-items:center;gap:8px}
+.sh{margin:20px 2px 10px}.sh .sp,.card h3 .sp{flex:1}
+.sh a,.card h3 a,.lnk{color:var(--g);font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;background:none;border:0;padding:0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.stats>div{background:#fff;border-radius:18px;padding:12px 10px;box-shadow:0 2px 10px rgba(11,59,38,.05)}
+.stats svg.i{color:var(--g);width:20px;height:20px}.stats b{display:block;font-size:20px;margin:6px 0 2px}.stats small{color:var(--mute);font-size:11.5px;line-height:1.25;display:block}
+.stats.s3{grid-template-columns:repeat(3,1fr)}
+.wait{background:var(--lime);border-radius:22px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.wait b{font-size:20px;display:block;color:var(--deep)}.wait p{margin:2px 0 10px;color:var(--ink2);font-size:13.5px}
+.wait .big{font-size:40px;color:var(--g);flex:none}
+.wait.calm{background:#fff;box-shadow:0 2px 12px rgba(11,59,38,.05)}.wait.calm b{font-size:16px}
+.li{display:flex;gap:12px;align-items:center;padding:12px;border-radius:20px;background:#fff;margin-bottom:10px;box-shadow:0 2px 10px rgba(11,59,38,.05);cursor:pointer;width:100%;border:0;text-align:left}
+.li .sp{flex:1;min-width:0}
+.li b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}
+.li small{display:block;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.li .end{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none;font-size:12px;color:var(--mute)}
+.li.hot{box-shadow:0 0 0 2px var(--amber);animation:glow 1.4s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 5px rgba(232,163,23,.25)}}
+.pill{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--mint);color:var(--g);white-space:nowrap}
+.pill.amber{background:#FFF1D6;color:#8A5A00}.pill.red{background:#FDE8E6;color:var(--red)}.pill.grey{background:#EEF2EF;color:var(--mute)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;border:0;background:#fff;color:var(--ink2);border-radius:999px;padding:9px 15px;font-weight:700;font-size:13.5px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.chips button.on{background:var(--deep);color:#fff;box-shadow:none}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.qa button{border:0;background:#fff;border-radius:18px;padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:700;font-size:12px;color:var(--ink);box-shadow:0 2px 10px rgba(11,59,38,.05);position:relative;line-height:1.25}
+.qa svg.i{width:24px;height:24px;color:var(--g)}
+.qa .badge{left:auto;right:10px;top:8px}
+.none{color:var(--mute);font-size:13.5px;padding:8px 2px;line-height:1.5}
+.empty{text-align:center;color:var(--mute);padding:30px 16px;line-height:1.6}
+.rows .r{display:flex;align-items:center;gap:12px;padding:14px 2px;border-top:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.rows .r:first-child{border-top:0}.rows .r .sp{flex:1;min-width:0}.rows .r b{display:block;font-size:14.5px}.rows .r small{color:var(--mute);font-size:12.5px}
+.rows .r>svg.i:first-child{color:var(--g);width:22px;height:22px}.rows .r>svg.i:last-child{color:#9DB3A7}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px}.kv span{color:var(--mute)}
+.metric{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric>div{background:var(--bg);border-radius:16px;padding:12px}.metric small{color:var(--mute);font-size:12px;display:block}.metric b{font-size:19px}
+.metric .tag{display:inline-block;margin-top:4px;font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;background:#FFF1D6;color:#8A5A00}
+.goal{display:flex;gap:12px;align-items:center;background:var(--lime);border-radius:18px;padding:14px;margin-bottom:14px}.goal small{display:block;font-size:12px;color:var(--ink2)}.goal b{font-size:15px}
+.note{display:flex;gap:10px;background:#F2F9E6;border-radius:18px;padding:14px;font-size:13px;color:var(--ink2);line-height:1.5;margin-bottom:14px}.note svg.i{color:#8A9A1C;width:22px;height:22px}
+.redflag{display:flex;gap:12px;align-items:center;background:#FDE8E6;color:#7A1F15;border-radius:18px;padding:12px 14px;margin-bottom:12px;font-size:13.5px;line-height:1.45}.redflag svg.i{width:22px;height:22px}.redflag .sp{flex:1}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:14px;display:grid;gap:12px}.tl>div{position:relative;font-size:13.5px}.tl>div::before{content:"";position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:#9DB3A7}.tl>div:first-child::before{background:var(--g)}.tl b{display:block}.tl small{color:var(--mute)}
+.pnote{background:#FFF8E6;border-color:#F3DFB0}
+.files{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.files a{display:block;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#FDE8E6;color:var(--red);font-weight:800;font-size:11px;text-decoration:none;display:grid;place-items:center;text-align:center;padding:4px}.files img{width:100%;height:100%;object-fit:cover}
+.frow{display:flex;gap:12px;align-items:center;padding:12px 2px;border-top:1px solid var(--line);color:inherit;text-decoration:none}.frow:first-child{border-top:0}
+.frow .t{width:40px;height:44px;border-radius:10px;background:#FDE8E6;color:var(--red);display:grid;place-items:center;font-size:11px;font-weight:800;flex:none}.frow .t.img{background:var(--mint);color:var(--g)}
+.frow .sp{flex:1;min-width:0}.frow b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.frow small{color:var(--mute);font-size:12px}
+.tabs{display:flex;gap:4px;background:#fff;border-radius:999px;padding:4px;margin-bottom:14px;box-shadow:0 2px 10px rgba(11,59,38,.05)}
+.tabs button{flex:1;border:0;background:none;border-radius:999px;padding:9px 4px;font-weight:700;font-size:13px;color:var(--mute)}.tabs button.on{background:var(--deep);color:#fff}
+.hero{background:linear-gradient(135deg,#E3F5D0,#C8F169);border-radius:24px;padding:20px;margin-bottom:14px}
+.hero small{color:var(--ink2);font-weight:700;font-size:13px}.hero b{display:block;font-size:34px;letter-spacing:-.02em;color:var(--deep);margin:4px 0}.hero span{font-size:13px;color:var(--ink2)}
+.ebars{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px}.ebars>div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:11px;color:var(--mute);height:100%}.ebars i{display:block;width:100%;max-width:40px;border-radius:9px 9px 4px 4px}.ebars .v{font-weight:700;color:var(--ink);font-size:10.5px}
+.shgrid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:5px;align-items:center}.shgrid .dh{text-align:center;font-size:11.5px;color:var(--mute);font-weight:700}.shgrid .ph2{font-size:12px;font-weight:700}.shgrid .ph2 small{display:block;color:var(--mute);font-weight:500;font-size:10.5px}
+.shgrid .cell{height:34px;border-radius:9px;border:0;background:#EEF3EF}.shgrid .cell.on{background:var(--g)}.shgrid .cell.gap{box-shadow:inset 0 0 0 2px var(--amber)}
+.tx{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.tx:first-of-type{border-top:0}.tx .ic{width:38px;height:38px;border-radius:50%;background:var(--mint);color:var(--g);display:grid;place-items:center;flex:none}.tx .sp{flex:1;min-width:0}.tx b{display:block;font-size:14px}.tx small{color:var(--mute);font-size:12px}.tx .amt{text-align:right;font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{display:flex;align-items:center;gap:10px;padding:11px 2px;border-top:1px solid var(--line);font-size:14px}.slot:first-of-type{border-top:0}.slot .sp{flex:1}
+.slot .x{border:0;background:none;color:var(--red);padding:6px}
+.dayh{margin:14px 0 4px;font-weight:800;font-size:13px;color:var(--g)}
+/* chat */
+.chd{background:var(--deep);color:#fff;padding:calc(10px + var(--st)) 12px 12px;display:flex;align-items:center;gap:10px;flex:none}
+.chd .sp{flex:1;min-width:0}.chd b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chd small{color:#CFE3D7;font-size:12.5px}
+.chd .ava{width:38px;height:38px;font-size:13px;background:var(--lime);color:var(--deep)}
+.tbar{flex:none;display:flex;align-items:center;gap:8px;background:#EAF7D9;color:var(--deep);font-weight:800;font-size:13.5px;padding:10px 16px;font-variant-numeric:tabular-nums}
+.tbar .sp{flex:1}.tbar.low{background:#FFE7B8}
+.tbar .end{border:0;background:#fff;color:var(--red);font-weight:800;border-radius:999px;padding:6px 12px;font-size:12.5px}
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:80%;padding:11px 14px;border-radius:20px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px}
+.m.d{align-self:flex-end;background:var(--bub);border-bottom-right-radius:6px}
+.m.c{align-self:flex-start;background:#fff;box-shadow:0 1px 4px rgba(18,58,38,.08);border-bottom-left-radius:6px}
+.m.sys{align-self:center;color:var(--g);background:var(--mint);font-weight:700;font-size:12px;text-align:center;padding:5px 12px;border-radius:999px}
+.m time{display:block;font-size:10.5px;opacity:.6;margin-top:3px;text-align:right}
+.m.file{padding:6px}.m.file img{display:block;max-width:230px;max-height:270px;border-radius:15px;background:#EEF3EF}
 .m.file .pdf{display:flex;gap:10px;align-items:center;padding:6px 8px;color:inherit;text-decoration:none;min-width:200px}
-.m.file .pdf span.t{width:40px;height:48px;border-radius:10px;background:#FDE8E6;color:#A12D20;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none}
+.m.file .pdf span.t{width:40px;height:48px;border-radius:10px;background:#FDE8E6;color:var(--red);display:grid;place-items:center;font-size:11px;font-weight:800;flex:none}
 .m.file .pdf b{display:block;font-size:13.5px}.m.file .pdf small{font-size:12px;opacity:.75}.m.file time{padding:0 8px 2px}
-.att{width:44px;height:44px;border-radius:50%;border:0;background:var(--mint);color:var(--g700);display:grid;place-items:center;cursor:pointer;flex:none}
-.files{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}.files a{display:block;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#FDE8E6;color:#A12D20;font-weight:800;font-size:11px;text-decoration:none;display:grid;place-items:center;text-align:center;padding:4px}.files img{width:100%;height:100%;object-fit:cover}
-.m time{display:block;font-size:10.5px;opacity:.65;margin-top:3px;text-align:right}
-.prof{border-left:1px solid var(--line);background:#fff;overflow-y:auto;padding:14px 16px}
-.prof h4{margin:4px 0 8px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute)}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;font-size:13.5px}.kv span{color:var(--mute)}
-.topic{background:var(--mint);border-radius:12px;padding:10px 12px;margin-bottom:14px;line-height:1.5}
-.bar{display:flex;gap:8px;padding:10px 12px;background:#fff;border-top:1px solid var(--line);align-items:flex-end}
-.pwrap{flex:1;display:grid;grid-template-columns:1fr 320px;min-height:0}.pwrap .ped{min-width:0}.pthread{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow:auto;background:var(--bg);border-radius:14px;padding:8px}.pthread .m{max-width:92%;font-size:13.5px}
-.ptools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 10px}
-.ptbl .kc{width:100%;box-sizing:border-box;margin-top:4px;border:1.5px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;font-size:12px}
-.ptbl td.tot{font-weight:800;font-size:12.5px;color:var(--mute);vertical-align:middle;text-align:center;background:#fff;border-radius:10px}.ptbl td.tot.ok{color:#146C43;background:#E3F1E8}.ptbl td.tot.off{color:#8A5A00;background:#FFF4DE}
-.ptbl .cp{display:block;margin-top:6px;border:0;background:var(--mint);color:var(--g700);font-weight:700;font-size:10.5px;border-radius:999px;padding:3px 6px;cursor:pointer;font-family:inherit}
-.redflag{display:flex;gap:12px;align-items:center;background:#FDE8E6;color:#7A1F15;border-radius:16px;padding:12px 14px;margin:12px 16px 0;font-size:13.5px;line-height:1.45}.ped .redflag{margin:0 0 14px}.redflag svg.i{width:22px;height:22px}
-.mcol{display:flex;flex-direction:column;min-height:0}.mcol .msgs{flex:1}
-.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:14px;display:grid;gap:10px}.tl>div{position:relative;font-size:13px}.tl>div::before{content:"";position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:#9DB3A7}.tl>div:first-child::before{background:var(--g700)}.tl b{display:block}.tl small{color:var(--mute)}
-.pnote{background:#FFF4DE;border-color:#F3DFB0}
-.qsel{border:1.5px solid var(--line);border-radius:999px;padding:5px 8px;font-weight:700;font-size:12.5px;background:#fff;color:var(--ink);font-family:inherit}.quick .qadd{background:#fff;border:1.5px dashed #9DB3A7;color:var(--g700)}
-.earnpg{flex:1;overflow:auto;padding:18px 20px 30px;display:flex;flex-direction:column;gap:14px}.mobback{display:none;align-self:flex-start}
-.ehero{background:var(--g900);color:#fff;border-radius:24px;padding:22px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}.ehero small{color:var(--lime);font-weight:800;letter-spacing:.06em;font-size:12px}.ehero b{display:block;font-size:38px;letter-spacing:-.02em}.ehero span{color:#CFE3D7;font-size:13px}
-.btn.lime{background:var(--lime);color:var(--g900)}
-.estats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.estats>div{background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(11,59,38,.05)}.estats small{color:var(--mute);font-size:12px;display:block}.estats b{font-size:20px}
-.ecard{margin:0}.ecard h3{margin:0 0 12px;font-size:15px}
-.ebars{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;height:160px}.ebars>div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;font-size:11.5px;color:var(--mute);height:100%}.ebars i{display:block;width:100%;max-width:54px;border-radius:10px}.ebars .v{font-weight:700;color:var(--ink)}
-.shgrid{display:grid;grid-template-columns:90px repeat(7,1fr);gap:6px;align-items:center}.shgrid .dh{text-align:center;font-size:12px;color:var(--mute);font-weight:700}.shgrid .ph2{font-size:12.5px;font-weight:700}.shgrid .ph2 small{display:block;color:var(--mute);font-weight:500}
-.shgrid .cell{height:38px;border-radius:10px;border:0;background:#EEF3EF;cursor:pointer}.shgrid .cell.on{background:var(--g700)}.shgrid .cell.gap{box-shadow:inset 0 0 0 2px #E8A317}
-@media(max-width:1100px){.pwrap{grid-template-columns:1fr}.estats{grid-template-columns:1fr 1fr}}
-@media(max-width:860px){.mobback{display:inline-flex}}
-.bar textarea{flex:1;border:1.5px solid var(--line);border-radius:22px;padding:10px 12px;resize:none;min-height:44px;max-height:140px;outline:0}
-.quick{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding:8px 12px 4px;background:#fff;border-top:1px solid var(--line)}
-.quick button{flex:none;border:0;background:var(--mint);color:var(--g800);border-radius:999px;padding:6px 10px;font-size:12.5px;font-weight:700;cursor:pointer}
-.quick+.bar{border-top:0}
-.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(18,58,38,.05);margin:12px 14px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:10px 0 5px}
-.slot{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-top:1px solid var(--line);font-size:13.5px}
-.slot:first-child{border-top:0}
-.hist{font-size:13px;padding:9px 2px;border-top:1px solid var(--line)}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--g900);color:#fff;padding:11px 16px;border-radius:12px;font-weight:600;z-index:99}
-.back{display:none}
-@media(max-width:860px){
-  .layout{grid-template-columns:1fr}
-  .layout.chatting .side{display:none}
-  .layout:not(.chatting) .main{display:none}
-  .cbody{grid-template-columns:1fr}
-  .prof{display:none;border-left:0}.cbody.showprof .prof{display:block}.cbody.showprof .msgs{display:none}
-  .back{display:inline-flex}
-  .earn{display:none}
-}
+.quick{flex:none;display:flex;gap:6px;overflow-x:auto;padding:8px 12px 4px;background:#fff;border-top:1px solid var(--line);scrollbar-width:none}.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;border:0;background:var(--mint);color:var(--deep);border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700}
+.quick .qadd{background:#fff;box-shadow:inset 0 0 0 1.5px #9DB3A7}
+.qsel{border:1.5px solid var(--line);border-radius:999px;padding:5px 8px;font-weight:700;font-size:12.5px;background:#fff;flex:none}
+.bar{flex:none;display:flex;gap:8px;padding:8px 12px calc(10px + var(--sb));background:#fff;align-items:flex-end}
+.bar textarea{flex:1;border:1.5px solid var(--line);border-radius:22px;padding:11px 14px;resize:none;min-height:46px;max-height:140px;outline:0;background:var(--bg)}
+.circ{width:46px;height:46px;border-radius:50%;border:0;display:grid;place-items:center;flex:none;background:var(--mint);color:var(--g)}
+.circ.go{background:var(--g);color:#fff}
+.cdone{flex:none;padding:14px 16px calc(14px + var(--sb));background:#fff;border-top:1px solid var(--line);text-align:center;color:var(--mute);font-size:13.5px}
+.over{position:absolute;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column}
+.foot{flex:none;padding:12px 16px calc(12px + var(--sb));background:#fff;border-top:1px solid var(--line);display:flex;gap:10px}
+.foot .btn{flex:1;padding:15px}
+/* plan builder */
+.steps{display:flex;justify-content:space-between;align-items:flex-start;margin:14px 6px 0;position:relative}
+.steps::before{content:"";position:absolute;left:12%;right:12%;top:14px;height:2px;background:rgba(255,255,255,.25)}
+.steps>div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:#CFE3D7;font-weight:700;position:relative;z-index:1;flex:1}
+.steps i{width:30px;height:30px;border-radius:50%;background:var(--deep);border:2px solid rgba(255,255,255,.4);display:grid;place-items:center;font-style:normal;font-weight:800;color:#fff}
+.steps .on i{background:var(--lime);color:var(--deep);border-color:var(--lime)}.steps .on{color:#fff}
+.steps .ok i{background:var(--g);border-color:var(--g)}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}
+.days button{flex:none;border:0;border-radius:999px;padding:8px 13px;font-weight:700;font-size:13px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--ink2)}
+.days button.on{background:var(--g);color:#fff;box-shadow:none}.days button.ok:not(.on){box-shadow:inset 0 0 0 1.5px var(--g);color:var(--g)}
+.meal{background:#fff;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 2px 10px rgba(11,59,38,.05)}
+.meal .mh{display:flex;align-items:center;gap:8px;margin-bottom:8px}.meal .mh b{flex:1}
+.meal .kc{width:96px;border:1.5px solid var(--line);border-radius:999px;padding:6px 10px;font-size:13px;text-align:right;outline:0;background:#F2F9E6;font-weight:700}
+.meal textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;resize:vertical;min-height:58px;outline:0;font-size:14px}
+.meal textarea:focus,.meal .kc:focus{border-color:var(--g6)}
+.dtot{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(11,59,38,.05);margin-bottom:14px;font-weight:800}
+.dtot .sp{flex:1}.dtot.ok{background:var(--mint);color:var(--g)}.dtot.off{background:#FFF1D6;color:#8A5A00}
+.pthread{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto;background:var(--bg);border-radius:16px;padding:10px}.pthread .m{max-width:92%;font-size:13.5px}
+.rv{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}.rv:first-of-type{border-top:0}.rv .sp{flex:1;min-width:0;color:var(--mute);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* login */
+.login{margin:auto;width:100%;max-width:400px;padding:24px}
+.login .lc{background:#fff;border-radius:26px;padding:28px 22px;box-shadow:0 10px 30px rgba(18,58,38,.1)}
+.login img{height:34px;display:block;margin:0 auto 14px}
+.login h1{text-align:center;margin:0 0 4px;font-size:22px}.login p{text-align:center;color:var(--mute);margin:0 0 18px}
+.login .in{margin-bottom:10px}.login .btn{width:100%;padding:14px}
+.err{color:var(--red);font-weight:600;margin-top:10px;text-align:center}
+@media(min-width:561px){.app{border-radius:0}}
+@media (max-width:380px){.stats b{font-size:17px}.qa button{font-size:11px}}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root" class="app"></div>
 <script>
 window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', logoUrl: '/Logo.png' };
 </script>
@@ -143,16 +185,27 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
 (function () {
   'use strict';
   var C = window.DIETO_DIETICIAN, root = document.getElementById('root');
-  var TOKEN = localStorage.getItem('dieto_dtoken') || '', S = null, TAB = 'chats', SEL = 0, CH = null, STATE_T = null, CHAT_T = null, TICK = null, KNOWN = {}, AUDIO = null;
+  var TOKEN = localStorage.getItem('dieto_dtoken') || '', S = null, CH = null, STATE_T = null, CHAT_T = null, TICK = null, PLAN_T = null, KNOWN = {}, AUDIO = null, HIST = null, OVER = null;
   var ICONS = { back: '<path d="M15 18l-6-6 6-6"/>', send: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', x: '<path d="M18 6L6 18M6 6l12 12"/>', plus: '<path d="M12 5v14M5 12h14"/>' };
-  function ic(n) { return '<svg class="i" viewBox="0 0 24 24">' + ICONS[n] + '</svg>'; }
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', x: '<path d="M18 6L6 18M6 6l12 12"/>', plus: '<path d="M12 5v14M5 12h14"/>',
+    home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>', chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+    cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>', users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+    star: '<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/>', chev: '<path d="M9 6l6 6-6 6"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    plan: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>', chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', wallet: '<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>',
+    hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>', lock: '<rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+    help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/>', doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/>',
+    out: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', clip: '<path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
+    shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>', bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+    warn: '<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>', copy: '<rect x="8" y="8" width="13" height="13" rx="3"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
+    bank: '<path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18"/>', goal: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' };
+  function ic(n) { return '<svg class="i" viewBox="0 0 24 24">' + (ICONS[n] || '') + '</svg>'; }
   function el(tag, attrs, kids) {
     var e = document.createElement(tag);
     for (var k in attrs || {}) { if (k === 'html') e.innerHTML = attrs[k]; else if (k === 'text') e.textContent = attrs[k]; else if (k.slice(0, 2) === 'on' && typeof attrs[k] === 'function') e.addEventListener(k.slice(2), attrs[k]); else if (attrs[k] != null && attrs[k] !== false) e.setAttribute(k, attrs[k]); }
     (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
     return e;
   }
+  function ico(n, cls) { return el('span', { class: cls || '', style: 'display:inline-flex', html: ic(n) }); }
   async function api(route, body) {
     var ctl = window.AbortController ? new AbortController() : null, tm = ctl && setTimeout(function () { ctl.abort(); }, 20000), r;
     try { r = await fetch(C.api + '?route=' + route, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(Object.assign({ _d: TOKEN }, body || {})), signal: ctl ? ctl.signal : undefined }); }
@@ -164,456 +217,409 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     return d;
   }
   function toast(t) { var x = el('div', { class: 'toast', text: t }); document.body.appendChild(x); setTimeout(function () { x.remove(); }, 3000); }
-  function rs(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
-  function mmss(s) { s = Math.max(0, s | 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function rs(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
+  function mmss(s) { s = Math.max(0, s | 0); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
   function fmtTime(ts) { return new Date(ts * 1000).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' }); }
+  function fmtDay(ts) { return new Date(ts * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
   function fmtWhen(ts) { return new Date(ts * 1000).toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); }
+  function sameDay(a, b) { return new Date(a * 1000).toDateString() === new Date(b * 1000).toDateString(); }
+  function ago(sec) { return sec < 60 ? 'just now' : sec < 3600 ? Math.round(sec / 60) + ' min ago' : sec < 86400 ? Math.round(sec / 3600) + ' h ago' : Math.round(sec / 86400) + ' d ago'; }
+  function bare(n) { return String(n || '').replace(/^\s*dr\.?\s+/i, ''); }
+  function inits(n) { return bare(n || '?').trim().split(/\s+/).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); }
+  function ava(n, on) { return el('div', { class: 'ava' + (on ? ' on' : ''), text: inits(n) }); }
   function beep() {
     try {
       AUDIO = AUDIO || new (window.AudioContext || window.webkitAudioContext)();
       [0, .22].forEach(function (t) { var o = AUDIO.createOscillator(), g = AUDIO.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(.0001, AUDIO.currentTime + t); g.gain.exponentialRampToValueAtTime(.25, AUDIO.currentTime + t + .02); g.gain.exponentialRampToValueAtTime(.0001, AUDIO.currentTime + t + .18); o.connect(g); g.connect(AUDIO.destination); o.start(AUDIO.currentTime + t); o.stop(AUDIO.currentTime + t + .2); });
     } catch (e) {}
   }
-  function notify(t) {
-    beep();
-    try { if (document.hidden && window.Notification && Notification.permission === 'granted') new Notification('dietO', { body: t, icon: '/icons/icon-192.png' }); } catch (e) {}
-  }
+  function notify(t) { beep(); try { if (document.hidden && window.Notification && Notification.permission === 'granted') new Notification('dietO', { body: t, icon: '/icons/icon-192.png' }); } catch (e) {} }
+  var API_DIR = C.api.replace(/[^\/]*$/, '');
 
   /* ---------- login ---------- */
   function signOut(silent) {
-    clearTimeout(STATE_T); clearTimeout(CHAT_T); clearInterval(TICK);
+    clearTimeout(STATE_T); clearTimeout(CHAT_T); clearInterval(TICK); clearTimeout(PLAN_T); CH = null;
     if (!silent && TOKEN) api('d_logout').catch(function () {});
-    TOKEN = ''; localStorage.removeItem('dieto_dtoken'); S = null; login();
+    TOKEN = ''; localStorage.removeItem('dieto_dtoken'); S = null; HIST = null; login();
   }
   function login() {
     root.innerHTML = '';
     var em = el('input', { class: 'in', type: 'email', placeholder: 'Email', autocomplete: 'username' });
     var pw = el('input', { class: 'in', type: 'password', placeholder: 'Password', autocomplete: 'current-password' });
-    var err = el('div', { class: 'err' });
-    var b = el('button', { class: 'btn', text: 'Sign in' });
-    var f = el('form', { class: 'login' }, [el('img', { src: C.logoUrl, alt: 'dietO', onerror: 'this.remove()' }), el('h1', { text: 'Dietician sign in' }), el('p', { text: 'Chat with dietO clients' }), em, pw, b, err]);
+    var err = el('div', { class: 'err' }), b = el('button', { class: 'btn', text: 'Sign in' });
+    var f = el('form', { class: 'lc' }, [el('img', { src: C.logoUrl, alt: 'dietO', onerror: 'this.remove()' }), el('h1', { text: 'Dietitian sign in' }), el('p', { text: 'Chat with dietO clients and send diet plans' }), em, pw, b, err]);
     f.addEventListener('submit', async function (e) {
       e.preventDefault(); err.textContent = ''; b.disabled = true;
       try { var d = await api('d_login', { email: em.value, password: pw.value }); TOKEN = d.token; localStorage.setItem('dieto_dtoken', TOKEN); start(); }
       catch (x) { err.textContent = x.message; } b.disabled = false;
     });
-    root.appendChild(f); em.focus();
+    root.appendChild(el('div', { class: 'login', style: 'display:flex;flex:1' }, [el('div', { style: 'margin:auto;width:100%' }, [f])])); em.focus();
   }
 
-  /* ---------- shell ---------- */
+  /* ---------- shell: screens, stack and bottom nav ---------- */
+  var TABS = [['home', 'Home', 'home'], ['chats', 'Chats', 'chat'], ['bookings', 'Bookings', 'cal'], ['profile', 'Profile', 'user']];
+  var STACK = [{ n: 'home' }], LAST = null;
   function start() {
     root.innerHTML = '';
-    var top = el('div', { class: 'top' }); var layout = el('div', { class: 'layout' }); var side = el('div', { class: 'side' }); var main = el('div', { class: 'main' });
-    layout.appendChild(side); layout.appendChild(main);
-    root.appendChild(top); root.appendChild(layout);
-    S = { top: top, layout: layout, side: side, main: main, data: null };
-    main.appendChild(el('div', { class: 'blank', html: '<div>Waiting clients appear on the left. Tap <b>Accept</b> to start.<br>Keep <b>Online</b> on to receive live chats. Booked chats appear under Upcoming.</div>' }));
-    if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);   // phone alerts for new clients, even when the app is closed
+    var scr = el('div', { class: 'scr' }), nav = el('nav', { class: 'nav' });
+    root.appendChild(scr); root.appendChild(nav);
+    S = { scr: scr, nav: nav, data: null, chip: {} };
+    TABS.forEach(function (t) { nav.appendChild(el('button', { 'data-t': t[0], onclick: function () { if (top().n === t[0]) { var b = S.scr.querySelector('.body'); if (b) b.scrollTop = 0; return; } STACK = [{ n: t[0] }]; render(); } }, [ico(t[2]), el('span', { text: t[1] })])); });
+    try { history.replaceState({ d: 1 }, ''); } catch (e) {}
+    if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);
     else if (window.Notification && Notification.permission === 'default') Notification.requestPermission().catch(function () {});
+    S.scr.appendChild(el('div', { class: 'empty', style: 'margin:auto', text: 'Loading…' }));
     poll();
+  }
+  function top() { return STACK[STACK.length - 1]; }
+  function go(n, arg) { STACK.push({ n: n, a: arg }); try { history.pushState({ d: STACK.length }, ''); } catch (e) {} render(); }
+  function back() { if (OVER) { closeOver(); return; } if (STACK.length > 1) { try { history.back(); } catch (e) { STACK.pop(); render(); } } }
+  window.addEventListener('popstate', function () { if (!S) return; if (OVER) { OVER.remove(); OVER = null; return; } if (STACK.length > 1) { STACK.pop(); render(); } });
+  function closeOver() { if (!OVER) return; try { history.back(); } catch (e) { OVER.remove(); OVER = null; } }
+  function openOver(node) { if (OVER) OVER.remove(); OVER = node; root.appendChild(node); try { history.pushState({ o: 1 }, ''); } catch (e) {} }
+  var LIVE = { home: 1, chats: 1, bookings: 1, plans: 1, availability: 0 };
+  function render() {
+    var t = top();
+    if (LAST && LAST !== t && LAST.a && LAST.a.onLeave) { try { LAST.a.onLeave(); } catch (e) {} } LAST = t;
+    if (t.n !== 'chat') { clearTimeout(CHAT_T); clearInterval(TICK); CH = null; }
+    if (t.n !== 'plan') clearTimeout(PLAN_T);
+    if (OVER) { OVER.remove(); OVER = null; }
+    S.scr.innerHTML = '';
+    var isTab = TABS.some(function (x) { return x[0] === t.n; });
+    S.nav.classList.toggle('hidden', !isTab);
+    [].forEach.call(S.nav.children, function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t.n); });
+    if (!S.data) return;
+    (SCREENS[t.n] || SCREENS.home)(t.a);
   }
   async function poll() {
     clearTimeout(STATE_T);
-    try { var d = await api('d_state'); S.data = d; draw(); } catch (e) { if (!TOKEN) return; }
+    try { var d = await api('d_state'); var first = !S.data; S.data = d; tick(first); } catch (e) { if (!TOKEN) return; }
     STATE_T = setTimeout(poll, document.hidden ? 15000 : 5000);
   }
-  function draw(force) {
-    var d = S.data, me = d.me;
-    // top bar
-    S.top.innerHTML = '';
-    S.top.appendChild(el('img', { src: '/Logo-light.png', alt: 'dietO', onerror: 'this.remove()' }));
-    S.top.appendChild(el('span', { class: 'who', text: me.name }));
-    var sw = el('button', { class: 'sw' + (me.online_flag ? ' on' : ''), 'aria-pressed': me.online_flag ? 'true' : 'false' }, [el('i'), me.online_flag ? 'Online' : 'Offline']);
-    sw.addEventListener('click', async function () { beep(); await api('d_online', { online: !me.online_flag }).catch(function (e) { toast(e.message); }); poll(); });
-    S.top.appendChild(sw);
-    S.top.appendChild(el('span', { class: 'sp' }));
-    S.top.appendChild(el('span', { class: 'earn' }, [el('span', {}, ['Today ', el('b', { text: rs(d.earnings.today) })]), el('span', {}, ['To be paid ', el('b', { text: rs(d.earnings.unpaid) })])]));
-    S.top.appendChild(el('a', { text: 'Sign out', onclick: function () { if (confirm('Sign out? You will go offline.')) signOut(); } }));
-    // alerts for new queue items
-    var title = 'dietO · Dietician';
-    d.queue.forEach(function (q) { if (!KNOWN[q.id]) { KNOWN[q.id] = 1; notify(q.name + ' is waiting to chat'); } });
-    if (d.queue.length) title = '(' + d.queue.length + ') Client waiting · dietO';
-    document.title = title;
-    // side (form tabs only redraw when asked, so typing isn't interrupted)
-    if (!force && TAB !== 'chats' && TAB !== 'plans') return;
-    var y = S.side.scrollTop; S.side.innerHTML = '';
-    var tabs = el('div', { class: 'tabs' });
-    [['chats', 'Chats' + (d.queue.length ? ' (' + d.queue.length + ')' : '')], ['plans', 'Plans' + ((d.plans || []).length ? ' (' + d.plans.length + ')' : '')], ['slots', 'Slots'], ['earn', 'Earnings'], ['history', 'History'], ['account', 'Account']].forEach(function (t) {
-      tabs.appendChild(el('button', { class: TAB === t[0] ? 'on' : '', text: t[1], onclick: function () { TAB = t[0]; draw(true); } }));
-    });
-    S.side.appendChild(tabs);
-    if (TAB === 'chats') sideChats(d); else if (TAB === 'plans') sidePlans(d); else if (TAB === 'slots') sideSlots(d); else if (TAB === 'earn') sideEarnings(d); else if (TAB === 'history') sideHistory(); else sideAccount(d);
-    S.side.scrollTop = y;
+  function tick(first) {
+    var d = S.data;
+    d.queue.forEach(function (q) { if (!KNOWN[q.id]) { KNOWN[q.id] = 1; if (!first) notify(q.name + ' is waiting to chat'); } });
+    if (first && d.queue.length) beep();
+    document.title = d.queue.length ? '(' + d.queue.length + ') Client waiting · dietO' : 'dietO · Dietitian';
+    var nb = S.nav.querySelector('[data-t=chats]'), old = nb.querySelector('.badge'); if (old) old.remove();
+    var n = d.queue.length + d.active.length; if (n) nb.appendChild(el('span', { class: 'badge', text: String(n) }));
+    if (first) { render(); return; }
+    var t = top();
+    if (LIVE[t.n] && !OVER && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))) { var b = S.scr.querySelector('.body'), y = b ? b.scrollTop : 0; render(); b = S.scr.querySelector('.body'); if (b) b.scrollTop = y; }
   }
-  function sideChats(d) {
-    var sec = el('div', { class: 'sec' }); S.side.appendChild(sec);
-    sec.appendChild(el('h3', { text: 'Waiting now' }));
-    if (!d.queue.length) sec.appendChild(el('div', { class: 'none', text: d.me.online_flag ? 'No one waiting. New chats will beep.' : 'You are offline. Turn on Online to get live chats.' }));
-    d.queue.forEach(function (q) {
-      sec.appendChild(el('div', { class: 'item new' }, [el('div', { class: 'sp' }, [el('b', { text: q.name }), q.reviewer ? el('span', { class: 'pill amber', style: 'margin-left:6px', text: 'App Store / Play reviewer · please reply quickly' }) : null, el('small', { text: (q.free ? 'Free chat · ' : 'Paid · ') + (q.care ? 'dietO Care · ' : '') + (q.for_me ? 'Asked for you · ' : '') + (q.lang ? q.lang + ' · ' : '') + (q.files ? q.files + ' file' + (q.files > 1 ? 's' : '') + ' · ' : '') + 'waiting ' + mmss(q.waited) + (q.topic ? ' · ' + q.topic : '') })]),
-        el('button', { class: 'btn sm', text: 'Accept', onclick: function () { accept(q.id); } })]));
-    });
-    sec.appendChild(el('h3', { text: 'In progress' }));
-    if (!d.active.length) sec.appendChild(el('div', { class: 'none', text: 'No active chats.' }));
-    d.active.forEach(function (a) {
-      sec.appendChild(el('div', { class: 'item' + (SEL === a.id ? ' sel' : ''), onclick: function () { openChat(a.id); } }, [el('div', { class: 'sp' }, [el('b', { text: a.name }), el('small', { text: mmss(a.remaining) + ' left' })]), el('span', { class: 'pill', text: 'Live' })]));
-    });
-    sec.appendChild(el('h3', { text: 'Upcoming bookings' }));
-    if (!d.upcoming.length) sec.appendChild(el('div', { class: 'none', text: 'No bookings yet. Add open times under Slots.' }));
-    d.upcoming.forEach(function (u) {
-      var soon = u.scheduled_at - d.now <= 600;
-      sec.appendChild(el('div', { class: 'item' + (soon ? ' new' : '') }, [el('div', { class: 'sp' }, [el('b', { text: u.name }), el('small', { text: fmtWhen(u.scheduled_at) + (u.topic ? ' · ' + u.topic : '') })]),
-        soon ? el('button', { class: 'btn sm', text: 'Start', onclick: function () { accept(u.id); } }) : el('span', { class: 'pill amber', text: 'Booked' })]));
-    });
+  function hdr(title, o) {
+    o = o || {};
+    var h = el('div', { class: 'hd' }), row = el('div', { class: 'row' });
+    if (o.back !== false) row.appendChild(el('button', { class: 'hb', 'aria-label': 'Back', html: ic('back'), onclick: o.onBack || back }));
+    row.appendChild(el('h1', { text: title }));
+    if (o.right) row.appendChild(o.right);
+    h.appendChild(row);
+    if (o.sub) h.appendChild(el('p', { text: o.sub }));
+    if (o.extra) h.appendChild(o.extra);
+    return h;
   }
-  /* ---------- personalised plans ---------- */
-  function sidePlans(d) {
-    var sec = el('div', { class: 'sec' }); S.side.appendChild(sec);
-    sec.appendChild(el('h3', { text: 'Plan requests' }));
-    var list = d.plans || [];
-    if (!list.length) sec.appendChild(el('div', { class: 'none', text: 'No plan requests right now. New ones will appear here.' }));
-    list.forEach(function (q) {
-      var late = q.waited > 20 * 3600;
-      sec.appendChild(el('div', { class: 'item' + (PSEL === q.id ? ' sel' : late ? ' new' : ''), onclick: function () { openPlan(q.id); } }, [
-        el('div', { class: 'sp' }, [el('b', { text: q.name }), el('small', { text: 'Asked ' + ago(q.waited) + ' ago' + (q.topic ? ' · ' + q.topic : '') })]),
-        el('span', { class: 'pill' + (q.unread ? ' amber' : q.mine ? (q.draft ? ' amber' : '') : ''), text: q.unread ? q.unread + ' new message' + (q.unread > 1 ? 's' : '') : q.mine ? (q.draft ? 'Draft saved' : 'Yours') : q.care ? 'Care · new' : 'New' })]));
-    });
-    sec.appendChild(el('p', { class: 'none', style: 'margin-top:12px', text: 'Opening a request assigns it to you. You earn your share when you send the plan.' }));
+  function page(h) { var b = el('div', { class: 'body' }); if (h) S.scr.appendChild(h); S.scr.appendChild(b); return b; }
+  function chips(key, list, onPick) {
+    var cur = S.chip[key] || list[0][0], box = el('div', { class: 'chips' });
+    list.forEach(function (c) { box.appendChild(el('button', { class: cur === c[0] ? 'on' : '', text: c[1], onclick: function () { S.chip[key] = c[0]; onPick ? onPick(c[0]) : render(); } })); });
+    return box;
   }
-  function ago(sec) { return sec < 3600 ? Math.max(1, Math.round(sec / 60)) + ' min' : Math.round(sec / 3600) + ' h'; }
-  var PSEL = 0;
-  async function openPlan(id) {
-    clearTimeout(CHAT_T); clearInterval(TICK); SEL = 0; CH = null; PSEL = id;
-    S.layout.classList.add('chatting'); S.main.innerHTML = '';
-    S.main.appendChild(el('div', { class: 'blank', text: 'Opening…' }));
-    var v; try { v = await api('d_plan_open', { session_id: id }); } catch (e) { toast(e.message); PSEL = 0; S.main.innerHTML = ''; draw(true); return; }
-    draw(true);
-    S.main.innerHTML = '';
-    var wrap = el('div', { class: 'pwrap' }); S.main.appendChild(wrap);
-    var ed = el('div', { class: 'ped' }); var side = el('div', { class: 'prof' }); wrap.appendChild(ed); wrap.appendChild(side);
-    var target = 0; var p = v.client.profile || {};
-    if (p['Plan target']) target = parseInt(String(p['Plan target']).replace(/[^\d].*$/, '').replace(/\D/g, ''), 10) || 0;
-    ed.appendChild(el('div', { class: 'ph' }, [el('button', { class: 'btn sm ghost', text: '← Back', onclick: function () { PSEL = 0; clearTimeout(PLAN_T); S.layout.classList.remove('chatting'); S.main.innerHTML = ''; draw(true); } }),
-      el('div', { class: 'sp' }, [el('h2', { text: 'Personalised plan for ' + v.client.name + (v.care ? ' · dietO Care' : '') }), el('small', { text: v.status === 'plan_done' ? 'Sent. You can still update it.' : 'Due within ' + v.plan_hours + ' hours of the request' + (target ? ' · target ' + target + ' kcal a day' : '') })])]));
-    alertBox(ed, v.history, function (t) { pmsg.value = t; pmsg.focus(); });
-    var info = el('div', { class: 'info' });
-    info.appendChild(el('div', { class: 'box' }, [el('h4', { text: 'What the client asked for' }), el('div', { text: v.client.topic || 'No extra notes.' })]));
-    var b2 = el('div', { class: 'box' }, [el('h4', { text: 'Diet test' })]);
-    if (Object.keys(p).length) b2.appendChild(el('div', { text: Object.keys(p).map(function (k) { return k + ': ' + p[k]; }).join(' · ') }));
-    else b2.appendChild(el('div', { text: 'This client hasn’t taken the diet test. Ask them what you need in the messages on the right.' }));
-    info.appendChild(b2); ed.appendChild(info);
-    // tools: templates
-    var tsel = el('select', { class: 'in', style: 'width:auto;min-width:200px;padding:8px 12px' }); var TPL = [];
-    async function loadT(r) { try { TPL = (r || await api('d_templates', { action: 'list' })).templates; } catch (e) { TPL = []; } tsel.innerHTML = ''; tsel.appendChild(el('option', { value: '', text: TPL.length ? 'Load a saved template…' : 'No saved templates yet' })); TPL.forEach(function (t) { tsel.appendChild(el('option', { value: String(t.id), text: t.name })); }); }
-    tsel.onchange = function () { var t = TPL.filter(function (x) { return String(x.id) === tsel.value; })[0]; if (!t) return; if (!confirm('Replace the table with “' + t.name + '”?')) { tsel.value = ''; return; } fill(t.days); if (t.notes && !notes.value.trim()) notes.value = t.notes; tsel.value = ''; toast('Template loaded'); };
-    loadT();
-    var tools = el('div', { class: 'ptools' }, [tsel,
-      el('button', { class: 'btn sm ghost', text: 'Save as template', onclick: async function () { var n = prompt('Template name, e.g. “PCOS veg 1,400 kcal”'); if (!n) return; try { await loadT(await api('d_templates', { action: 'save', name: n, days: collect(), notes: notes.value.trim() })); toast('Template saved'); } catch (e) { toast(e.message); } } }),
-      v.plan.from_ai ? el('span', { class: 'none', style: 'padding:0', text: 'Started from the client’s AI plan. Change anything you like.' }) : null]);
-    ed.appendChild(tools);
-    var SL = v.slots, keys = Object.keys(SL), cells = [], tots = [];
-    var tbl = el('table', { class: 'ptbl' });
-    var hr = el('tr', {}, [el('th', { text: '' })]); keys.forEach(function (k) { hr.appendChild(el('th', { text: SL[k] })); }); hr.appendChild(el('th', { text: 'Day total', style: 'width:84px' }));
-    tbl.appendChild(el('thead', {}, [hr]));
-    var tb = el('tbody');
-    for (var i = 0; i < 7; i++) (function (i) {
-      var tr = el('tr', {}, [el('td', { class: 'dl' }, [el('div', { text: 'Day ' + (i + 1) }), i ? el('button', { class: 'cp', title: 'Copy Day ' + i + ' into Day ' + (i + 1), text: 'Copy Day ' + i, onclick: function () { keys.forEach(function (k) { cells[i][k].value = cells[i - 1][k].value; cells[i][k + '_k'].value = cells[i - 1][k + '_k'].value; }); sum(); } }) : null])]); cells[i] = {};
-      keys.forEach(function (k) {
-        var t = el('textarea', { rows: '2', maxlength: '300', placeholder: SL[k] });
-        var kc = el('input', { class: 'kc', type: 'number', min: '0', max: '3000', placeholder: 'kcal', 'aria-label': SL[k] + ' kcal, day ' + (i + 1) });
-        kc.addEventListener('input', sum);
-        cells[i][k] = t; cells[i][k + '_k'] = kc; tr.appendChild(el('td', { 'data-l': SL[k] }, [t, kc]));
-      });
-      tots[i] = el('td', { class: 'tot' }); tr.appendChild(tots[i]);
-      tb.appendChild(tr);
-    })(i);
-    tbl.appendChild(tb); ed.appendChild(tbl);
-    function fill(days) { for (var i = 0; i < 7; i++) keys.forEach(function (k) { var d = days[i] || {}; cells[i][k].value = d[k] || ''; cells[i][k + '_k'].value = d[k + '_k'] || ''; }); sum(); }
-    function collect() { return cells.map(function (c) { var o = {}; keys.forEach(function (k) { o[k] = c[k].value.trim(); var n = parseInt(c[k + '_k'].value, 10); if (n > 0) o[k + '_k'] = n; }); return o; }); }
-    function sum() { for (var i = 0; i < 7; i++) { var t = 0, any = false; keys.forEach(function (k) { var n = parseInt(cells[i][k + '_k'].value, 10); if (n > 0) { t += n; any = true; } });
-      tots[i].textContent = any ? t + ' kcal' : '—'; tots[i].className = 'tot' + (any && target ? (Math.abs(t - target) > target * 0.12 ? ' off' : ' ok') : ''); tots[i].title = target ? 'Target ' + target + ' kcal' : ''; } }
-    fill(v.plan.days);
-    var notes = el('textarea', { class: 'in', rows: '4', maxlength: '3000', placeholder: 'Notes & tips for the client: portions, water, what to avoid, swaps when eating out…' }); notes.value = v.plan.notes || '';
-    ed.appendChild(el('label', { style: 'display:block;font-weight:800;font-size:13px;margin:14px 0 6px', text: 'Notes for the client' })); ed.appendChild(notes);
-    var msg = el('span', { class: 'none', style: 'margin-right:auto' });
-    async function save(send) {
-      if (send && !confirm(v.status === 'plan_done' ? 'Send the updated plan to the client?' : 'Send this plan to ' + v.client.name + '? They will be notified.')) return;
-      try { await api('d_plan_save', { session_id: id, days: collect(), notes: notes.value.trim(), send: send }); msg.textContent = send ? 'Sent to the client ✓' : 'Draft saved ✓'; toast(send ? 'Plan sent' : 'Draft saved'); if (send) { v.status = 'plan_done'; poll(); } }
-      catch (e) { toast(e.message); }
+  function sh(title, linkText, onLink) { return el('div', { class: 'sh' }, [el('span', { class: 'sp', text: title }), linkText ? el('button', { class: 'lnk', text: linkText + ' →', onclick: onLink }) : null]); }
+  function onlineSwitch(cls) {
+    var me = S.data.me, sw = el('button', { class: 'sw' + (cls || '') + (me.online_flag ? ' on' : ''), role: 'switch', 'aria-checked': me.online_flag ? 'true' : 'false', 'aria-label': 'Online for live chats' });
+    sw.addEventListener('click', async function () { beep(); sw.classList.toggle('on'); await api('d_online', { online: !me.online_flag }).catch(function (e) { toast(e.message); }); poll(); });
+    return sw;
+  }
+  function queueItem(q) {
+    return el('div', { class: 'li hot' }, [ava(q.name), el('div', { class: 'sp' }, [el('b', { text: q.name }),
+      el('small', { text: (q.free ? 'Free chat' : 'Paid chat') + (q.care ? ' · dietO Care' : '') + (q.for_me ? ' · asked for you' : '') + (q.lang ? ' · ' + q.lang : '') + (q.files ? ' · ' + q.files + ' file' + (q.files > 1 ? 's' : '') : '') }),
+      q.topic ? el('small', { text: q.topic }) : null, q.reviewer ? el('span', { class: 'pill amber', style: 'display:inline-block;margin-top:5px', text: 'App Store / Play reviewer · reply quickly' }) : null]),
+      el('div', { class: 'end' }, [el('span', { text: 'waiting ' + mmss(q.waited) }), el('button', { class: 'btn sm', text: 'Accept', onclick: function () { accept(q.id); } })])]);
+  }
+
+  var SCREENS = {};
+  /* ---------- 1. Home ---------- */
+  SCREENS.home = function () {
+    var d = S.data, me = d.me, st = d.stats || {}, hr = new Date().getHours();
+    var greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+    var h = el('div', { class: 'hd' });
+    h.appendChild(el('div', { class: 'row' }, [el('div', { class: 'brand' }, [el('img', { src: '/Logo-light.png', alt: 'dietO', onerror: 'this.remove()' }), el('span', { class: 'tagp', text: 'Dietitian' })]),
+      el('button', { class: 'hb', 'aria-label': 'Plan requests', html: ic('plan'), onclick: function () { go('plans'); } }, (d.plans || []).length ? [el('span', { class: 'dot' })] : []),
+      el('button', { class: 'ava', style: 'border:0', 'aria-label': 'Profile', onclick: function () { STACK = [{ n: 'profile' }]; render(); } }, [inits(me.name)])]));
+    h.appendChild(el('h1', { style: 'margin-top:16px;font-size:22px;white-space:normal', text: greet + ', ' + (/^\s*dr\b/i.test(me.name) ? 'Dr. ' : '') + bare(me.name).split(' ')[0] }));
+    h.appendChild(el('p', { text: me.online_flag ? 'You’re online and available for live chats.' : 'You’re offline. Turn on Online to get live chats.' }));
+    h.appendChild(el('div', { class: 'onl' }, [el('span', {}, [el('span', { style: 'display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:' + (me.online_flag ? '#7CE08F' : '#9DB3A7') }), me.online_flag ? 'Online' : 'Offline']), onlineSwitch()]));
+    var b = page(h);
+    var today = d.upcoming.filter(function (u) { return sameDay(u.scheduled_at, d.now); });
+    b.appendChild(el('div', { class: 'stats' }, [[ 'chat', d.active.length, 'Active chats'], ['cal', today.length, 'Bookings today'], ['users', st.patients || 0, 'Total patients'], ['star', st.rating || '—', 'Your rating']]
+      .map(function (s) { return el('div', {}, [ico(s[0]), el('b', { text: String(s[1]) }), el('small', { text: s[2] })]); })));
+    if (d.queue.length) {
+      b.appendChild(el('div', { class: 'wait' }, [el('div', { style: 'flex:1' }, [el('b', { text: d.queue.length + (d.queue.length === 1 ? ' patient' : ' patients') + ' waiting to chat' }), el('p', { text: 'Start a consultation now.' }),
+        el('button', { class: 'btn deep sm', html: 'View queue ' + ic('chev'), onclick: function () { S.chip.chats = 'waiting'; STACK = [{ n: 'chats' }]; render(); } })]), ico('users', 'big')]));
+    } else b.appendChild(el('div', { class: 'wait calm' }, [el('div', { style: 'flex:1' }, [el('b', { text: 'No one waiting right now' }), el('p', { style: 'margin:2px 0 0', text: me.online_flag ? 'New chats will beep and show here.' : 'Turn on Online above to receive live chats.' })])]));
+    d.active.forEach(function (a) { b.appendChild(el('button', { class: 'li', style: 'margin-top:10px', onclick: function () { openChat(a.id); } }, [ava(a.name, 1), el('div', { class: 'sp' }, [el('b', { text: a.name }), el('small', { text: 'Live chat · ' + mmss(a.remaining) + ' left' })]), el('span', { class: 'pill', text: 'Active' })])); });
+    if ((d.plans || []).length) {
+      var mine = d.plans.filter(function (p) { return p.mine; }).length;
+      b.appendChild(el('button', { class: 'li', style: 'margin-top:10px', onclick: function () { go('plans'); } }, [el('div', { class: 'ava', html: ic('plan') }), el('div', { class: 'sp' }, [el('b', { text: d.plans.length + ' diet plan request' + (d.plans.length > 1 ? 's' : '') }), el('small', { text: mine ? mine + ' assigned to you' : 'Open one to start the plan' })]), ico('chev')]));
     }
-    ed.appendChild(el('div', { class: 'acts' }, [msg, el('button', { class: 'btn ghost', text: 'Save draft', onclick: function () { save(false); } }),
-      el('button', { class: 'btn', text: v.status === 'plan_done' ? 'Send update' : 'Send plan to client', onclick: function () { save(true); } })]));
-    // right: messages with the client + history
-    side.appendChild(el('h4', { text: 'Messages with ' + v.client.name }));
-    var thread = el('div', { class: 'pthread' }); side.appendChild(thread);
-    var pmsg = el('textarea', { class: 'in', rows: '2', maxlength: '2000', placeholder: 'Ask a question before you write the plan…', style: 'margin-top:8px' });
-    var pseen = {}, plast = 0;
-    function addMsgs(list) { list.forEach(function (m) { plast = Math.max(plast, m.id); if (pseen[m.id]) return; pseen[m.id] = 1; thread.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null])); }); thread.scrollTop = thread.scrollHeight; }
-    addMsgs(v.messages || []);
-    side.appendChild(pmsg);
-    side.appendChild(el('button', { class: 'btn sm', style: 'margin-top:6px', html: ic('send') + ' Send', onclick: async function () { var t = pmsg.value.trim(); if (!t) return; try { await api('d_send', { session_id: id, text: t }); pmsg.value = ''; pp(); } catch (e) { toast(e.message); } } }));
-    async function pp() { clearTimeout(PLAN_T); if (PSEL !== id) return; try { var r = await api('d_poll', { session_id: id, after: plast }); addMsgs(r.messages); } catch (e) {} PLAN_T = setTimeout(pp, document.hidden ? 30000 : 8000); }
-    PLAN_T = setTimeout(pp, 8000);
-    historyPanel(side, v.history, id);
+    b.appendChild(sh(today.length ? 'Today’s bookings' : 'Next bookings', d.upcoming.length ? 'See all' : '', function () { STACK = [{ n: 'bookings' }]; render(); }));
+    var list = (today.length ? today : d.upcoming).slice(0, 3);
+    if (!list.length) b.appendChild(el('div', { class: 'card none', text: 'No bookings yet. Add open times so clients can book you.' }));
+    list.forEach(function (u) { b.appendChild(bookingItem(u)); });
+    b.appendChild(sh('Quick actions'));
+    b.appendChild(el('div', { class: 'qa' }, [['plan', 'Diet plans', function () { go('plans'); }, (d.plans || []).length], ['cal', 'Manage availability', function () { go('availability'); }], ['chart', 'View earnings', function () { go('earnings'); }], ['hist', 'Chat history', function () { go('history'); }]]
+      .map(function (q) { return el('button', { onclick: q[2] }, [ico(q[0]), el('span', { text: q[1] }), q[3] ? el('span', { class: 'badge', text: String(q[3]) }) : null]); })));
+  };
+  function bookingItem(u) {
+    var d = S.data, soon = u.scheduled_at - d.now <= 600;
+    return el('div', { class: 'li' + (soon ? ' hot' : '') }, [ava(u.name), el('div', { class: 'sp' }, [el('b', { text: u.name }), el('small', { text: u.topic || 'Booked chat' }), el('small', { html: ic('cal') + ' ' + fmtWhen(u.scheduled_at) })]),
+      soon ? el('button', { class: 'btn sm', text: 'Start', onclick: function () { accept(u.id); } }) : el('span', { class: 'pill', text: 'Upcoming' })]);
   }
-  var PLAN_T = null;
-  function sideSlots(d) {
-    var card = el('div', { class: 'card' }); S.side.appendChild(card);
+
+  /* ---------- 2. Chats list ---------- */
+  SCREENS.chats = function () {
+    var d = S.data, f = S.chip.chats || 'all';
+    var h = el('div', { class: 'hd' }, [el('div', { class: 'row' }, [el('h1', { style: 'font-size:22px', text: 'Chats' }), el('span', { style: 'font-size:13px;font-weight:700;color:#CFE3D7', text: d.me.online_flag ? 'Online' : 'Offline' }), onlineSwitch()]),
+      el('p', { text: 'Consult with your patients, share plans and track progress.' })]);
+    var b = page(h);
+    b.appendChild(chips('chats', [['all', 'All'], ['active', 'Active (' + d.active.length + ')'], ['waiting', 'Waiting (' + d.queue.length + ')'], ['done', 'Completed']]));
+    var any = false;
+    if (f === 'all' || f === 'waiting') d.queue.forEach(function (q) { any = true; b.appendChild(queueItem(q)); });
+    if (f === 'all' || f === 'active') d.active.forEach(function (a) { any = true; b.appendChild(el('button', { class: 'li', onclick: function () { openChat(a.id); } }, [ava(a.name, 1), el('div', { class: 'sp' }, [el('b', { text: a.name }), el('small', { text: 'Live chat in progress' })]), el('div', { class: 'end' }, [el('span', { text: mmss(a.remaining) + ' left' }), el('span', { class: 'pill', text: 'Active' })])])); });
+    if (f === 'all' || f === 'done') {
+      if (!HIST) { loadHist(); if (f === 'done') b.appendChild(el('div', { class: 'none', text: 'Loading…' })); }
+      else HIST.filter(function (r) { return r.status !== 'active' && r.mode !== 'plan'; }).slice(0, f === 'all' ? 8 : 60).forEach(function (r) { any = true; b.appendChild(histItem(r)); });
+    }
+    if (!any && HIST) b.appendChild(el('div', { class: 'empty', text: f === 'waiting' ? (d.me.online_flag ? 'No one waiting. New chats will beep.' : 'You’re offline. Turn on Online to get live chats.') : 'Nothing here yet.' }));
+  };
+  async function loadHist() { try { HIST = (await api('d_history')).history; } catch (e) { HIST = []; } if (LIVE[top().n] || top().n === 'history') render(); }
+  function histItem(r) {
+    var free = +r.is_free === 1 || !+r.earned;
+    return el('button', { class: 'li', onclick: function () { openChat(+r.id); } }, [ava(r.client_name), el('div', { class: 'sp' }, [el('b', { text: r.client_name }), el('small', { text: r.topic || (r.mode === 'slot' ? 'Booked chat' : 'Live chat') }),
+      el('small', { html: ic('cal') + ' ' + (r.started_at ? fmtDay(+r.started_at) : '') + ' · ' + r.minutes + ' min' })]),
+      el('div', { class: 'end' }, [el('span', { class: 'pill ' + (r.status === 'refunded' ? 'red' : free ? 'grey' : ''), text: r.status === 'refunded' ? 'Refunded' : free ? 'Free' : 'Paid' }), el('b', { style: 'color:var(--ink);font-size:14px', text: free ? '' : rs(r.earned) }), r.rating ? el('span', { text: '★ ' + r.rating }) : null])]);
+  }
+
+  /* ---------- 13. Chat history ---------- */
+  SCREENS.history = function () {
+    var b = page(hdr('Chat History'));
+    if (!HIST) { b.appendChild(el('div', { class: 'none', text: 'Loading…' })); loadHist(); return; }
+    var f = S.chip.hist || 'all', t0 = new Date(); t0.setDate(1); t0.setHours(0, 0, 0, 0); var m0 = t0.getTime() / 1000;
+    var chats = HIST.filter(function (r) { return r.mode !== 'plan'; }), month = chats.filter(function (r) { return +r.started_at >= m0; });
+    b.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'Chat summary (this month)' }), el('div', { class: 'stats s3', style: 'margin:0' }, [['chat', month.length, 'Total chats'], ['check', month.filter(function (r) { return r.status === 'ended'; }).length, 'Completed'], ['wallet', rs(month.reduce(function (a, r) { return a + (+r.earned || 0); }, 0)), 'Earned']]
+      .map(function (s) { return el('div', { style: 'box-shadow:none;background:var(--bg)' }, [ico(s[0]), el('b', { text: String(s[1]) }), el('small', { text: s[2] })]); }))]));
+    b.appendChild(chips('hist', [['all', 'All'], ['done', 'Completed'], ['paid', 'Paid'], ['free', 'Free'], ['ref', 'Refunded']]));
+    var list = chats.filter(function (r) { var free = +r.is_free === 1 || !+r.earned; return f === 'all' || (f === 'done' && r.status === 'ended') || (f === 'paid' && !free) || (f === 'free' && free) || (f === 'ref' && r.status === 'refunded'); });
+    if (!list.length) b.appendChild(el('div', { class: 'empty', text: 'No chats here yet.' }));
+    list.forEach(function (r) { b.appendChild(histItem(r)); });
+  };
+
+  /* ---------- 15. Bookings + 16. Availability ---------- */
+  SCREENS.bookings = function () {
+    var d = S.data, f = S.chip.book || 'up';
+    var h = el('div', { class: 'hd' }, [el('div', { class: 'row' }, [el('h1', { style: 'font-size:22px', text: 'Bookings' })]), el('p', { text: 'Booked chats and the times clients can book you.' })]);
+    var b = page(h);
+    b.appendChild(el('button', { class: 'li', style: 'background:var(--mint)', onclick: function () { go('availability'); } }, [el('div', { class: 'ava', style: 'background:#fff', html: ic('cal') }), el('div', { class: 'sp' }, [el('b', { text: 'Manage availability' }), el('small', { text: 'Add or remove times clients can book' })]), el('span', { class: 'btn sm deep', text: 'Open' })]));
+    var open = d.slots.filter(function (s) { return s.status === 'open' && s.starts_at > d.now; }).length;
+    var today = d.upcoming.filter(function (u) { return sameDay(u.scheduled_at, d.now); });
+    b.appendChild(el('div', { class: 'stats s3', style: 'margin-top:4px' }, [['cal', d.upcoming.length, 'Upcoming'], ['clock', today.length, 'Today'], ['plus', open, 'Open times']].map(function (s) { return el('div', {}, [ico(s[0]), el('b', { text: String(s[1]) }), el('small', { text: s[2] })]); })));
+    b.appendChild(chips('book', [['up', 'Upcoming'], ['today', 'Today'], ['done', 'Completed']]));
+    if (f === 'done') {
+      if (!HIST) { loadHist(); b.appendChild(el('div', { class: 'none', text: 'Loading…' })); return; }
+      var done = HIST.filter(function (r) { return r.mode === 'slot' && r.status !== 'active'; });
+      if (!done.length) b.appendChild(el('div', { class: 'empty', text: 'No completed bookings yet.' }));
+      done.forEach(function (r) { b.appendChild(histItem(r)); });
+      return;
+    }
+    var list = f === 'today' ? today : d.upcoming;
+    if (!list.length) b.appendChild(el('div', { class: 'empty', text: open ? 'No bookings yet. Clients can book your ' + open + ' open time' + (open > 1 ? 's' : '') + '.' : 'No bookings yet. Add open times so clients can book you.' }));
+    list.forEach(function (u) { b.appendChild(bookingItem(u)); });
+    b.appendChild(el('div', { class: 'note', style: 'margin-top:6px' }, [ico('bulb'), el('span', { text: 'You can start a booked chat from 10 minutes before its time. Each session is ' + d.slot_minutes + ' minutes.' })]));
+  };
+  SCREENS.availability = function () {
+    var d = S.data, b = page(hdr('Manage Availability'));
+    var card = el('div', { class: 'card' }); b.appendChild(card);
     var t0 = new Date(Date.now() + 86400000); t0.setMinutes(0, 0, 0); t0.setHours(10);
     var pad = function (n) { return String(n).padStart(2, '0'); };
     var date = el('input', { class: 'in', type: 'date', value: t0.getFullYear() + '-' + pad(t0.getMonth() + 1) + '-' + pad(t0.getDate()) });
     var time = el('input', { class: 'in', type: 'time', value: '10:00', step: '300' });
     var count = el('select', { class: 'in' }); [1, 2, 3, 4, 6, 8, 12, 16].forEach(function (n) { count.appendChild(el('option', { value: String(n), text: n + (n === 1 ? ' slot' : ' slots') })); });
-    var gap = el('select', { class: 'in' }); [10, 15, 20, 30, 45, 60].forEach(function (n) { gap.appendChild(el('option', { value: String(n), text: 'every ' + n + ' min' })); }); gap.value = '15';
-    card.appendChild(el('b', { text: 'Add open times' }));
-    card.appendChild(el('p', { style: 'margin:4px 0 0;color:var(--mute);font-size:13px', text: 'Each booked chat is ' + d.slot_minutes + ' minutes. Clients see these times and book them.' }));
+    var gap = el('select', { class: 'in' }); [10, 15, 20, 30, 45, 60].forEach(function (n) { gap.appendChild(el('option', { value: String(n), text: 'Every ' + n + ' min' })); }); gap.value = '15';
+    card.appendChild(el('h3', { html: ic('cal') + ' Add open times' }));
+    card.appendChild(el('p', { class: 'none', style: 'margin:-6px 0 0;padding:0', text: 'Each booked chat is ' + d.slot_minutes + ' minutes. Clients see these times and book them.' }));
     card.appendChild(el('div', { class: 'grid2' }, [el('div', {}, [el('label', { class: 'f', text: 'Date' }), date]), el('div', {}, [el('label', { class: 'f', text: 'Start time' }), time])]));
     card.appendChild(el('div', { class: 'grid2' }, [el('div', {}, [el('label', { class: 'f', text: 'How many' }), count]), el('div', {}, [el('label', { class: 'f', text: 'Spacing' }), gap])]));
-    card.appendChild(el('button', { class: 'btn', style: 'width:100%;margin-top:12px', html: ic('plus') + ' Add times', onclick: async function () {
+    card.appendChild(el('button', { class: 'btn deep wide', style: 'margin-top:16px', html: ic('plus') + ' Add times', onclick: async function () {
       var ts = Math.floor(new Date(date.value + 'T' + time.value).getTime() / 1000);
-      try { var r = await api('d_slot_add', { starts_at: ts, count: +count.value, gap_minutes: +gap.value }); toast(r.added + ' time' + (r.added === 1 ? '' : 's') + ' added'); await poll(); draw(true); } catch (e) { toast(e.message); }
+      try { var r = await api('d_slot_add', { starts_at: ts, count: +count.value, gap_minutes: +gap.value }); toast(r.added + ' time' + (r.added === 1 ? '' : 's') + ' added'); await poll(); render(); } catch (e) { toast(e.message); }
     } }));
-    var list = el('div', { class: 'card' }); S.side.appendChild(list);
-    list.appendChild(el('b', { text: 'Your upcoming times' }));
     var up = d.slots.filter(function (s) { return s.starts_at > d.now - 600; });
+    var list = el('div', { class: 'card' }, [el('h3', { html: ic('clock') + ' Your upcoming times (' + up.length + ')' })]); b.appendChild(list);
     if (!up.length) list.appendChild(el('div', { class: 'none', text: 'No times added yet.' }));
     var lastDay = '';
     up.forEach(function (s) {
       var day = new Date(s.starts_at * 1000).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-      if (day !== lastDay) { lastDay = day; list.appendChild(el('div', { style: 'margin:12px 0 2px;font-weight:800;font-size:12.5px;color:var(--g700)', text: day })); }
-      list.appendChild(el('div', { class: 'slot' }, [el('span', { text: fmtTime(s.starts_at) }),
-        s.status === 'open' ? el('button', { class: 'btn sm ghost', html: ic('x') + ' Remove', onclick: async function () { await api('d_slot_del', { slot_id: s.id }).catch(function () {}); await poll(); draw(true); } })
+      if (day !== lastDay) { lastDay = day; list.appendChild(el('div', { class: 'dayh', text: day })); }
+      list.appendChild(el('div', { class: 'slot' }, [ico('clock'), el('span', { class: 'sp', text: fmtTime(s.starts_at) }),
+        s.status === 'open' ? el('button', { class: 'x', 'aria-label': 'Remove ' + fmtTime(s.starts_at), html: ic('x'), onclick: async function () { await api('d_slot_del', { slot_id: s.id }).catch(function () {}); await poll(); render(); } })
           : el('span', { class: 'pill' + (s.status === 'held' ? ' amber' : ''), text: s.status === 'held' ? 'Being paid' : 'Booked' })]));
     });
-  }
-  async function sideHistory() {
-    var card = el('div', { class: 'card' }); S.side.appendChild(card);
-    card.appendChild(el('b', { text: 'Past chats' }));
-    var box = el('div', { text: 'Loading…', class: 'none' }); card.appendChild(box);
-    try {
-      var h = (await api('d_history')).history; box.innerHTML = '';
-      if (!h.length) box.textContent = 'No chats yet.';
-      h.forEach(function (r) {
-        box.appendChild(el('div', { class: 'hist' }, [el('b', { text: r.client_name }), ' · ', r.minutes + ' min · ', el('b', { text: rs(r.earned) }),
-          el('div', { style: 'color:var(--mute)', text: (r.started_at ? fmtWhen(+r.started_at) : '') + ' · ' + r.status + (r.rating ? ' · ' + '★'.repeat(+r.rating) : '') })]));
-      });
-    } catch (e) { box.textContent = e.message; }
-  }
-  function sideAccount(d) {
-    var card = el('div', { class: 'card' }); S.side.appendChild(card);
-    card.appendChild(el('div', { class: 'kv' }, [el('span', { text: 'Name' }), el('b', { text: d.me.name }), el('span', { text: 'Email' }), el('b', { text: d.me.email }),
-      el('span', { text: 'Your share' }), el('b', { text: d.me.share_pct + '%' }), el('span', { text: 'Total earned' }), el('b', { text: rs(d.earnings.total) }), el('span', { text: 'To be paid' }), el('b', { text: rs(d.earnings.unpaid) })]));
-    var pc = el('div', { class: 'card' }); S.side.appendChild(pc);
-    pc.appendChild(el('b', { text: 'Your profile and payouts' }));
-    var me = d.me, fUpi = el('input', { class: 'in', placeholder: 'name@okaxis', value: me.upi || '' }), fSp = el('input', { class: 'in', placeholder: 'PCOS, Diabetes, Weight loss', value: me.specialties || '' }),
-      fLg = el('input', { class: 'in', placeholder: 'English, Kannada, Tulu', value: me.langs || '' }), fYr = el('input', { class: 'in', type: 'number', min: '0', max: '60', value: me.years || '' }), fBio = el('textarea', { class: 'in', rows: '3', maxlength: '600' }); fBio.value = me.bio || '';
-    [['UPI ID for payouts', fUpi], ['Helps with', fSp], ['Languages you speak', fLg], ['Years of experience', fYr], ['Short bio (clients see it)', fBio]].forEach(function (r) { pc.appendChild(el('label', { class: 'f', text: r[0] })); pc.appendChild(r[1]); });
-    pc.appendChild(el('button', { class: 'btn', style: 'margin-top:10px', text: 'Save profile', onclick: async function () { try { await api('d_profile', { upi: fUpi.value.trim(), specialties: fSp.value.trim(), langs: fLg.value.trim(), years: +fYr.value || 0, bio: fBio.value.trim() }); toast('Profile saved'); poll(); } catch (e) { toast(e.message); } } }));
-    pc.appendChild(el('p', { class: 'none', style: 'margin:8px 0 0', text: me.verified ? 'Your profile shows “Verified by dietO”.' : 'dietO verifies your degree and registration, then your profile shows a Verified badge.' }));
-    var c2 = el('div', { class: 'card' }); S.side.appendChild(c2);
-    var cur = el('input', { class: 'in', type: 'password', placeholder: 'Current password', autocomplete: 'current-password' });
-    var nw = el('input', { class: 'in', type: 'password', placeholder: 'New password (8+ characters)', autocomplete: 'new-password', style: 'margin-top:8px' });
-    c2.appendChild(el('b', { text: 'Change password' })); c2.appendChild(el('div', { style: 'height:8px' })); c2.appendChild(cur); c2.appendChild(nw);
-    c2.appendChild(el('button', { class: 'btn', style: 'margin-top:10px', text: 'Update password', onclick: async function () { try { await api('d_password', { current: cur.value, new: nw.value }); toast('Password updated'); cur.value = nw.value = ''; } catch (e) { toast(e.message); } } }));
-  }
+    b.appendChild(el('div', { class: 'note' }, [ico('bulb'), el('span', { text: 'Patients can only book the times you add here. Booked times can’t be removed.' })]));
+  };
 
-  /* ---------- client history, alerts, private note ---------- */
-  function alertBox(parent, h, insert) {
-    if (!h || !h.alerts || !h.alerts.length) return;
-    var t = 'Since you mentioned ' + h.alerts.join(' and ') + ', please also check these diet changes with your doctor. I’ll keep my advice safe for you, but your doctor knows your full medical history.';
-    parent.appendChild(el('div', { class: 'redflag' }, [el('span', { html: '<svg class="i" viewBox="0 0 24 24"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg>' }),
-      el('span', { class: 'sp' }, [el('b', { text: 'Client mentioned ' + h.alerts.join(', ') + '.' }), ' Diet changes may need their doctor’s advice too.']),
-      el('button', { class: 'btn sm', style: 'background:#A12D20', text: 'Add doctor note', onclick: function () { insert(t); } })]));
-  }
-  function historyPanel(prof, h, sid) {
-    if (!h) return;
-    var tags = [];
-    if (h.care) tags.push(el('span', { class: 'pill', text: 'dietO Care' }));
-    if (h.lang) tags.push(el('span', { class: 'pill amber', text: 'Prefers ' + h.lang }));
-    if (tags.length) prof.appendChild(el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin:10px 0' }, tags));
-    if (h.progress && h.progress.weights && h.progress.weights.length) {
-      var w = h.progress.weights, last = w[w.length - 1], st = h.progress.start_kg != null ? h.progress.start_kg : w[0].kg, ch = Math.round((last.kg - st) * 10) / 10;
-      prof.appendChild(el('h4', { style: 'margin-top:14px', text: 'Progress' }));
-      prof.appendChild(el('div', { class: 'topic' }, [el('b', { text: last.kg + ' kg' }), ' now · ', el('b', { style: 'color:' + (ch <= 0 ? '#146C43' : '#A12D20'), text: (ch > 0 ? '+' : '') + ch + ' kg' }), ' since start' + (h.progress.water_avg != null ? ' · water ' + h.progress.water_avg + ' glasses a day' : '')]));
-    }
-    if (h.photos && h.photos.length) {
-      prof.appendChild(el('h4', { style: 'margin-top:14px', text: 'Meal photos' }));
-      var g = el('div', { class: 'files' }); h.photos.forEach(function (f) { g.appendChild(el('a', { href: API_DIR + f.url, target: '_blank', rel: 'noopener', title: f.name + ' · ' + fmtWhen(f.at) }, [el('img', { src: API_DIR + f.url, alt: f.name })])); }); prof.appendChild(g);
-    }
-    prof.appendChild(el('h4', { style: 'margin-top:14px', text: 'Earlier with dietO' }));
-    if (!h.past.length) prof.appendChild(el('div', { class: 'none', text: 'First time with dietO.' }));
-    var tl = el('div', { class: 'tl' }); prof.appendChild(tl);
-    h.past.slice(0, 8).forEach(function (p) {
-      var what = p.mode === 'plan' ? (p.plan_sent ? '7-day plan sent' : 'Plan requested') : (p.free ? 'Free chat' : 'Chat') + ' · ' + p.minutes + ' min';
-      tl.appendChild(el('div', {}, [el('b', { text: what }), el('small', { text: new Date(p.at * 1000).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + (p.dietician ? ' · ' + p.dietician : '') + (p.files ? ' · ' + p.files + ' file' + (p.files > 1 ? 's' : '') : '') + (p.rating ? ' · ' + '★'.repeat(p.rating) : '') + (p.status === 'refunded' ? ' · refunded' : '') })]));
-    });
-    prof.appendChild(el('h4', { style: 'margin-top:14px', text: 'Your private note' }));
-    var note = el('textarea', { class: 'in pnote', rows: '3', maxlength: '2000', placeholder: 'Only you see this. e.g. skips breakfast, likes neer dosa, follow up on sugar.' }); note.value = h.note || '';
-    var nt = null; note.addEventListener('input', function () { clearTimeout(nt); nt = setTimeout(function () { api('d_note', { session_id: sid, note: note.value }).then(function () { note.style.borderColor = '#146C43'; setTimeout(function () { note.style.borderColor = ''; }, 800); }).catch(function (e) { toast(e.message); }); }, 700); });
-    prof.appendChild(note);
-  }
+  /* ---------- 12. Profile & settings ---------- */
+  SCREENS.profile = function () {
+    var d = S.data, me = d.me, st = d.stats || {};
+    var h = el('div', { class: 'hd' }, [el('div', { class: 'row' }, [el('h1', { style: 'font-size:22px', text: 'Profile & Settings' })])]);
+    var b = page(h);
+    b.appendChild(el('div', { class: 'card', style: 'display:flex;gap:14px;align-items:center' }, [el('div', { class: 'ava', style: 'width:64px;height:64px;font-size:22px' }, [me.photo ? el('img', { src: me.photo, alt: '' }) : inits(me.name)]),
+      el('div', { style: 'flex:1;min-width:0' }, [el('b', { style: 'font-size:17px;display:block', text: me.name }), el('small', { style: 'color:var(--mute);display:block', text: me.title || 'Dietitian' }), el('small', { style: 'color:var(--mute)', text: (st.rating ? '★ ' + st.rating + ' (' + st.ratings + ' reviews) · ' : '') + me.email })])]));
+    b.appendChild(el('div', { class: 'stats s3' }, [['user', (me.years || 0) + ' yrs', 'Experience'], ['users', st.patients || 0, 'Patients'], ['wallet', rs(d.earnings.total), 'Total earned']].map(function (s) { return el('div', {}, [ico(s[0]), el('b', { text: String(s[1]) }), el('small', { text: s[2] })]); })));
+    b.appendChild(el('div', { class: 'note', style: me.verified ? '' : 'background:#FFF8E6' }, [ico('shield'), el('span', { text: me.verified ? 'Your profile is verified. Patients see “Verified by dietO”.' : 'dietO verifies your degree and registration, then your profile shows a Verified badge.' })]));
+    function row(i, t, s, fn) { return el('button', { class: 'r', onclick: fn }, [ico(i), el('div', { class: 'sp' }, [el('b', { text: t }), s ? el('small', { text: s }) : null]), ico('chev')]); }
+    b.appendChild(el('div', { class: 'card rows' }, [row('user', 'Professional information', me.specialties || 'Helps with, languages, bio', function () { go('editprof'); }),
+      row('wallet', 'Earnings & payouts', 'To be paid ' + rs(d.earnings.unpaid) + (me.upi ? ' · UPI ' + me.upi : ''), function () { go('earnings'); }),
+      row('plan', 'Diet plan requests', (d.plans || []).length ? d.plans.length + ' open' : 'None right now', function () { go('plans'); }),
+      row('cal', 'Availability', 'Times clients can book', function () { go('availability'); }),
+      row('hist', 'Chat history', 'Past chats and earnings', function () { go('history'); })]));
+    b.appendChild(el('div', { class: 'card rows' }, [row('lock', 'Change password', '', function () { go('password'); }),
+      row('help', 'Help & support', 'health@dieto.health · +91 96067 93199', function () { location.href = 'mailto:health@dieto.health'; }),
+      row('doc', 'Terms & privacy', 'Terms, privacy and refunds', function () { var u = '/legal/terms.html'; if (DietoAuth.native && window.Capacitor && Capacitor.Plugins.Browser) Capacitor.Plugins.Browser.open({ url: 'https://dieto.health' + u }); else window.open(u, '_blank'); })]));
+    b.appendChild(el('button', { class: 'btn ghost wide', style: 'color:var(--red)', html: ic('out') + ' Log out', onclick: function () { if (confirm('Log out? You will go offline.')) signOut(); } }));
+  };
+  SCREENS.editprof = function () {
+    var me = S.data.me, b = page(hdr('Professional information')), pc = el('div', { class: 'card' }); b.appendChild(pc);
+    var fUpi = el('input', { class: 'in', placeholder: 'name@okaxis', value: me.upi || '' }), fSp = el('input', { class: 'in', placeholder: 'PCOS, Diabetes, Weight loss', value: me.specialties || '' }),
+      fLg = el('input', { class: 'in', placeholder: 'English, Kannada, Tulu', value: me.langs || '' }), fYr = el('input', { class: 'in', type: 'number', min: '0', max: '60', value: me.years || '' }), fBio = el('textarea', { class: 'in', rows: '4', maxlength: '600' }); fBio.value = me.bio || '';
+    [['Helps with', fSp], ['Languages you speak', fLg], ['Years of experience', fYr], ['Short bio (clients see it)', fBio], ['UPI ID for payouts', fUpi]].forEach(function (r) { pc.appendChild(el('label', { class: 'f', text: r[0] })); pc.appendChild(r[1]); });
+    pc.appendChild(el('button', { class: 'btn wide', style: 'margin-top:16px', text: 'Save', onclick: async function () { try { await api('d_profile', { upi: fUpi.value.trim(), specialties: fSp.value.trim(), langs: fLg.value.trim(), years: +fYr.value || 0, bio: fBio.value.trim() }); toast('Profile saved'); await poll(); back(); } catch (e) { toast(e.message); } } }));
+  };
+  SCREENS.password = function () {
+    var b = page(hdr('Change password')), c2 = el('div', { class: 'card' }); b.appendChild(c2);
+    var cur = el('input', { class: 'in', type: 'password', autocomplete: 'current-password' }), nw = el('input', { class: 'in', type: 'password', autocomplete: 'new-password' });
+    c2.appendChild(el('label', { class: 'f', text: 'Current password' })); c2.appendChild(cur); c2.appendChild(el('label', { class: 'f', text: 'New password (8+ characters)' })); c2.appendChild(nw);
+    c2.appendChild(el('button', { class: 'btn wide', style: 'margin-top:16px', text: 'Update password', onclick: async function () { try { await api('d_password', { current: cur.value, new: nw.value }); toast('Password updated'); back(); } catch (e) { toast(e.message); } } }));
+  };
 
-  /* ---------- quick replies (saved per dietician) ---------- */
-  var QR = null, QTOPIC = 'All';
-  async function quickBar(box, ta) {
-    if (!QR) { try { QR = (await api('d_quick')).replies; } catch (e) { QR = []; } }
-    box.innerHTML = '';
-    var topics = ['All'].concat(QR.map(function (r) { return r.topic; }).filter(function (t, i, a) { return a.indexOf(t) === i; }));
-    var sel = el('select', { class: 'qsel', 'aria-label': 'Topic' }); topics.forEach(function (t) { sel.appendChild(el('option', { value: t, text: t })); }); sel.value = topics.indexOf(QTOPIC) >= 0 ? QTOPIC : 'All';
-    sel.onchange = function () { QTOPIC = sel.value; quickBar(box, ta); };
-    box.appendChild(sel);
-    QR.filter(function (r) { return QTOPIC === 'All' || r.topic === QTOPIC; }).forEach(function (r) {
-      var b = el('button', { text: r.text.length > 38 ? r.text.slice(0, 36) + '…' : r.text, title: r.text + '\n(right-click to delete)', onclick: function () { ta.value = (ta.value ? ta.value.trim() + ' ' : '') + r.text; ta.focus(); ta.dispatchEvent(new Event('input')); } });
-      b.addEventListener('contextmenu', async function (e) { e.preventDefault(); if (!confirm('Delete this quick reply?\n\n' + r.text)) return; QR = (await api('d_quick', { action: 'del', id: r.id })).replies; quickBar(box, ta); });
-      box.appendChild(b);
-    });
-    box.appendChild(el('button', { class: 'qadd', text: '+ Save reply', title: 'Save what’s in the reply box as a quick reply', onclick: async function () {
-      var t = ta.value.trim(); if (t.length < 3) return toast('Type the reply in the box first, then tap Save reply.');
-      var tp = prompt('Topic for this reply (e.g. PCOS, Diabetes, General)', QTOPIC !== 'All' ? QTOPIC : 'General'); if (tp === null) return;
-      try { QR = (await api('d_quick', { action: 'add', topic: tp.trim() || 'General', text: t })).replies; toast('Quick reply saved'); quickBar(box, ta); } catch (e) { toast(e.message); }
-    } }));
-  }
-
-  /* ---------- earnings and shifts (main panel) ---------- */
+  /* ---------- 10–11. Earnings & payouts ---------- */
   var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], PARTS = [['m', 'Morning', '6–12'], ['a', 'Afternoon', '12–5'], ['e', 'Evening', '5–11']];
-  async function mainEarnings() {
-    clearTimeout(CHAT_T); clearInterval(TICK); SEL = 0; CH = null; PSEL = 0;
-    S.layout.classList.add('chatting'); S.main.innerHTML = '';
-    var pg = el('div', { class: 'earnpg' }); S.main.appendChild(pg);
-    pg.appendChild(el('button', { class: 'btn sm ghost mobback', text: '← Back', onclick: function () { S.layout.classList.remove('chatting'); TAB = 'chats'; S.main.innerHTML = ''; draw(true); } }));
-    pg.appendChild(el('div', { class: 'none', text: 'Loading…' }));
-    var e, sh; try { var r = await Promise.all([api('d_earnings'), api('d_shifts')]); e = r[0]; sh = r[1]; } catch (x) { pg.lastChild.textContent = x.message; return; }
-    pg.lastChild.remove();
+  SCREENS.earnings = async function () {
+    var b = page(hdr('Earnings & Payouts'));
+    b.appendChild(el('div', { class: 'none', text: 'Loading…' }));
+    var e, sh_; try { var r = await Promise.all([api('d_earnings'), api('d_shifts')]); e = r[0]; sh_ = r[1]; } catch (x) { b.lastChild.textContent = x.message; return; }
+    if (top().n !== 'earnings') return;
+    b.innerHTML = '';
     var avail = Math.max(0, e.unpaid - e.requested);
-    var hero = el('div', { class: 'ehero' }, [el('div', { class: 'sp' }, [el('small', { text: 'READY TO WITHDRAW' }), el('b', { text: rs(avail) }), el('span', { text: e.upi ? 'Paid to UPI ' + e.upi : 'Tap Request payout to add your UPI ID' })])]);
-    var reqb = el('button', { class: 'btn lime', text: 'Request payout', onclick: async function () {
-      if (!e.upi) {   // no UPI yet: ask for it right here instead of sending them to Account
-        var u = (prompt('Your UPI ID for payouts (e.g. name@okaxis):') || '').trim(); if (!u) return;
-        try { await api('d_profile', { upi: u }); e.upi = u; } catch (x) { toast(x.message); return; }
-      }
+    b.appendChild(el('div', { class: 'hero' }, [el('small', { text: 'Available balance' }), el('b', { text: rs(avail) }), el('span', { text: e.upi ? 'Paid to UPI ' + e.upi : 'Add your UPI ID when you request a payout' })]));
+    var reqb = el('button', { class: 'btn deep wide', html: ic('bank') + ' Request payout', onclick: async function () {
+      if (!e.upi) { var u = (prompt('Your UPI ID for payouts (e.g. name@okaxis):') || '').trim(); if (!u) return; try { await api('d_profile', { upi: u }); e.upi = u; } catch (x) { toast(x.message); return; } }
       if (!confirm('Request ' + rs(avail) + ' to UPI ' + e.upi + '?')) return;
-      reqb.disabled = true; reqb.textContent = 'Requesting…';
-      try { await api('d_payout'); toast('Payout requested'); mainEarnings(); } catch (x) { toast(x.message); reqb.disabled = false; reqb.textContent = 'Request payout'; } } });
-    if (avail < e.payout_min) { reqb.disabled = true; reqb.title = 'From ₹' + e.payout_min; }
-    hero.appendChild(el('div', { style: 'text-align:right' }, [reqb, el('div', { style: 'font-size:12px;color:#CFE3D7;margin-top:6px', text: e.requested ? rs(e.requested) + ' requested, on its way' : 'Minimum ₹' + e.payout_min }) ]));
-    pg.appendChild(hero);
-    pg.appendChild(el('div', { class: 'estats' }, [['This week', rs(e.week)], ['Paid chats this week', String(e.paid_chats_week)], ['Free → paid', e.free_to_paid == null ? '—' : e.free_to_paid + '%'], ['Rating', e.rating ? '★ ' + e.rating + ' (' + e.ratings + ')' : '—']]
-      .map(function (s, i) { return el('div', {}, [el('small', { text: s[0] }), el('b', { style: i === 2 ? 'color:#146C43' : '', text: s[1] })]); })));
+      reqb.disabled = true;
+      try { await api('d_payout'); toast('Payout requested'); render(); } catch (x) { toast(x.message); reqb.disabled = false; } } });
+    if (avail < e.payout_min) { reqb.disabled = true; }
+    b.appendChild(reqb);
+    b.appendChild(el('p', { class: 'none', style: 'text-align:center', text: e.requested ? rs(e.requested) + ' requested and on its way.' : avail < e.payout_min ? 'You can request a payout from ' + rs(e.payout_min) + '.' : '' }));
+    b.appendChild(el('div', { class: 'stats s3' }, [['wallet', rs(e.total), 'Total earned'], ['chart', rs(e.week), 'This week'], ['clock', rs(e.requested), 'Pending']].map(function (s) { return el('div', {}, [ico(s[0]), el('b', { style: 'font-size:17px', text: s[1] }), el('small', { text: s[2] })]); })));
+    b.appendChild(el('div', { class: 'stats s3' }, [['chat', e.paid_chats_week, 'Paid chats this week'], ['check', e.free_to_paid == null ? '—' : e.free_to_paid + '%', 'Free → paid'], ['star', e.rating ? e.rating : '—', 'Rating' + (e.ratings ? ' (' + e.ratings + ')' : '')]].map(function (s) { return el('div', {}, [ico(s[0]), el('b', { style: 'font-size:17px', text: String(s[1]) }), el('small', { text: s[2] })]); })));
     var mx = Math.max.apply(null, e.by_day.concat([1])), today = (new Date().getDay() + 6) % 7;
-    var bars = el('div', { class: 'ebars' }); e.by_day.forEach(function (n, i) { bars.appendChild(el('div', { title: DAYS[i] + ': ' + rs(n) }, [el('span', { class: 'v', text: n ? rs(n) : '' }), el('i', { style: 'height:' + Math.max(4, Math.round(110 * n / mx)) + 'px;background:' + (i === today ? '#146C43' : '#8FD3B0') }), el('span', { text: DAYS[i] })])); });
-    pg.appendChild(el('div', { class: 'card ecard' }, [el('h3', { text: 'This week by day' }), bars]));
+    var bars = el('div', { class: 'ebars' }); e.by_day.forEach(function (n, i) { bars.appendChild(el('div', { title: DAYS[i] + ': ' + rs(n) }, [el('span', { class: 'v', text: n ? rs(n) : '' }), el('i', { style: 'height:' + Math.max(4, Math.round(100 * n / mx)) + 'px;background:' + (i === today ? '#146C43' : '#B9E59A') }), el('span', { text: DAYS[i] })])); });
+    b.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'This week by day' }), bars]));
+    // payouts with filter
+    var pc = el('div', { class: 'card' }); b.appendChild(pc);
+    function drawPay() {
+      pc.innerHTML = ''; pc.appendChild(el('h3', { text: 'Payouts' }));
+      pc.appendChild(chips('pay', [['all', 'All'], ['paid', 'Paid'], ['req', 'Requested']], function () { drawPay(); }));
+      var f = S.chip.pay || 'all', rows = [];
+      if (f !== 'paid') e.requests.filter(function (r) { return r.status === 'requested'; }).forEach(function (r) { rows.push([r.at, 'Payout request', rs(r.amount), 'pill amber', 'Pending', 'clock']); });
+      if (f !== 'req') e.payouts.forEach(function (p) { rows.push([p.at, 'Payout to UPI' + (p.note ? ' · ' + p.note : ''), rs(p.amount), 'pill', 'Completed', 'bank']); });
+      rows.sort(function (a, b) { return b[0] - a[0]; });
+      if (!rows.length) pc.appendChild(el('div', { class: 'none', text: 'No payouts yet.' }));
+      rows.forEach(function (r) { pc.appendChild(el('div', { class: 'tx' }, [el('span', { class: 'ic', html: ic(r[5]) }), el('div', { class: 'sp' }, [el('b', { text: r[1] }), el('small', { text: fmtWhen(r[0]) })]), el('div', { class: 'amt' }, [el('div', { text: r[2] }), el('span', { class: r[3], text: r[4] })])])); });
+    }
+    drawPay();
     // shifts
-    var mine = {}; sh.mine.forEach(function (k) { mine[k] = 1; });
-    var grid = el('div', { class: 'shgrid' }, [el('span')].concat(DAYS.map(function (d) { return el('span', { class: 'dh', text: d }); })));
+    var mine = {}; sh_.mine.forEach(function (k) { mine[k] = 1; });
+    var grid = el('div', { class: 'shgrid' }, [el('span')].concat(DAYS.map(function (x) { return el('span', { class: 'dh', text: x }); })));
     PARTS.forEach(function (p) {
       grid.appendChild(el('span', { class: 'ph2' }, [p[1], el('small', { text: p[2] })]));
-      for (var d = 1; d <= 7; d++) (function (k) {
-        var gap = (sh.gaps[k] || 0) > 0 && !(sh.cover[k] || 0);
-        var c = el('button', { class: 'cell' + (mine[k] ? ' on' : '') + (gap ? ' gap' : ''), 'aria-pressed': mine[k] ? 'true' : 'false', title: (gap ? sh.gaps[k] + ' clients waited with nobody online. ' : '') + (sh.cover[k] ? sh.cover[k] + ' dietician(s) cover this' : 'Nobody covers this yet'),
-          onclick: async function () { mine[k] = !mine[k]; try { sh = await api('d_shifts', { set: Object.keys(mine).filter(function (x) { return mine[x]; }) }); c.classList.toggle('on', !!mine[k]); } catch (x) { toast(x.message); } } });
+      for (var dd = 1; dd <= 7; dd++) (function (k) {
+        var gap = (sh_.gaps[k] || 0) > 0 && !(sh_.cover[k] || 0);
+        var c = el('button', { class: 'cell' + (mine[k] ? ' on' : '') + (gap ? ' gap' : ''), 'aria-pressed': mine[k] ? 'true' : 'false', 'aria-label': DAYS[+k[0] - 1] + ' ' + p[1],
+          onclick: async function () { mine[k] = !mine[k]; try { sh_ = await api('d_shifts', { set: Object.keys(mine).filter(function (x) { return mine[x]; }) }); c.classList.toggle('on', !!mine[k]); } catch (x) { toast(x.message); } } });
         grid.appendChild(c);
-      })(d + p[0]);
+      })(dd + p[0]);
     });
-    var busiest = Object.keys(sh.gaps).sort(function (a, b) { return sh.gaps[b] - sh.gaps[a]; })[0];
-    pg.appendChild(el('div', { class: 'card ecard' }, [el('h3', {}, ['My shifts', busiest ? el('span', { class: 'pill amber', style: 'float:right', text: 'Clients missed most on ' + DAYS[+busiest[0] - 1] + ' ' + PARTS.filter(function (p) { return p[0] === busiest[1]; })[0][1].toLowerCase() }) : null]),
-      grid, el('p', { class: 'none', text: 'Tap a slot to say you’re usually online then. Orange outlines show times when clients waited and nobody was online.' })]));
-    var hist = el('div', { class: 'card ecard' }, [el('h3', { text: 'Payouts' })]);
-    if (!e.payouts.length && !e.requests.length) hist.appendChild(el('div', { class: 'none', text: 'No payouts yet.' }));
-    e.requests.filter(function (r) { return r.status === 'requested'; }).forEach(function (r) { hist.appendChild(el('div', { class: 'slot' }, [el('span', { text: fmtWhen(r.at) + ' · requested' }), el('b', { text: rs(r.amount) })])); });
-    e.payouts.forEach(function (p) { hist.appendChild(el('div', { class: 'slot' }, [el('span', { text: fmtWhen(p.at) + (p.note ? ' · ' + p.note : '') }), el('b', { text: rs(p.amount) + ' paid' })])); });
-    pg.appendChild(hist);
-  }
-  function sideEarnings(d) {
-    var sec = el('div', { class: 'sec' }); S.side.appendChild(sec);
-    sec.appendChild(el('div', { class: 'kv' }, [el('span', { text: 'Today' }), el('b', { text: rs(d.earnings.today) }), el('span', { text: 'To be paid' }), el('b', { text: rs(d.earnings.unpaid) }), el('span', { text: 'Total earned' }), el('b', { text: rs(d.earnings.total) })]));
-    sec.appendChild(el('button', { class: 'btn ghost', style: 'width:100%;margin-top:12px', text: 'Open earnings and shifts', onclick: mainEarnings }));
-    if (!SEL && !PSEL) mainEarnings();
-  }
-  /* ---------- chat ---------- */
+    b.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'My usual hours' }), grid, el('p', { class: 'none', style: 'margin:8px 0 0', text: 'Tap the times you’re usually online. Orange outlines show when clients waited and nobody was online.' })]));
+    b.appendChild(el('div', { class: 'note' }, [ico('bulb'), el('span', { text: 'Payouts are sent to your UPI ID, usually within 1–3 business days of your request.' })]));
+  };
+
+  /* ---------- 3–5. Live chat with patient profile ---------- */
   async function accept(id) {
-    try { var v = await api('d_accept', { session_id: id }); toast('Chat started'); openChat(id, v); poll(); }
+    try { var v = await api('d_accept', { session_id: id }); toast('Chat started'); HIST = null; openChat(id, v); poll(); }
     catch (e) { toast(e.message); poll(); }
   }
-  function openChat(id, first) {
-    clearTimeout(CHAT_T); clearInterval(TICK);
-    SEL = id; CH = { id: id, last: 0, seen: {}, built: false };
-    S.layout.classList.add('chatting');
-    S.main.innerHTML = '';
-    if (first) renderChat(first); else chatPoll();
-    draw();
-  }
-  function closeChat() { clearTimeout(CHAT_T); clearInterval(TICK); SEL = 0; CH = null; S.layout.classList.remove('chatting'); S.main.innerHTML = ''; S.main.appendChild(el('div', { class: 'blank', text: 'Pick a chat on the left.' })); draw(); }
-  async function chatPoll() {
+  function openChat(id, first) { go('chat', { id: id, first: first }); }
+  SCREENS.chat = function (a) {
+    CH = { id: a.id, last: 0, seen: {}, built: false, files: [] };
+    S.scr.appendChild(el('div', { class: 'empty', style: 'margin:auto', text: 'Opening chat…' }));
+    if (a.first) { renderChat(a.first); a.first = null; chatPoll(true); } else chatPoll();
+  };
+  async function chatPoll(wait) {
     if (!CH) return; var id = CH.id;
-    try { var v = await api('d_poll', { session_id: id, after: CH.last }); if (CH && CH.id === id) { CH.quiet = v.messages && v.messages.length ? 0 : (CH.quiet || 0) + 1; renderChat(v); } } catch (e) {}
-    // fast while messages are flowing, slower when quiet or in the background
-    if (CH && CH.id === id) CHAT_T = setTimeout(chatPoll, CH.v && CH.v.status === 'active' ? (document.hidden ? 10000 : Math.min(6000, 2000 + (CH.quiet || 0) * 400)) : 15000);
+    if (!wait) { try { var v = await api('d_poll', { session_id: id, after: CH.last }); if (CH && CH.id === id) { CH.quiet = v.messages && v.messages.length ? 0 : (CH.quiet || 0) + 1; renderChat(v); } } catch (e) { if (CH && !CH.built) { S.scr.innerHTML = ''; page(hdr('Chat')).appendChild(el('div', { class: 'empty', text: e.message })); return; } } }
+    if (CH && CH.id === id) { clearTimeout(CHAT_T); CHAT_T = setTimeout(chatPoll, CH.v && CH.v.status === 'active' ? (document.hidden ? 10000 : Math.min(6000, 2000 + (CH.quiet || 0) * 400)) : 15000); }
   }
   function renderChat(v) {
     CH.v = v;
     if (!CH.built) {
       CH.built = true;
-      var head = el('div', { class: 'chead' });
-      head.appendChild(el('button', { class: 'btn sm ghost back', html: ic('back'), 'aria-label': 'Back', onclick: closeChat }));
-      head.appendChild(el('div', { class: 'sp' }, [el('b', { text: v.client.name }), el('div', { style: 'color:var(--mute);font-size:12.5px', text: v.mode === 'slot' ? 'Booked chat' : 'Live chat' })]));
-      head.appendChild(el('button', { class: 'btn sm ghost', style: 'display:inline-flex;gap:6px;align-items:center', html: ic('user') + '<span>Profile</span>', 'aria-label': 'Patient profile', onclick: function () { CH.body.classList.toggle('showprof'); } }));
-      CH.timer = el('span', { class: 'timer' }); head.appendChild(CH.timer);
-      CH.endBtn = el('button', { class: 'btn sm red', text: 'End', onclick: async function () { if (confirm('End this chat now?')) { await api('d_end', { session_id: CH.id }).catch(function () {}); clearTimeout(CHAT_T); chatPoll(); poll(); } } });
-      head.appendChild(CH.endBtn);
+      var head = el('div', { class: 'chd' }, [el('button', { class: 'hb', 'aria-label': 'Back', html: ic('back'), onclick: back }), ava(v.client.name),
+        el('div', { class: 'sp' }, [el('b', { text: v.client.name }), el('small', { text: v.client.topic ? v.client.topic.slice(0, 60) : (v.mode === 'slot' ? 'Booked chat' : 'Live chat') })]),
+        el('button', { class: 'hb', 'aria-label': 'Patient profile', html: ic('user'), onclick: function () { patientProfile(); } })]);
+      CH.tbar = el('div', { class: 'tbar' }); CH.timer = el('span', { class: 'sp' });
+      CH.endBtn = el('button', { class: 'end', text: 'End chat', onclick: async function () { if (confirm('End this chat now?')) { await api('d_end', { session_id: CH.id }).catch(function () {}); HIST = null; clearTimeout(CHAT_T); chatPoll(); poll(); } } });
+      CH.tbar.appendChild(el('span', { html: ic('clock') })); CH.tbar.appendChild(CH.timer); CH.tbar.appendChild(CH.endBtn);
       CH.msgs = el('div', { class: 'msgs' });
-      var prof = el('div', { class: 'prof' });
-      if (v.client.topic) { prof.appendChild(el('h4', { text: 'Client’s question' })); prof.appendChild(el('div', { class: 'topic', text: v.client.topic })); }
-      CH.filesH = el('h4', { class: 'hidden', text: 'Files shared' }); CH.filesBox = el('div', { class: 'files' }); prof.appendChild(CH.filesH); prof.appendChild(CH.filesBox);
-      prof.appendChild(el('h4', { text: 'Diet test' }));
-      var p = v.client.profile;
-      if (p && Object.keys(p).length) {
-        var cm = parseFloat(p.Height), kgv = parseFloat(p.Weight);
-        if (cm > 90 && kgv > 20 && !p.BMI) p = Object.assign({ BMI: (kgv / Math.pow(cm / 100, 2)).toFixed(1) }, p);
-        var kv = el('div', { class: 'kv' }); Object.keys(p).forEach(function (k) { kv.appendChild(el('span', { text: k })); kv.appendChild(el('b', { text: String(p[k]) })); }); prof.appendChild(kv); }
-      else prof.appendChild(el('div', { class: 'none', text: 'This client hasn’t taken the diet test.' }));
-      prof.appendChild(el('h4', { style: 'margin-top:16px', text: 'Phone' })); prof.appendChild(el('div', { text: '+91 ' + v.client.phone }));
-      historyPanel(prof, v.history, v.id);
-      CH.alert = el('div'); alertBox(CH.alert, v.history, function (t) { CH.ta.value = t; CH.ta.focus(); });
-      CH.body = el('div', { class: 'cbody' }, [el('div', { class: 'mcol' }, [CH.alert, CH.msgs]), prof]);
+      CH.alert = el('div', { style: 'padding:10px 12px 0;flex:none' }); alertBox(CH.alert, v.history, function (t) { CH.ta.value = t; CH.ta.focus(); }); if (!CH.alert.childNodes.length) CH.alert.classList.add('hidden');
       CH.quick = el('div', { class: 'quick' });
-      CH.ta = el('textarea', { rows: '1', placeholder: 'Type a reply… (Enter to send, Shift+Enter for a new line)', maxlength: '2000' });
+      CH.ta = el('textarea', { rows: '1', placeholder: 'Type your message…', maxlength: '2000', 'aria-label': 'Message' });
       CH.ta.addEventListener('input', function () { CH.ta.style.height = 'auto'; CH.ta.style.height = Math.min(140, CH.ta.scrollHeight) + 'px'; });
-      CH.ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+      CH.ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !DietoAuth.native && window.innerWidth > 700) { e.preventDefault(); send(); } });
       quickBar(CH.quick, CH.ta);
-      CH.bar = el('div', { class: 'bar' }, [el('button', { class: 'att', title: 'Share a photo or PDF', 'aria-label': 'Share a photo or PDF', html: '<svg class="i" viewBox="0 0 24 24"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg>', onclick: attach }), CH.ta, el('button', { class: 'btn', html: ic('send'), 'aria-label': 'Send', onclick: send })]);
-      CH.done = el('div', { class: 'blank hidden', style: 'flex:none;padding:14px;background:#fff;border-top:1px solid var(--line)' });
-      S.main.innerHTML = '';
-      [head, CH.body, CH.quick, CH.bar, CH.done].forEach(function (x) { S.main.appendChild(x); });
+      CH.bar = el('div', { class: 'bar' }, [el('button', { class: 'circ', 'aria-label': 'Share a photo or PDF', html: ic('clip'), onclick: attach }), CH.ta, el('button', { class: 'circ go', html: ic('send'), 'aria-label': 'Send', onclick: send })]);
+      CH.done = el('div', { class: 'cdone hidden' });
+      S.scr.innerHTML = '';
+      [head, CH.tbar, CH.alert, CH.msgs, CH.quick, CH.bar, CH.done].forEach(function (x) { S.scr.appendChild(x); });
     }
     var atBottom = CH.msgs.scrollHeight - CH.msgs.scrollTop - CH.msgs.clientHeight < 80;
     v.messages.forEach(function (m) {
       CH.last = Math.max(CH.last, m.id); if (CH.seen[m.id]) return; CH.seen[m.id] = 1;
       var pend = CH.msgs.querySelector('[data-pending]'); if (m.from === 'd' && pend && pend.dataset.text === m.text) pend.remove();
-      if (m.from === 'c' && CH.built && CH.primed) notify(v.client.name + ': ' + m.text.slice(0, 60));
+      if (m.from === 'c' && CH.primed) notify(v.client.name + ': ' + (m.text || 'sent a file').slice(0, 60));
       CH.msgs.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]));
-      if (m.file && CH.filesBox) { CH.filesH.classList.remove('hidden'); CH.filesBox.appendChild(el('a', { href: API_DIR + m.file.url, target: '_blank', rel: 'noopener', title: m.file.name }, [/^image/.test(m.file.mime) ? el('img', { src: API_DIR + m.file.url, alt: m.file.name }) : 'PDF ' + m.file.name.slice(0, 18)])); }
+      if (m.file) CH.files.push(Object.assign({ ts: m.ts, from: m.from }, m.file));
     });
     CH.primed = true;
     if (atBottom || v.messages.length) CH.msgs.scrollTop = CH.msgs.scrollHeight;
     var active = v.status === 'active';
     CH.bar.classList.toggle('hidden', !active); CH.quick.classList.toggle('hidden', !active); CH.endBtn.classList.toggle('hidden', !active);
     CH.done.classList.toggle('hidden', active);
-    if (!active) { CH.done.textContent = v.status === 'ended' ? (v.ended_by === 'time' ? 'Time is up. If the client extends, the chat reopens here.' : 'This chat has ended.') : 'Status: ' + v.status; }
+    if (!active) CH.done.textContent = v.status === 'ended' ? (v.ended_by === 'time' ? 'Time is up. If the client extends, the chat reopens here.' : 'This chat has ended.') : v.status === 'booked' ? 'Booked for ' + fmtWhen(v.scheduled_at || 0) : 'Status: ' + v.status;
     clearInterval(TICK);
     if (active) {
-      var endAt = Date.now() + v.remaining * 1000;
-      var t = function () { var r = Math.max(0, Math.round((endAt - Date.now()) / 1000)); CH.timer.textContent = mmss(r) + ' left'; CH.timer.classList.toggle('low', r <= 60); };
+      var endAt = Date.now() + v.remaining * 1000, tot = v.paid_seconds || 0;
+      var t = function () { var r = Math.max(0, Math.round((endAt - Date.now()) / 1000)); CH.timer.textContent = 'Live consultation · ' + mmss(r) + ' left'; CH.tbar.classList.toggle('low', r <= 60); };
       t(); TICK = setInterval(t, 1000);
-    } else CH.timer.textContent = v.status === 'ended' ? 'Ended' : v.status;
+    } else CH.timer.textContent = v.status === 'ended' ? 'Chat ended' : v.status === 'booked' ? 'Booked chat' : v.status;
   }
-  var API_DIR = C.api.replace(/[^\/]*$/, '');
   function fileNode(m) {
     var f = m.file, box = el('div', { class: 'm file ' + m.from }), u = API_DIR + f.url;
     if (/^image\//.test(f.mime)) box.appendChild(el('a', { href: u, target: '_blank', rel: 'noopener' }, [el('img', { src: u, alt: 'Shared photo', loading: 'lazy' })]));
-    else box.appendChild(el('a', { class: 'pdf', href: u, target: '_blank', rel: 'noopener' }, [el('span', { class: 't', text: 'PDF' }), el('span', {}, [el('b', { text: f.name }), el('small', { text: (f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB') + ' · open' })])]));
+    else box.appendChild(el('a', { class: 'pdf', href: u, target: '_blank', rel: 'noopener' }, [el('span', { class: 't', text: 'PDF' }), el('span', {}, [el('b', { text: f.name }), el('small', { text: fsize(f.size) + ' · open' })])]));
     box.appendChild(el('time', { text: fmtTime(m.ts) }));
     return box;
   }
+  function fsize(s) { return s > 1048576 ? (s / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round((s || 0) / 1024)) + ' KB'; }
   function attach() {
     var i = el('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp,application/pdf', style: 'display:none' });
     i.onchange = function () {
@@ -632,6 +638,221 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     var tmp = el('div', { class: 'm d', 'data-pending': '1', style: 'opacity:.6' }, [t]); tmp.dataset.text = t; CH.msgs.appendChild(tmp); CH.msgs.scrollTop = CH.msgs.scrollHeight;
     try { await api('d_send', { session_id: CH.id, text: t }); clearTimeout(CHAT_T); CH.quiet = 0; chatPoll(); } catch (e) { tmp.remove(); CH.ta.value = t; toast(e.message); }
   }
+  /* patient profile: Overview / Diet test / Reports / History */
+  function patientProfile(src, startTab) {
+    var v = src || CH.v, files = src ? (src.files || []) : CH.files, sid = v.id;
+    var ov = el('div', { class: 'over' }), tab = startTab || 'ov';
+    var p = Object.assign({}, v.client.profile || {}), h = v.history || {};
+    var cm = parseFloat(p.Height), kg = parseFloat(p.Weight), bmi = p.BMI || (cm > 90 && kg > 20 ? (kg / Math.pow(cm / 100, 2)).toFixed(1) : '');
+    var right = el('button', { class: 'hb', 'aria-label': 'Call', html: ic('phone'), onclick: function () { location.href = 'tel:+91' + v.client.phone; } });
+    ov.appendChild(hdr('Patient Profile', { onBack: closeOver, right: v.client.phone ? right : null }));
+    var b = el('div', { class: 'body' }); ov.appendChild(b);
+    var meta = [p.Gender || p.Sex, p.Age ? p.Age + ' years' : null, p.City || p.Location].filter(Boolean).join(' · ');
+    b.appendChild(el('div', { class: 'card', style: 'display:flex;gap:14px;align-items:center' }, [el('div', { class: 'ava', style: 'width:58px;height:58px;font-size:20px', text: inits(v.client.name) }),
+      el('div', { style: 'flex:1;min-width:0' }, [el('b', { style: 'font-size:17px;display:block', text: v.client.name }), el('small', { style: 'color:var(--mute);display:block', text: meta || (v.client.phone ? '+91 ' + v.client.phone : '') }),
+        el('div', { style: 'display:flex;gap:6px;flex-wrap:wrap;margin-top:6px' }, [h.care ? el('span', { class: 'pill', text: 'dietO Care' }) : null, h.lang ? el('span', { class: 'pill amber', text: 'Prefers ' + h.lang }) : null])]),
+      src ? null : el('button', { class: 'btn sm lime', html: ic('chat') + ' Chat', onclick: closeOver })]));
+    var tb = el('div', { class: 'tabs' }), box = el('div'); b.appendChild(tb); b.appendChild(box);
+    [['ov', 'Overview'], ['dt', 'Diet Test'], ['rp', 'Reports'], ['hi', 'History']].forEach(function (t) { tb.appendChild(el('button', { class: tab === t[0] ? 'on' : '', text: t[1], onclick: function () { tab = t[0]; [].forEach.call(tb.children, function (x) { x.classList.remove('on'); }); this.classList.add('on'); draw(); } })); });
+    function draw() {
+      box.innerHTML = '';
+      if (tab === 'ov') {
+        var goal = p.Goal || p['Health goal'] || v.client.topic;
+        if (goal) box.appendChild(el('div', { class: 'goal' }, [ico('goal'), el('div', {}, [el('small', { text: p.Goal ? 'Health goal' : 'Client’s question' }), el('b', { text: goal })])]));
+        if (cm || kg || bmi) box.appendChild(el('div', { class: 'card' }, [el('div', { class: 'metric' }, [el('div', {}, [el('small', { text: 'Weight' }), el('b', { text: kg ? kg + ' kg' : '—' })]), el('div', {}, [el('small', { text: 'Height' }), el('b', { text: cm ? cm + ' cm' : '—' })]),
+          el('div', {}, [el('small', { text: 'BMI' }), el('b', { text: bmi || '—' }), bmi ? el('span', { class: 'tag', text: bmi < 18.5 ? 'Underweight' : bmi < 23 ? 'Healthy' : bmi < 25 ? 'Overweight' : 'Obese' }) : null])])]));
+        if (h.progress && h.progress.weights && h.progress.weights.length) {
+          var w = h.progress.weights, last = w[w.length - 1], st = h.progress.start_kg != null ? h.progress.start_kg : w[0].kg, chg = Math.round((last.kg - st) * 10) / 10;
+          box.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'Progress' }), el('div', {}, [el('b', { text: last.kg + ' kg' }), ' now · ', el('b', { style: 'color:' + (chg <= 0 ? '#146C43' : '#A12D20'), text: (chg > 0 ? '+' : '') + chg + ' kg' }), ' since start' + (h.progress.water_avg != null ? ' · water ' + h.progress.water_avg + ' glasses a day' : '')])]));
+        }
+        var alerts = el('div'); alertBox(alerts, h, function (t) { if (CH && CH.ta) { CH.ta.value = t; closeOver(); CH.ta.focus(); } }); box.appendChild(alerts);
+        if (v.client.phone) box.appendChild(el('div', { class: 'card kv' }, [el('span', { text: 'Phone' }), el('b', { text: '+91 ' + v.client.phone })]));
+        var nc = el('div', { class: 'card' }, [el('h3', { html: ic('edit') + ' Your private note' })]);
+        var note = el('textarea', { class: 'in pnote', rows: '3', maxlength: '2000', placeholder: 'Only you see this. e.g. skips breakfast, likes neer dosa, follow up on sugar.' }); note.value = h.note || '';
+        var nt = null; note.addEventListener('input', function () { h.note = note.value; clearTimeout(nt); nt = setTimeout(function () { api('d_note', { session_id: sid, note: note.value }).then(function () { note.style.borderColor = '#146C43'; setTimeout(function () { note.style.borderColor = ''; }, 800); }).catch(function (e) { toast(e.message); }); }, 700); });
+        nc.appendChild(note); box.appendChild(nc);
+      } else if (tab === 'dt') {
+        var keys = Object.keys(p);
+        if (!keys.length) { box.appendChild(el('div', { class: 'card none', text: 'This client hasn’t taken the diet test.' })); return; }
+        if (bmi && !p.BMI) p.BMI = bmi;
+        var kv = el('div', { class: 'kv' }); Object.keys(p).forEach(function (k) { kv.appendChild(el('span', { text: k })); kv.appendChild(el('b', { text: String(p[k]) })); });
+        box.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'Diet test answers' }), kv]));
+      } else if (tab === 'rp') {
+        var docs = files.filter(function (f) { return !/^image/.test(f.mime); }), imgs = files.filter(function (f) { return /^image/.test(f.mime); });
+        var c1 = el('div', { class: 'card' }, [el('h3', { text: 'Medical reports (' + docs.length + ')' })]);
+        if (!docs.length) c1.appendChild(el('div', { class: 'none', text: 'No reports shared in this chat.' }));
+        docs.forEach(function (f) { c1.appendChild(el('a', { class: 'frow', href: API_DIR + f.url, target: '_blank', rel: 'noopener' }, [el('span', { class: 't', text: 'PDF' }), el('span', { class: 'sp' }, [el('b', { text: f.name }), el('small', { text: fsize(f.size) + (f.ts ? ' · ' + fmtDay(f.ts) : '') })]), ico('chev')])); });
+        box.appendChild(c1);
+        var ph = imgs.map(function (f) { return { url: f.url, name: f.name }; }).concat((h.photos || []));
+        var c2 = el('div', { class: 'card' }, [el('h3', { text: 'Photos (' + ph.length + ')' })]);
+        if (!ph.length) c2.appendChild(el('div', { class: 'none', text: 'No photos yet.' }));
+        var g = el('div', { class: 'files' }); ph.forEach(function (f) { g.appendChild(el('a', { href: API_DIR + f.url, target: '_blank', rel: 'noopener' }, [el('img', { src: API_DIR + f.url, alt: f.name || 'Photo', loading: 'lazy' })])); }); c2.appendChild(g);
+        box.appendChild(c2);
+        box.appendChild(el('div', { class: 'note' }, [ico('lock'), el('span', { text: 'Files are private and only for this consultation.' })]));
+      } else {
+        var c = el('div', { class: 'card' }, [el('h3', { text: 'Earlier with dietO' })]); box.appendChild(c);
+        var past = h.past || [];
+        if (!past.length) { c.appendChild(el('div', { class: 'none', text: 'First time with dietO.' })); return; }
+        var tl = el('div', { class: 'tl' }); c.appendChild(tl);
+        past.slice(0, 12).forEach(function (q) {
+          var what = q.mode === 'plan' ? (q.plan_sent ? '7-day plan sent' : 'Plan requested') : (q.free ? 'Free chat' : 'Chat') + ' · ' + q.minutes + ' min';
+          tl.appendChild(el('div', {}, [el('b', { text: what }), el('small', { text: fmtDay(q.at) + (q.dietician ? ' · ' + q.dietician : '') + (q.files ? ' · ' + q.files + ' file' + (q.files > 1 ? 's' : '') : '') + (q.rating ? ' · ' + '★'.repeat(q.rating) : '') + (q.status === 'refunded' ? ' · refunded' : '') })]));
+        });
+      }
+    }
+    draw();
+    openOver(ov);
+  }
+  function alertBox(parent, h, insert) {
+    if (!h || !h.alerts || !h.alerts.length) return;
+    var t = 'Since you mentioned ' + h.alerts.join(' and ') + ', please also check these diet changes with your doctor. I’ll keep my advice safe for you, but your doctor knows your full medical history.';
+    parent.appendChild(el('div', { class: 'redflag' }, [ico('warn'), el('span', { class: 'sp' }, [el('b', { text: 'Client mentioned ' + h.alerts.join(', ') + '.' }), ' Diet changes may need their doctor’s advice too.']),
+      el('button', { class: 'btn sm', style: 'background:#A12D20', text: 'Add note', onclick: function () { insert(t); } })]));
+  }
+  /* quick replies */
+  var QR = null, QTOPIC = 'All';
+  async function quickBar(box, ta) {
+    if (!QR) { try { QR = (await api('d_quick')).replies; } catch (e) { QR = []; } }
+    box.innerHTML = '';
+    var topics = ['All'].concat(QR.map(function (r) { return r.topic; }).filter(function (t, i, a) { return a.indexOf(t) === i; }));
+    if (topics.length > 2) { var sel = el('select', { class: 'qsel', 'aria-label': 'Topic' }); topics.forEach(function (t) { sel.appendChild(el('option', { value: t, text: t })); }); sel.value = topics.indexOf(QTOPIC) >= 0 ? QTOPIC : 'All'; sel.onchange = function () { QTOPIC = sel.value; quickBar(box, ta); }; box.appendChild(sel); }
+    QR.filter(function (r) { return QTOPIC === 'All' || r.topic === QTOPIC; }).forEach(function (r) {
+      var b = el('button', { text: r.text.length > 34 ? r.text.slice(0, 32) + '…' : r.text, title: r.text, onclick: function () { ta.value = (ta.value ? ta.value.trim() + ' ' : '') + r.text; ta.focus(); ta.dispatchEvent(new Event('input')); } });
+      var lp = null, del = async function () { if (!confirm('Delete this quick reply?\n\n' + r.text)) return; QR = (await api('d_quick', { action: 'del', id: r.id })).replies; quickBar(box, ta); };
+      b.addEventListener('contextmenu', function (e) { e.preventDefault(); del(); });
+      b.addEventListener('touchstart', function () { lp = setTimeout(function () { lp = 'x'; del(); }, 700); }, { passive: true });
+      b.addEventListener('touchend', function (e) { if (lp === 'x') e.preventDefault(); clearTimeout(lp); lp = null; });
+      box.appendChild(b);
+    });
+    box.appendChild(el('button', { class: 'qadd', text: '+ Save reply', title: 'Save what’s in the message box as a quick reply (hold a reply to delete it)', onclick: async function () {
+      var t = ta.value.trim(); if (t.length < 3) return toast('Type the reply in the box first, then tap Save reply.');
+      var tp = prompt('Topic for this reply (e.g. PCOS, Diabetes, General)', QTOPIC !== 'All' ? QTOPIC : 'General'); if (tp === null) return;
+      try { QR = (await api('d_quick', { action: 'add', topic: tp.trim() || 'General', text: t })).replies; toast('Quick reply saved'); quickBar(box, ta); } catch (e) { toast(e.message); }
+    } }));
+  }
+
+  /* ---------- 6. Diet plans list ---------- */
+  SCREENS.plans = function () {
+    var d = S.data, list = d.plans || [], f = S.chip.plans || 'all';
+    var b = page(hdr('Diet Plans', { sub: 'Personalised 7-day plans clients asked for. Opening a request assigns it to you.' }));
+    var mine = list.filter(function (q) { return q.mine; });
+    b.appendChild(chips('plans', [['all', 'All (' + list.length + ')'], ['new', 'New (' + (list.length - mine.length) + ')'], ['mine', 'Mine (' + mine.length + ')'], ['msg', 'Messages']]));
+    var show = list.filter(function (q) { return f === 'all' || (f === 'new' && !q.mine) || (f === 'mine' && q.mine) || (f === 'msg' && q.unread); });
+    if (!show.length) b.appendChild(el('div', { class: 'empty', text: list.length ? 'Nothing in this filter.' : 'No plan requests right now. New ones will appear here.' }));
+    show.forEach(function (q) {
+      var late = q.waited > 20 * 3600;
+      b.appendChild(el('button', { class: 'li' + (late && !q.mine ? ' hot' : ''), onclick: function () { go('plan', { id: q.id }); } }, [ava(q.name), el('div', { class: 'sp' }, [el('b', { text: q.name }), el('small', { text: q.topic || '7-day diet plan' }), el('small', { html: ic('clock') + ' Asked ' + ago(q.waited) })]),
+        el('div', { class: 'end' }, [el('span', { class: 'pill' + (q.unread ? ' red' : q.draft ? ' amber' : ''), text: q.unread ? q.unread + ' new message' + (q.unread > 1 ? 's' : '') : q.mine ? (q.draft ? 'Draft' : 'Yours') : q.care ? 'Care · new' : 'New request' }), ico('chev')])]));
+    });
+    b.appendChild(el('div', { class: 'note', style: 'margin-top:6px' }, [ico('bulb'), el('span', { text: 'You earn your share when you send the plan. Plans are due within 24 hours of the request.' })]));
+  };
+
+  /* ---------- 7–9, 14. Plan request + 3-step builder ---------- */
+  SCREENS.plan = async function (a) {
+    var id = a.id;
+    S.scr.appendChild(el('div', { class: 'empty', style: 'margin:auto', text: 'Opening…' }));
+    var v; try { v = await api('d_plan_open', { session_id: id }); } catch (e) { toast(e.message); back(); return; }
+    if (top().n !== 'plan' || top().a !== a) return;
+    poll();
+    var SL = v.slots, keys = Object.keys(SL), p = v.client.profile || {}, target = 0, step = a.step || 1, day = 0;
+    if (p['Plan target']) target = parseInt(String(p['Plan target']).replace(/[^\d].*$/, '').replace(/\D/g, ''), 10) || 0;
+    var days = []; for (var i = 0; i < 7; i++) days.push(Object.assign({}, (v.plan.days || [])[i] || {}));
+    var notes = v.plan.notes || '', dirty = false, TPL = [], hadPlan = days.some(function (dd) { return keys.some(function (k) { return (dd[k] || '').trim(); }); });
+    var thread = el('div', { class: 'pthread' }), pseen = {}, plast = 0;
+    function addMsgs(list) { list.forEach(function (m) { plast = Math.max(plast, m.id); if (pseen[m.id]) return; pseen[m.id] = 1; thread.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null])); }); thread.scrollTop = thread.scrollHeight; }
+    addMsgs(v.messages || []);
+    async function pp() { clearTimeout(PLAN_T); if (top().a !== a) return; try { var r = await api('d_poll', { session_id: id, after: plast }); addMsgs(r.messages); } catch (e) {} PLAN_T = setTimeout(pp, document.hidden ? 30000 : 8000); }
+    PLAN_T = setTimeout(pp, 8000);
+    var planFiles = (v.messages || []).filter(function (m) { return m.file; }).map(function (m) { return Object.assign({ ts: m.ts }, m.file); });
+    function dayKcal(dd) { var t = 0; keys.forEach(function (k) { t += +dd[k + '_k'] || 0; }); return t; }
+    function dayFilled(dd) { return keys.some(function (k) { return (dd[k] || '').trim(); }); }
+    async function save(sendIt) {
+      if (sendIt && !confirm(v.status === 'plan_done' ? 'Send the updated plan to the client?' : 'Send this plan to ' + v.client.name + '? They will be notified.')) return false;
+      try { await api('d_plan_save', { session_id: id, days: days, notes: notes.trim(), send: sendIt }); dirty = false; toast(sendIt ? 'Plan sent to ' + v.client.name : 'Draft saved'); if (sendIt) { v.status = 'plan_done'; poll(); } return true; }
+      catch (e) { toast(e.message); return false; }
+    }
+    function view() {
+      S.scr.innerHTML = '';
+      var st = el('div', { class: 'steps' });
+      [['Plan details'], ['Meals'], ['Review']].forEach(function (s, i) { st.appendChild(el('div', { class: step === i + 1 ? 'on' : step > i + 1 ? 'ok' : '' }, [el('i', { html: step > i + 1 ? ic('check') : String(i + 1) }), s[0]])); });
+      var h = hdr(step === 1 && v.status !== 'plan_done' && !hadPlan ? 'Plan Request' : 'Create Diet Plan', { right: el('button', { class: 'hpill', text: 'Save draft', onclick: function () { save(false); } }), extra: st });
+      var b = page(h), foot = el('div', { class: 'foot' });
+      if (step === 1) stepDetails(b, foot); else if (step === 2) stepMeals(b, foot); else stepReview(b, foot);
+      S.scr.appendChild(foot);
+    }
+    function pcard() {
+      return el('div', { class: 'li', style: 'cursor:default' }, [ava(v.client.name), el('div', { class: 'sp' }, [el('b', { text: v.client.name + (v.care ? ' · dietO Care' : '') }), el('small', { text: [p.Gender, p.Age ? p.Age + ' yrs' : null, target ? target + ' kcal/day' : null].filter(Boolean).join(' · ') || 'Personalised 7-day plan' })]),
+        el('button', { class: 'btn sm lime', text: 'Profile', onclick: function () { patientProfile({ id: id, client: v.client, history: v.history, files: planFiles }); } })]);
+    }
+    function stepDetails(b, foot) {
+      b.appendChild(pcard());
+      alertBox(b, v.history, function (t) { pmsg.value = t; pmsg.focus(); });
+      var cm = parseFloat(p.Height), kg = parseFloat(p.Weight);
+      b.appendChild(el('div', { class: 'card' }, [el('div', { class: 'metric' }, [el('div', {}, [el('small', { text: 'Daily target' }), el('b', { text: target ? target + ' kcal' : '—' })]), el('div', {}, [el('small', { text: 'Diet type' }), el('b', { style: 'font-size:15px', text: p['Diet type'] || p.Diet || p.Food || '—' })]), el('div', {}, [el('small', { text: 'Weight' }), el('b', { text: kg ? kg + ' kg' : '—' }), cm && kg ? el('small', { text: 'BMI ' + (kg / Math.pow(cm / 100, 2)).toFixed(1) }) : null])])]));
+      b.appendChild(el('div', { class: 'card' }, [el('h3', { text: 'What the client asked for' }), el('div', { style: 'line-height:1.55', text: v.client.topic || 'No extra notes.' })]));
+      var dt = el('div', { class: 'card' }, [el('h3', { text: 'Diet test' })]);
+      if (Object.keys(p).length) { var kv = el('div', { class: 'kv' }); Object.keys(p).forEach(function (k) { kv.appendChild(el('span', { text: k })); kv.appendChild(el('b', { text: String(p[k]) })); }); dt.appendChild(kv); }
+      else dt.appendChild(el('div', { class: 'none', text: 'This client hasn’t taken the diet test. Ask what you need in the messages below.' }));
+      b.appendChild(dt);
+      var mc = el('div', { class: 'card' }, [el('h3', { text: 'Messages with ' + v.client.name.split(' ')[0] })]); b.appendChild(mc);
+      mc.appendChild(thread); thread.scrollTop = thread.scrollHeight;
+      var pmsg = el('textarea', { class: 'in', rows: '2', maxlength: '2000', placeholder: 'Ask a question before you write the plan…', style: 'margin-top:10px' });
+      mc.appendChild(pmsg);
+      mc.appendChild(el('button', { class: 'btn sm', style: 'margin-top:8px', html: ic('send') + ' Send', onclick: async function () { var t = pmsg.value.trim(); if (!t) return; try { await api('d_send', { session_id: id, text: t }); pmsg.value = ''; pp(); } catch (e) { toast(e.message); } } }));
+      var tc = el('div', { class: 'card' }, [el('h3', { text: 'Start from a template' })]); b.appendChild(tc);
+      var tsel = el('select', { class: 'in' }); tc.appendChild(tsel);
+      tc.appendChild(el('p', { class: 'none', style: 'margin:6px 0 0', text: v.plan.from_ai ? 'The plan starts from the client’s AI plan. Change anything you like.' : 'Or fill the meals yourself in the next step.' }));
+      (async function () { try { TPL = (await api('d_templates', { action: 'list' })).templates; } catch (e) { TPL = []; } tsel.innerHTML = ''; tsel.appendChild(el('option', { value: '', text: TPL.length ? 'Load a saved template…' : 'No saved templates yet' })); TPL.forEach(function (t) { tsel.appendChild(el('option', { value: String(t.id), text: t.name })); }); })();
+      tsel.onchange = function () { var t = TPL.filter(function (x) { return String(x.id) === tsel.value; })[0]; if (!t) return; if (!confirm('Replace all 7 days with “' + t.name + '”?')) { tsel.value = ''; return; } for (var i = 0; i < 7; i++) days[i] = Object.assign({}, t.days[i] || {}); if (t.notes && !notes.trim()) notes = t.notes; dirty = true; toast('Template loaded'); step = 2; view(); };
+      foot.appendChild(el('button', { class: 'btn deep', html: (hadPlan || v.status === 'plan_done' ? 'Next: meals ' : 'Accept & create plan ') + ic('chev'), onclick: function () { step = 2; view(); } }));
+    }
+    function stepMeals(b, foot) {
+      b.appendChild(pcard());
+      var dc = el('div', { class: 'days' }); b.appendChild(dc);
+      days.forEach(function (dd, i) { dc.appendChild(el('button', { class: (i === day ? 'on' : '') + (dayFilled(dd) ? ' ok' : ''), text: 'Day ' + (i + 1), onclick: function () { day = i; view(); } })); });
+      var dd = days[day], tot = el('div', { class: 'dtot' });
+      function sumUp() { var t = dayKcal(dd); tot.className = 'dtot' + (t && target ? (Math.abs(t - target) > target * 0.12 ? ' off' : ' ok') : ''); tot.innerHTML = ''; tot.appendChild(el('span', { class: 'sp', text: 'Day ' + (day + 1) + ' total' })); tot.appendChild(el('span', { text: (t ? t.toLocaleString('en-IN') + ' kcal' : '—') + (target ? ' / ' + target.toLocaleString('en-IN') : '') })); }
+      keys.forEach(function (k) {
+        var t = el('textarea', { rows: '2', maxlength: '300', placeholder: 'e.g. 2 idli + sambar + 1 boiled egg', 'aria-label': SL[k] + ', day ' + (day + 1) }); t.value = dd[k] || '';
+        var kc = el('input', { class: 'kc', type: 'number', inputmode: 'numeric', min: '0', max: '3000', placeholder: 'kcal', 'aria-label': SL[k] + ' kcal' }); kc.value = dd[k + '_k'] || '';
+        t.addEventListener('input', function () { dd[k] = t.value; dirty = true; [].forEach.call(dc.children, function (bt, i) { bt.classList.toggle('ok', dayFilled(days[i])); }); });
+        kc.addEventListener('input', function () { var n = parseInt(kc.value, 10); if (n > 0) dd[k + '_k'] = n; else delete dd[k + '_k']; dirty = true; sumUp(); });
+        b.appendChild(el('div', { class: 'meal' }, [el('div', { class: 'mh' }, [el('b', { text: SL[k] }), kc]), t]));
+      });
+      sumUp(); b.appendChild(tot);
+      var row = el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap' });
+      if (day) row.appendChild(el('button', { class: 'btn sm ghost', html: ic('copy') + ' Copy Day ' + day, onclick: function () { if (dayFilled(dd) && !confirm('Replace Day ' + (day + 1) + ' with Day ' + day + '?')) return; days[day] = Object.assign({}, days[day - 1]); dirty = true; view(); } }));
+      if (day < 6) row.appendChild(el('button', { class: 'btn sm ghost', html: 'Copy to all remaining days', onclick: function () { if (!confirm('Copy Day ' + (day + 1) + ' to Days ' + (day + 2) + '–7?')) return; for (var i = day + 1; i < 7; i++) days[i] = Object.assign({}, dd); dirty = true; view(); } }));
+      row.appendChild(el('button', { class: 'btn sm ghost', text: 'Save as template', onclick: async function () { var n = prompt('Template name, e.g. “PCOS veg 1,400 kcal”'); if (!n) return; try { await api('d_templates', { action: 'save', name: n, days: days, notes: notes.trim() }); toast('Template saved'); } catch (e) { toast(e.message); } } }));
+      b.appendChild(row);
+      foot.appendChild(el('button', { class: 'btn ghost', style: 'flex:0 0 auto', html: ic('back') + ' Back', onclick: function () { if (day) { day--; view(); } else { step = 1; view(); } } }));
+      foot.appendChild(el('button', { class: 'btn deep', html: (day < 6 ? 'Next: Day ' + (day + 2) : 'Next: review plan') + ' ' + ic('chev'), onclick: function () { if (day < 6) { day++; view(); var bd = S.scr.querySelector('.body'); if (bd) bd.scrollTop = 0; } else { step = 3; view(); } } }));
+    }
+    function stepReview(b, foot) {
+      b.appendChild(el('div', { style: 'margin-bottom:12px' }, [el('b', { style: 'font-size:18px', text: 'Review & send' }), el('div', { class: 'none', style: 'padding:2px 0', text: 'Check the plan before sharing it with ' + v.client.name.split(' ')[0] + '.' })]));
+      b.appendChild(pcard());
+      var avg = 0, n = 0; days.forEach(function (dd) { var t = dayKcal(dd); if (t) { avg += t; n++; } }); avg = n ? Math.round(avg / n) : 0;
+      b.appendChild(el('div', { class: 'card' }, [el('div', { class: 'metric' }, [el('div', {}, [el('small', { text: 'Duration' }), el('b', { text: '7 days' })]), el('div', {}, [el('small', { text: 'Daily target' }), el('b', { text: target ? target + ' kcal' : '—' })]), el('div', {}, [el('small', { text: 'Avg planned' }), el('b', { text: avg ? avg + ' kcal' : '—' })])])]));
+      var rc = el('div', { class: 'card' }, [el('h3', { text: 'Meal plan preview' })]); b.appendChild(rc);
+      var empty = 0;
+      days.forEach(function (dd, i) {
+        var t = dayKcal(dd), first = keys.map(function (k) { return (dd[k] || '').trim(); }).filter(Boolean);
+        if (!first.length) empty++;
+        rc.appendChild(el('button', { class: 'rv', style: 'width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;padding-left:0;padding-right:0', onclick: function () { step = 2; day = i; view(); } }, [el('b', { style: 'width:52px', text: 'Day ' + (i + 1) }), el('span', { class: 'sp', text: first.length ? first.join(' · ') : 'Empty — tap to fill' }),
+          el('span', { class: 'pill' + (!first.length ? ' red' : t && target && Math.abs(t - target) > target * 0.12 ? ' amber' : ''), text: t ? t + ' kcal' : first.length ? 'no kcal' : 'Empty' })]));
+      });
+      var nc = el('div', { class: 'card' }, [el('h3', { text: 'Notes & tips for the client' })]); b.appendChild(nc);
+      var nt = el('textarea', { class: 'in', rows: '5', maxlength: '3000', placeholder: 'Portions, water, what to avoid, swaps when eating out…' }); nt.value = notes; nt.addEventListener('input', function () { notes = nt.value; dirty = true; }); nc.appendChild(nt);
+      if (empty) b.appendChild(el('div', { class: 'note', style: 'background:#FFF8E6' }, [ico('warn'), el('span', { text: empty + ' day' + (empty > 1 ? 's are' : ' is') + ' still empty. Fill every day before sending.' })]));
+      if (v.status === 'plan_done') b.appendChild(el('div', { class: 'note' }, [ico('check'), el('span', { text: 'This plan was already sent. Sending again updates it for the client.' })]));
+      foot.appendChild(el('button', { class: 'btn ghost', style: 'flex:0 0 auto', html: ic('back') + ' Back', onclick: function () { step = 2; day = 6; view(); } }));
+      var sb = el('button', { class: 'btn deep', html: ic('send') + (v.status === 'plan_done' ? ' Send update' : ' Send diet plan'), onclick: async function () { if (empty) return toast('Fill all 7 days first.'); sb.disabled = true; if (await save(true)) { view(); } else sb.disabled = false; } });
+      foot.appendChild(sb);
+    }
+    a.onLeave = function () { if (dirty) save(false); };
+    view();
+  };
+
   document.addEventListener('visibilitychange', function () { if (!document.hidden && S) { poll(); if (CH) { clearTimeout(CHAT_T); chatPoll(); } } });
   if (TOKEN) start(); else login();
 })();
