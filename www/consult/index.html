@@ -233,8 +233,11 @@ window.DIETO_CONSULT = {
     finally { clearTimeout(tm); }
     var d = {}; try { d = await r.json(); } catch (e) {}
     if (!r.ok) { var err = new Error(d.error || 'Something went wrong. Please try again.'); err.status = r.status; err.data = d; throw err; }
+    // iPhone app: Apple requires its own in-app purchase for services that aren't live, so the written plan and dietO Care aren't sold here
+    if (route === 'config' && IOS_APP) { if (d.plan) d.plan.enabled = false; if (d.care) d.care.enabled = false; }
     return d;
   }
+  var IOS_APP = !!(window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'ios');
   function toast(t) { var x = el('div', { class: 'toast', text: t }); document.body.appendChild(x); setTimeout(function () { x.remove(); }, 3200); }
   function rs(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
   function initials(n) { return (n || '?').split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase(); }

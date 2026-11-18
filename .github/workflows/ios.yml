@@ -1,0 +1,92 @@
+# Builds the dietO iPhone app on GitHub's Mac runners and uploads it to TestFlight (no Mac needed).
+# Actions tab → "Build iOS app" → Run workflow.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8   App Store Connect API key (Admin) — signing + upload
+#   APPLE_TEAM_ID                           10-character Apple Developer Team ID
+#   GOOGLE_SERVICE_INFO_PLIST_B64           base64 of GoogleService-Info.plist (Firebase iOS app) — push notifications
+name: Build iOS app
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App Store version (must match the version open in App Store Connect)'
+        default: '1.0'
+  push:
+    tags: ['ios-v*']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    defaults:
+      run:
+        shell: bash   # bash -eo pipefail: a failed xcodebuild fails the step even when piped to tail
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ github.event.inputs.version || '1.0' }}
+      BUILD: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with: { xcode-version: latest-stable }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci || npm install
+      - name: Firebase config (push notifications)
+        env: { GSI: "${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 }}" }
+        run: |
+          if [ -n "$GSI" ]; then
+            echo "$GSI" | base64 -d > ios/App/App/GoogleService-Info.plist
+            grep -rl "DIETO_PUSH=false" www | xargs -r sed -i '' "s/DIETO_PUSH=false/DIETO_PUSH=true/g"
+          else echo "No GoogleService-Info.plist - push notifications will be off in this build"; fi
+      - run: npx cap sync ios
+      - name: Add Firebase file to the Xcode project
+        run: if [ -f ios/App/App/GoogleService-Info.plist ]; then ruby scripts/ios-add-firebase.rb; fi
+      - name: App Store Connect API key
+        env: { P8: "${{ secrets.ASC_KEY_P8 }}", KID: "${{ secrets.ASC_KEY_ID }}" }
+        run: |
+          if [ -z "$P8" ]; then echo "No ASC_KEY_P8 secret yet"; exit 0; fi
+          mkdir -p ~/private_keys
+          printf '%s\n' "$P8" > ~/private_keys/AuthKey_$KID.p8
+          echo "ASC_KEY_PATH=$HOME/private_keys/AuthKey_$KID.p8" >> $GITHUB_ENV
+      - name: Archive
+        env: { KID: "${{ secrets.ASC_KEY_ID }}", ISS: "${{ secrets.ASC_ISSUER_ID }}", TEAM: "${{ secrets.APPLE_TEAM_ID }}" }
+        run: |
+          if [ -z "$KID" ] || [ -z "$TEAM" ]; then
+            echo "No App Store Connect key yet - doing an unsigned build only, to check the app compiles"
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release -destination 'generic/platform=iOS' \
+              build CODE_SIGNING_ALLOWED=NO MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD" | tail -n 40
+            echo "SKIP_UPLOAD=1" >> $GITHUB_ENV; exit 0
+          fi
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/App.xcarchive" archive \
+            DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic \
+            MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD" \
+            -allowProvisioningUpdates -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$KID" -authenticationKeyIssuerID "$ISS" | tail -n 60
+          test -d "$RUNNER_TEMP/App.xcarchive"
+      - name: Upload to TestFlight
+        if: env.SKIP_UPLOAD != '1'
+        env: { KID: "${{ secrets.ASC_KEY_ID }}", ISS: "${{ secrets.ASC_ISSUER_ID }}", TEAM: "${{ secrets.APPLE_TEAM_ID }}" }
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$TEAM</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>uploadSymbols</key><true/>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$KID" -authenticationKeyIssuerID "$ISS"
+          echo "Uploaded build $BUILD (version $VERSION). It appears in App Store Connect → TestFlight after Apple finishes processing (5–30 min)."
+      - name: Remove the key
+        if: always()
+        run: rm -rf ~/private_keys
