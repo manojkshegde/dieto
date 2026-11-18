@@ -45,7 +45,7 @@ os.makedirs(WWW)
 
 # start page: open the app
 write('index.html', '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-      '<style>html,body{margin:0;background:#1d5a3a}</style><script>location.replace("/app/index.html" + location.hash);</script></head><body></body></html>')
+      '<style>html,body{margin:0;background:#F3F8F4}</style><script>location.replace("/app/index.html" + location.hash);</script></head><body></body></html>')
 
 # the app
 write('app/index.html', inject_base(read('app/index.html')))

@@ -405,27 +405,31 @@ window.DIETO_CONSULT = {
   }
   async function myList(main) {
     var holder = el('div'); main.appendChild(holder);
-    if (DietoAuth.token()) {   // chats saved to the account, from any phone
-      try {
-        var srv = (await api('my_sessions')).sessions, loc = mine(), byId = {};
-        loc.forEach(function (m) { byId[m.id] = m; });
-        srv.forEach(function (m) { byId[m.id] = Object.assign(byId[m.id] || {}, { id: m.id, key: m.key, title: m.title, created: m.created }); });
-        store('dieto_consults', Object.keys(byId).map(function (k) { return byId[k]; }).sort(function (a, b) { return a.created - b.created; }).slice(-30));
-      } catch (e) {}
+    function draw() {
+      holder.innerHTML = '';
+      var list = mine().slice(-8).reverse(); if (!list.length) return;
+      holder.appendChild(el('div', { class: 'h', text: 'Your chats' }));
+      var box = el('div', { class: 'card my' }); holder.appendChild(box);
+      list.forEach(function (m) {
+        var st = el('span', { class: 'st' + (m.status ? ' ' + m.status : ''), text: m.status ? (STATUS[m.status] || m.status) : '…' });
+        box.appendChild(el('a', { href: '#s=' + m.id }, [el('span', {}, [el('b', { text: m.title || 'Dietician chat' }), el('br'), el('small', { style: 'color:var(--mute)', text: new Date(m.created).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) })]), st]));
+        // guests (no account) have no list from the server, so check each chat on its own
+        if (!DietoAuth.token()) api('poll', { session_id: m.id, key: m.key, after: 1e12 }).then(function (v) { st.textContent = STATUS[v.status] || v.status; st.className = 'st ' + v.status; }).catch(function () { st.textContent = '—'; });
+      });
     }
-    if (DietoAuth.token()) {   // a chat still running: offer to jump straight back in
-      try { var ss = (await api('my_sessions')).sessions.filter(function (x) { return (x.status === 'active' || x.status === 'waiting') && x.mode !== 'plan'; })[0];
-        if (ss) main.insertBefore(el('a', { class: 'card dt', href: '#s=' + ss.id, style: 'text-decoration:none;color:var(--g900);background:var(--lime);box-shadow:none' }, [el('span', { style: 'width:12px;height:12px;border-radius:50%;background:#22A35A;box-shadow:0 0 0 5px rgba(34,163,90,.25);flex:none;margin:0 6px' }),
-          el('div', { class: 'sp' }, [el('b', { text: ss.status === 'active' ? 'Your chat is still on' : 'You’re in the queue' }), el('small', { style: 'color:var(--g900)', text: (ss.dietician || 'Your dietician') + ' · tap to resume' })]), el('span', { html: ic('next') })]), main.firstChild); } catch (e) {}
-    }
-    var list = mine().slice(-8).reverse(); if (!list.length) return;
-    holder.appendChild(el('div', { class: 'h', text: 'Your chats' }));
-    var box = el('div', { class: 'card my' }); holder.appendChild(box);
-    list.forEach(function (m) {
-      var st = el('span', { class: 'st', text: '…' });
-      box.appendChild(el('a', { href: '#s=' + m.id }, [el('span', {}, [el('b', { text: m.title || 'Dietician chat' }), el('br'), el('small', { style: 'color:var(--mute)', text: new Date(m.created).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) })]), st]));
-      api('poll', { session_id: m.id, key: m.key, after: 1e12 }).then(function (v) { st.textContent = STATUS[v.status] || v.status; st.className = 'st ' + v.status; }).catch(function () { st.textContent = '—'; });
-    });
+    draw();   // last-known list straight away
+    if (!DietoAuth.token()) return;
+    try {   // one call refreshes the list, every status and the "still on" banner
+      var srv = (await api('my_sessions')).sessions, loc = mine(), byId = {};
+      loc.forEach(function (m) { byId[m.id] = m; });
+      srv.forEach(function (m) { byId[m.id] = Object.assign(byId[m.id] || {}, { id: m.id, key: m.key, title: m.title, created: m.created, status: m.status }); });
+      store('dieto_consults', Object.keys(byId).map(function (k) { return byId[k]; }).sort(function (a, b) { return a.created - b.created; }).slice(-30));
+      if (!holder.isConnected) return;
+      draw();
+      var ss = srv.filter(function (x) { return (x.status === 'active' || x.status === 'waiting') && x.mode !== 'plan'; })[0];
+      if (ss) main.insertBefore(el('a', { class: 'card dt', href: '#s=' + ss.id, style: 'text-decoration:none;color:var(--g900);background:var(--lime);box-shadow:none' }, [el('span', { style: 'width:12px;height:12px;border-radius:50%;background:#22A35A;box-shadow:0 0 0 5px rgba(34,163,90,.25);flex:none;margin:0 6px' }),
+          el('div', { class: 'sp' }, [el('b', { text: ss.status === 'active' ? 'Your chat is still on' : 'You’re in the queue' }), el('small', { style: 'color:var(--g900)', text: (ss.dietician || 'Your dietician') + ' · tap to resume' })]), el('span', { html: ic('next') })]), main.firstChild);
+    } catch (e) {}
   }
   var STATUS = { pending: 'Not paid', waiting: 'Waiting', booked: 'Booked', active: 'Live', ended: 'Ended', refunded: 'Refunded', cancelled: 'Cancelled', plan_requested: 'Preparing your plan', plan_done: 'Plan ready' };
 

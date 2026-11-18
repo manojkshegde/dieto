@@ -14,10 +14,12 @@
       ]
     },
     "SplashScreen": {
-      "launchShowDuration": 900,
+      "launchShowDuration": 2500,
       "backgroundColor": "#ffffff",
       "showSpinner": false,
-      "androidScaleType": "CENTER_INSIDE"
+      "androidScaleType": "CENTER_INSIDE",
+      "launchAutoHide": true,
+      "launchFadeOutDuration": 150
     },
     "StatusBar": {
       "style": "DARK",

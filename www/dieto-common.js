@@ -210,4 +210,10 @@
   }
   // keep the push token registered for a signed-in user on every app start
   if (NATIVE && Auth.token()) Auth.registerPush('user');
+  // hide the launch splash as soon as the first screen has drawn (the config only keeps it as a fallback)
+  if (NATIVE) {
+    var hideSplash = function () { try { var sp = window.Capacitor.Plugins.SplashScreen; if (sp) sp.hide({ fadeOutDuration: 150 }); } catch (e) {} };
+    var afterPaint = function () { requestAnimationFrame(function () { setTimeout(hideSplash, 30); }); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', afterPaint); else afterPaint();
+  }
 })();
