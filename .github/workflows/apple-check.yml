@@ -1,0 +1,23 @@
+name: Apple setup check
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push capability on health.dieto.app
+        env: { P8: "${{ secrets.ASC_KEY_P8 }}", KID: "${{ secrets.ASC_KEY_ID }}", ISS: "${{ secrets.ASC_ISSUER_ID }}" }
+        run: |
+          pip install -q pyjwt cryptography requests
+          python3 - <<'PY'
+          import os, time, jwt, requests
+          t = jwt.encode({'iss': os.environ['ISS'], 'iat': int(time.time()), 'exp': int(time.time()) + 600, 'aud': 'appstoreconnect-v1'}, os.environ['P8'], algorithm='ES256', headers={'kid': os.environ['KID']})
+          H = {'Authorization': 'Bearer ' + t}
+          r = requests.get('https://api.appstoreconnect.apple.com/v1/bundleIds', params={'filter[identifier]': 'health.dieto.app', 'include': 'bundleIdCapabilities'}, headers=H).json()
+          ids = [b for b in r.get('data', []) if b['attributes']['identifier'] == 'health.dieto.app']
+          print('BUNDLE_ID_FOUND', bool(ids))
+          caps = sorted(c['attributes']['capabilityType'] for c in r.get('included', []) if c['type'] == 'bundleIdCapabilities')
+          print('CAPABILITIES', caps)
+          print('PUSH_ENABLED', 'PUSH_NOTIFICATIONS' in caps)
+          b = requests.get('https://api.appstoreconnect.apple.com/v1/builds', params={'sort': '-uploadedDate', 'limit': 3, 'fields[builds]': 'version,processingState,uploadedDate'}, headers=H).json()
+          for x in b.get('data', []): print('BUILD', x['attributes'])
+          PY
