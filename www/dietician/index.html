@@ -580,9 +580,30 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     b.appendChild(el('div', { class: 'card' }, [el('h3', { html: ic('bell') + ' Send a test alert' }),
       el('p', { class: 'none', style: 'padding:0;margin:-4px 0 12px', text: 'Close the app after tapping, and an alert should arrive within a few seconds.' }),
       el('button', { class: 'btn deep wide', text: 'Send me a test alert', onclick: async function () {
-        if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);
-        try { var r = await api('d_push_test'); res.textContent = r.phones ? 'Sent to ' + r.phones + ' phone' + (r.phones > 1 ? 's' : '') + '. Close the app now and wait a few seconds.' : 'No phone is registered for you yet. Open the dietO app on your phone, sign in here, and allow notifications.'; }
-        catch (e) { res.textContent = e.message; }
+        res.innerHTML = ''; res.appendChild(el('div', { text: 'Checking…' }));
+        var steps = [], ok = function (good, text) { steps.push([good, text]); };
+        var PN = DietoAuth.native && window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.PushNotifications, tok = '';
+        if (!DietoAuth.native) ok(false, 'You’re on the website. Alerts only come to the dietO app on your phone: sign in there.');
+        else if (!window.DIETO_PUSH || !PN) ok(false, 'This app version can’t receive alerts. Install the latest dietO app.');
+        else {
+          var perm = await PN.checkPermissions().catch(function () { return {}; });
+          if (perm.receive !== 'granted') perm = await PN.requestPermissions().catch(function () { return {}; });
+          ok(perm.receive === 'granted', perm.receive === 'granted' ? 'Notifications are allowed on this phone' : 'Notifications are blocked for dietO. Open phone Settings → Apps → dietO → Notifications and allow them.');
+          DietoAuth.registerPush('dietician', TOKEN);
+          for (var i = 0; i < 10 && !tok; i++) { await new Promise(function (r) { setTimeout(r, 500); }); try { tok = localStorage.getItem('dieto_push_token') || ''; } catch (e) {} }
+          ok(!!tok, tok ? 'This phone has a notification ID from Google/Apple' : 'This phone didn’t get a notification ID. Check the internet connection and that Google Play services are up to date, then try again.');
+          await new Promise(function (r) { setTimeout(r, 1500); });   // let the registration reach the server
+        }
+        try {
+          var r = await api('d_push_test', { token: tok });
+          if (DietoAuth.native) ok(r.this_phone, r.this_phone ? 'dietO knows this phone (' + r.phones + ' phone' + (r.phones > 1 ? 's' : '') + ' on your account)' : 'dietO hasn’t received this phone’s ID yet (' + r.phones + ' other phone' + (r.phones === 1 ? '' : 's') + '). Close and reopen the app, then try again.');
+          ok(r.server_key, r.server_key ? 'The server’s Firebase key is set up' : 'The server’s Firebase key is missing. Ask the admin to check fcm_service_account in dieto-config.php.');
+          ok(r.online, r.online ? 'You’re Online, so you get new-client alerts' : 'You’re Offline. You’ll still get alerts when no one else is Online, but switch Online on to get every new client.');
+          (r.result || []).forEach(function (l) { var good = /: sent$/.test(l); ok(good, (good ? 'Firebase accepted the alert: ' : 'Firebase result: ') + l.replace(/^.*? · /, '')); });
+          if (r.result && r.result.some(function (l) { return /: sent$/.test(l); })) ok(true, 'Now close the app. If no alert shows up within a few seconds, your phone is blocking dietO in the background: follow the steps for your phone below.');
+        } catch (e) { ok(false, e.message); }
+        res.innerHTML = '';
+        steps.forEach(function (x) { res.appendChild(el('div', { style: 'display:flex;gap:8px;align-items:flex-start;padding:6px 0;color:' + (x[0] ? '#146C43' : '#A12D20') + ';font-size:13.5px;line-height:1.45' }, [ico(x[0] ? 'check' : 'x'), el('span', { style: 'color:var(--ink)', text: x[1] })])); });
       } }), res]));
     var steps = [['All phones', 'Keep Online switched on. Allow notifications for dietO when asked (Settings → Apps → dietO → Notifications → Allow, with “Clients waiting” and “Dietician chat” turned on).'],
       ['Xiaomi, Redmi, POCO', 'Settings → Apps → Manage apps → dietO: turn on Autostart, and set Battery saver to “No restrictions”.'],
