@@ -144,6 +144,14 @@ nav a svg.i{width:23px;height:23px}nav a.on{color:var(--g700)}nav a.on svg.i{bac
 .nitem{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}.nitem:first-child{border-top:0}.nitem b{display:block;font-size:14.5px}.nitem.new b::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g700);margin-left:6px;vertical-align:middle}
 .ni{width:38px;height:38px;border-radius:12px;background:var(--mint);color:var(--g700);display:grid;place-items:center;flex:none}.ni svg.i{width:19px;height:19px}
 .disc{font-size:11.5px;color:var(--mute);margin:16px 4px 0;line-height:1.5}
+.ef{margin-top:12px}.ef label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}.ef small{display:block;color:var(--mute);font-size:12px;margin-top:5px}.ef .inp{width:100%}
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.echips{display:flex;flex-wrap:wrap;gap:8px}
+.echips button{border:0;border-radius:999px;padding:9px 14px;font:inherit;font-size:13.5px;font-weight:700;background:#fff;color:var(--ink2);box-shadow:inset 0 0 0 1.5px var(--line);cursor:pointer}
+.echips button.on{background:var(--g700);color:#fff;box-shadow:none}
+.hist .hrow{align-items:center;gap:8px}.hist .hrow .sp{flex:1}.hist .hb{width:34px;height:34px;border-radius:50%;border:0;background:var(--bg);color:var(--g700);display:grid;place-items:center;cursor:pointer}.hist .hb.del{color:#A12D20}.hist .hb svg.i{width:16px;height:16px}
+.ph3 .phd{position:relative;overflow:visible;background:none}.ph3 .phd a{display:block;width:100%;height:100%;border-radius:16px;overflow:hidden}
+.ph3 .phx{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:#A12D20;color:#fff;display:grid;place-items:center;padding:0;aspect-ratio:auto}.ph3 .phx svg.i{width:13px;height:13px}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
@@ -221,7 +229,7 @@ nav a svg.i{width:23px;height:23px}nav a.on{color:var(--g700)}nav a.on svg.i{bac
 <symbol id="i-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></symbol>
 <symbol id="i-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></symbol>
 <symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></symbol>
-<symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-shopping-basket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 11-1 9M19 11l-4-7M2 11h20M3.5 11l1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4M4.5 15.5h15M5 11l4-7M9 11l1 9"/></symbol><symbol id="i-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></symbol><symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol><symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14" /> <path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /> <path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" /> <rect x="3" y="7" width="18" height="4" rx="1" /></symbol>
+<symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.4a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/><path d="m15 5 4 4"/></symbol><symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-shopping-basket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 11-1 9M19 11l-4-7M2 11h20M3.5 11l1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4M4.5 15.5h15M5 11l4-7M9 11l1 9"/></symbol><symbol id="i-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></symbol><symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol><symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14" /> <path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" /> <path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5" /> <rect x="3" y="7" width="18" height="4" rx="1" /></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></symbol>
 <symbol id="i-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></symbol>
 <symbol id="i-croissant" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 18H4.774a1.5 1.5 0 0 1-1.352-.97 11 11 0 0 1 .132-6.487" /> <path d="M18 10.2V4.774a1.5 1.5 0 0 0-.97-1.352 11 11 0 0 0-6.486.132" /> <path d="M18 5a4 3 0 0 1 4 3 2 2 0 0 1-2 2 10 10 0 0 0-5.139 1.42" /> <path d="M5 18a3 4 0 0 0 3 4 2 2 0 0 0 2-2 10 10 0 0 1 1.42-5.14" /> <path d="M8.709 2.554a10 10 0 0 0-6.155 6.155 1.5 1.5 0 0 0 .676 1.626l9.807 5.42a2 2 0 0 0 2.718-2.718l-5.42-9.807a1.5 1.5 0 0 0-1.626-.676" /></symbol>
@@ -915,7 +923,19 @@ window.DIETO_RECIPES = [
     if (WTS.length) {
       var hc = h('div', { class: 'card' }, [h('h3', { html: ic('chart-line') + 'History' })]);
       var hist = h('div', { class: 'hist' });
-      WTS.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; }).slice(0, 12).forEach(function (w) { hist.appendChild(h('div', { html: '<span>' + parseYmd(w.d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) + '</span><b>' + w.kg + ' kg</b>' })); });
+      WTS.slice().sort(function (a, b) { return a.d < b.d ? 1 : -1; }).slice(0, 12).forEach(function (w) {
+        var when = parseYmd(w.d).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+        hist.appendChild(h('div', { class: 'hrow' }, [h('span', { class: 'sp', text: when }), h('b', { text: w.kg + ' kg' }),
+          h('button', { type: 'button', class: 'hb', 'aria-label': 'Edit ' + when, html: ic('pencil'), onclick: function () {
+            var v = parseFloat((prompt('Weight on ' + when + ' (kg)', w.kg) || '').replace(',', '.'));
+            if (!v) return; if (!(v >= 30 && v <= 250)) return toast('Please enter a weight between 30 and 250 kg');
+            w.kg = Math.round(v * 10) / 10; store('dieto_weights', WTS); syncProgress(); toast('Updated'); render();
+          } }),
+          h('button', { type: 'button', class: 'hb del', 'aria-label': 'Delete ' + when, html: ic('trash-2'), onclick: function () {
+            if (!confirm('Delete the ' + w.kg + ' kg entry from ' + when + '?')) return;
+            WTS = WTS.filter(function (x) { return x !== w; }); store('dieto_weights', WTS); syncProgress(); toast('Deleted'); render();
+          } })]));
+      });
       hc.appendChild(hist); m.appendChild(hc);
     }
     root.appendChild(m);
@@ -937,7 +957,16 @@ window.DIETO_RECIPES = [
     var grid = h('div', { class: 'ph3' }); c.appendChild(grid);
     var add = h('button', { html: ic('camera') + 'Add', 'aria-label': 'Add a meal photo' }); grid.appendChild(add);
     if (!DietoAuth.token()) { add.onclick = function () { location.hash = '#me'; toast('Sign in first, in Me'); }; m.appendChild(c); return; }
-    DietoAuth.api('my_meal_photos', {}).then(function (r) { r.photos.slice(0, 7).forEach(function (f) { grid.appendChild(h('a', { href: CAPI.replace(/[^\/]*$/, '') + f.url, target: '_blank', rel: 'noopener', title: f.name }, [h('img', { src: CAPI.replace(/[^\/]*$/, '') + f.url, alt: f.name + ' photo', loading: 'lazy' })])); }); }).catch(function () {});
+    function tile(f) {
+      var t = h('span', { class: 'phd' }, [h('a', { href: CAPI.replace(/[^\/]*$/, '') + f.url, target: '_blank', rel: 'noopener', title: f.name || 'Meal photo' }, [h('img', { src: CAPI.replace(/[^\/]*$/, '') + f.url, alt: (f.name || 'Meal') + ' photo', loading: 'lazy' })])]);
+      t.appendChild(h('button', { type: 'button', class: 'phx', 'aria-label': 'Delete this photo', html: ic('x'), onclick: async function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        if (!confirm('Delete this meal photo? Your dietician won’t see it any more.')) return;
+        try { await DietoAuth.api('meal_photo_del', { id: f.id }); t.remove(); toast('Photo deleted'); } catch (e) { toast(e.message || 'Couldn’t delete the photo'); }
+      } }));
+      return t;
+    }
+    DietoAuth.api('my_meal_photos', {}).then(function (r) { r.photos.slice(0, 7).forEach(function (f) { grid.appendChild(tile(f)); }); }).catch(function () {});
     add.onclick = function () {
       var i = h('input', { type: 'file', accept: 'image/*', capture: 'environment', style: 'display:none' });
       i.onchange = async function () {
@@ -949,7 +978,7 @@ window.DIETO_RECIPES = [
           var fd = new FormData(); fd.append('file', f); fd.append('slot', slot); fd.append('_u', DietoAuth.token());
           var r = await fetch(CAPI + '?route=meal_photo', { method: 'POST', body: fd }); var d = await r.json();
           if (!r.ok) throw new Error(d.error || 'Upload failed');
-          grid.insertBefore(h('a', { href: CAPI.replace(/[^\/]*$/, '') + d.photo.url, target: '_blank', rel: 'noopener' }, [h('img', { src: CAPI.replace(/[^\/]*$/, '') + d.photo.url, alt: 'Meal photo' })]), add.nextSibling);
+          grid.insertBefore(tile(d.photo), add.nextSibling);
           toast('Photo saved for your dietician');
         } catch (e) { toast(e.message || 'Couldn’t send the photo'); }
         add.disabled = false; add.innerHTML = ic('camera') + 'Add';
@@ -1215,6 +1244,7 @@ window.DIETO_RECIPES = [
     var pc = h('div', { class: 'card' }, [h('h3', { html: ic('user') + 'Your plan' })]);
     var kv = [['Plan', R.identity], ['Daily target', R.hideNums ? 'Set by your nutritionist' : R.kcal.toLocaleString('en-IN') + ' kcal · ' + R.p + 'g protein'], ['Diet', A.pref ? E.PREF_NAME[A.pref] : ''], ['Meals', (A.slots || []).map(function (s) { return E.SLOT_NAME[s]; }).join(', ')], ['Started', parseYmd(P.start).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })]];
     kv.forEach(function (r) { if (r[1]) pc.appendChild(h('div', { class: 'kv', html: '<span>' + r[0] + '</span><b>' + esc(r[1]) + '</b>' })); });
+    pc.appendChild(h('a', { class: 'btn btn-o', href: '#edit', style: 'margin-top:12px', html: ic('pencil') + 'Edit my details' }));
     m.appendChild(pc);
     if (P.code) {
       var cc = h('div', { class: 'card' }, [h('h3', { html: ic('smartphone') + 'Your app code' }), h('p', { class: 'sub', style: 'margin:-4px 0 10px', text: 'Use it to open your plan on another phone.' })]);
@@ -1296,7 +1326,86 @@ window.DIETO_RECIPES = [
     root.appendChild(o);
   }
 
-  var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe, grocery: viewGrocery, recipes: viewRecipes, inbox: viewInbox };
+  var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe, grocery: viewGrocery, recipes: viewRecipes, inbox: viewInbox, edit: viewEdit };
+
+  /* ---------- edit my details: everything from the diet test, with the plan rebuilt to match ---------- */
+  var PLAN_KEYS = ['age', 'gender', 'cm', 'kg', 'targetKg', 'goal', 'pref', 'slots', 'activity', 'conditions', 'allergies', 'pregnant'];
+  function viewEdit() {
+    root.appendChild(header('Edit my details', 'Change anything you told us. Your plan updates to match.'));
+    var m = h('main', { class: 'lift' }), a = JSON.parse(JSON.stringify(A)), F = {};
+    function row(label, el, hint) { return h('div', { class: 'ef' }, [h('label', { text: label }), el, hint ? h('small', { text: hint }) : null]); }
+    function inp(key, type, extra, val) { var i = h('input', Object.assign({ class: 'inp', type: type || 'text', value: val != null ? val : (a[key] == null ? '' : a[key]) }, extra || {})); F[key] = i; return i; }
+    function pick(key, opts, multi) {
+      var box = h('div', { class: 'echips' }), cur = multi ? (a[key] || []).slice() : a[key];
+      opts.forEach(function (o) {
+        var b = h('button', { type: 'button', class: (multi ? cur.indexOf(o[0]) >= 0 : cur === o[0]) ? 'on' : '', text: o[1], 'aria-pressed': 'false' });
+        b.onclick = function () {
+          if (multi) { var i = cur.indexOf(o[0]); if (i >= 0) cur.splice(i, 1); else cur.push(o[0]); b.classList.toggle('on'); }
+          else { cur = o[0]; [].forEach.call(box.children, function (x) { x.classList.remove('on'); }); b.classList.add('on'); }
+          box._v = cur; if (key === 'gender') preg.classList.toggle('hidden', cur === 'male');
+        };
+        box.appendChild(b);
+      });
+      box._v = cur; F[key] = box; return box;
+    }
+    var c1 = h('div', { class: 'card' }, [h('h3', { html: ic('user') + 'About you' })]);
+    c1.appendChild(row('Name', inp('name', 'text', { maxlength: '60', autocomplete: 'name' }, P.name || a.name || '')));
+    c1.appendChild(row('Email', inp('email', 'email', { autocomplete: 'email', placeholder: 'Optional' }), 'Leave it empty to remove your email.'));
+    c1.appendChild(h('div', { class: 'egrid' }, [row('Age', inp('age', 'number', { inputmode: 'numeric', min: '14', max: '90' })), row('Height (cm)', inp('cm', 'number', { inputmode: 'numeric', min: '120', max: '220' }))]));
+    c1.appendChild(h('div', { class: 'egrid' }, [row('Starting weight (kg)', inp('kg', 'number', { inputmode: 'decimal', step: '0.1' })), row('Target weight (kg)', inp('targetKg', 'number', { inputmode: 'decimal', step: '0.1', placeholder: 'Optional' }))]));
+    c1.appendChild(row('Gender', pick('gender', [['female', 'Female'], ['male', 'Male'], ['other', 'Other']])));
+    m.appendChild(c1);
+    var c2 = h('div', { class: 'card' }, [h('h3', { html: ic('target') + 'Goal & food' })]);
+    c2.appendChild(row('Main goal', pick('goal', [['lose', 'Lose weight'], ['gain', 'Gain muscle'], ['maintain', 'Maintain & eat clean'], ['medical', 'Manage a condition'], ['wellness', 'General wellness']])));
+    c2.appendChild(row('Diet', pick('pref', [['veg', 'Vegetarian'], ['nonveg', 'Non-veg'], ['egg', 'Eggetarian'], ['vegan', 'Vegan'], ['jain', 'Jain']])));
+    c2.appendChild(row('Meals in your plan', pick('slots', [['b', 'Breakfast'], ['l', 'Lunch'], ['s', 'Evening snack'], ['d', 'Dinner']], true)));
+    c2.appendChild(row('How active you are', pick('activity', [['sit', 'Mostly sitting'], ['some', 'On my feet sometimes'], ['active', 'Active / daily workouts'], ['athlete', 'Very active']])));
+    m.appendChild(c2);
+    var c3 = h('div', { class: 'card' }, [h('h3', { html: ic('heart-pulse') + 'Health' })]);
+    c3.appendChild(row('Conditions', pick('conditions', [['diabetes', 'Diabetes'], ['pcos', 'PCOS / PCOD'], ['thyroid', 'Thyroid'], ['bp', 'High BP'], ['cholesterol', 'Cholesterol'], ['liver', 'Fatty liver'], ['heart', 'Heart condition']], true), 'Tap again to remove one.'));
+    c3.appendChild(row('Other condition', inp('condOther', 'text', { maxlength: '120', placeholder: 'Optional' })));
+    c3.appendChild(row('Food allergies', pick('allergies', [['nuts', 'Nuts'], ['dairy', 'Dairy'], ['gluten', 'Gluten'], ['shellfish', 'Shellfish'], ['soy', 'Soy'], ['egg', 'Eggs']], true)));
+    c3.appendChild(row('Other allergy', inp('allergyOther', 'text', { maxlength: '120', placeholder: 'Optional' })));
+    var preg = row('Pregnant or breastfeeding?', pick('pregnant', [['no', 'No'], ['yes', 'Yes']]));
+    if (a.gender === 'male') preg.classList.add('hidden');
+    c3.appendChild(preg);
+    m.appendChild(c3);
+    var msg = h('div', { class: 'msg' });
+    var save = h('button', { class: 'btn btn-g', html: ic('check') + 'Save changes' });
+    m.appendChild(msg); m.appendChild(save);
+    m.appendChild(h('a', { class: 'btn btn-o', href: '#me', style: 'margin-top:10px', text: 'Cancel' }));
+    save.onclick = function () {
+      var n = function (k) { var v = parseFloat(String(F[k].value).replace(',', '.')); return isNaN(v) ? null : v; };
+      var na = Object.assign({}, A, {
+        name: F.name.value.trim(), email: F.email.value.trim().toLowerCase(), age: n('age'), cm: n('cm'), kg: n('kg'), targetKg: n('targetKg'),
+        gender: F.gender._v, goal: F.goal._v, pref: F.pref._v, slots: F.slots._v.slice(), activity: F.activity._v,
+        conditions: F.conditions._v.slice(), condOther: F.condOther.value.trim(), allergies: F.allergies._v.slice(), allergyOther: F.allergyOther.value.trim(),
+        pregnant: F.gender._v === 'male' ? 'no' : F.pregnant._v
+      });
+      var err = !na.name ? 'Please enter your name.' : na.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(na.email) ? 'Please check your email.' : !(na.age >= 14 && na.age <= 90) ? 'Age should be between 14 and 90.'
+        : !(na.cm >= 120 && na.cm <= 220) ? 'Height should be between 120 and 220 cm.' : !(na.kg >= 30 && na.kg <= 250) ? 'Weight should be between 30 and 250 kg.'
+        : na.targetKg != null && !(na.targetKg >= 30 && na.targetKg <= 250) ? 'Target weight should be between 30 and 250 kg, or empty.' : !na.slots.length ? 'Pick at least one meal.' : '';
+      if (err) { msg.className = 'msg err'; msg.textContent = err; msg.scrollIntoView({ block: 'center' }); return; }
+      ['slots', 'conditions', 'allergies'].forEach(function (k) { na[k].sort(); });
+      na.conditions_none = !na.conditions.length && !na.condOther; na.allergies_none = !na.allergies.length && !na.allergyOther; na.slots_none = false;
+      var changed = PLAN_KEYS.some(function (k) { var x = A[k], y = na[k]; if (Array.isArray(x)) x = x.slice().sort().join(); if (Array.isArray(y)) y = y.join(); return String(x == null ? '' : x) !== String(y == null ? '' : y); });
+      if (changed && !confirm('Update your 7-day plan to match these changes? Meal swaps you made this week will be replaced.')) return;
+      A = na; P.A = na; P.name = na.name;
+      if (changed) {
+        var ca = Object.assign({}, na); if (ca.pregnant === 'yes') ca.goal = 'maintain';
+        var r = E.calc(ca); r.identity = E.identity(na, r); r.hideNums = na.pregnant === 'yes';
+        r.note = r.hideNums ? 'During pregnancy and breastfeeding your needs change week to week, so there’s no calorie target or weight goal. Your meals focus on nourishing, protein-rich food.' : E.note(na, r);
+        R = r; P.R = r; P.WEEK = E.buildWeek(na, r);
+        try { P.TIER = E.recommendTier(na); } catch (e) {}
+      }
+      savePlan();
+      ping({ name: na.name, email: na.email, age: na.age, height_cm: na.cm, weight_kg: na.kg, target_kg: na.targetKg || '', diet_identity: R.identity, calories: R.hideNums ? '' : R.kcal });
+      if (DietoAuth.token()) DietoAuth.api('me_update', { name: na.name, email: na.email }).catch(function () {});
+      toast(changed ? 'Saved. Your plan is updated.' : 'Saved');
+      location.hash = '#me';
+    };
+    root.appendChild(m);
+  }
   function render(ev) {
     // a new screen (link or first load) starts at the top; a change on the same screen keeps the scroll position
     var y = window.scrollY || 0, fresh = !render._done || !!(ev && ev.type);
@@ -1308,7 +1417,7 @@ window.DIETO_RECIPES = [
     var v = (location.hash || '#today').slice(1);
     if (v.indexOf('r=') === 0) { $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#week'); }); viewRecipe(v.slice(2)); window.scrollTo(0, 0); return; }
     if (!VIEWS[v]) v = 'today';
-    $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + (v === 'grocery' || v === 'recipes' ? 'week' : v)); });
+    $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + (v === 'grocery' || v === 'recipes' ? 'week' : v === 'edit' ? 'me' : v)); });
     VIEWS[v]();
     fabs();
     window.scrollTo(0, fresh ? 0 : y);

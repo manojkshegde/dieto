@@ -235,7 +235,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     out: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', clip: '<path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
     shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>', bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
     warn: '<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>', copy: '<rect x="8" y="8" width="13" height="13" rx="3"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
-    bank: '<path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18"/>', goal: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' };
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',     bank: '<path d="M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18"/>', goal: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>' };
   function ic(n) { return '<svg class="i" viewBox="0 0 24 24">' + (ICONS[n] || '') + '</svg>'; }
   function el(tag, attrs, kids) {
     var e = document.createElement(tag);
@@ -562,6 +562,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       row('cal', 'Availability', 'Times clients can book', function () { go('availability'); }),
       row('hist', 'Chat history', 'Past chats and earnings', function () { go('history'); })]));
     b.appendChild(el('div', { class: 'card rows' }, [row('lock', 'Change password', '', function () { go('password'); }),
+      row('bell', 'Alerts when the app is closed', 'Test it and fix your phone settings', function () { go('alerts'); }),
       row('help', 'Help & support', 'health@dieto.health · +91 96067 93199', function () { location.href = 'mailto:health@dieto.health'; }),
       row('doc', 'Terms & privacy', 'Terms, privacy and refunds', function () { var u = '/legal/terms.html'; if (DietoAuth.native && window.Capacitor && Capacitor.Plugins.Browser) Capacitor.Plugins.Browser.open({ url: 'https://dieto.health' + u }); else window.open(u, '_blank'); })]));
     b.appendChild(el('button', { class: 'btn ghost wide', style: 'color:var(--red)', html: ic('out') + ' Log out', onclick: function () { if (confirm('Log out? You will go offline.')) signOut(); } }));
@@ -572,6 +573,28 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       fLg = el('input', { class: 'in', placeholder: 'English, Kannada, Tulu', value: me.langs || '' }), fYr = el('input', { class: 'in', type: 'number', min: '0', max: '60', value: me.years || '' }), fBio = el('textarea', { class: 'in', rows: '4', maxlength: '600' }); fBio.value = me.bio || '';
     [['Helps with', fSp], ['Languages you speak', fLg], ['Years of experience', fYr], ['Short bio (clients see it)', fBio], ['UPI ID for payouts', fUpi]].forEach(function (r) { pc.appendChild(el('label', { class: 'f', text: r[0] })); pc.appendChild(r[1]); });
     pc.appendChild(el('button', { class: 'btn wide', style: 'margin-top:16px', text: 'Save', onclick: async function () { try { await api('d_profile', { upi: fUpi.value.trim(), specialties: fSp.value.trim(), langs: fLg.value.trim(), years: +fYr.value || 0, bio: fBio.value.trim() }); toast('Profile saved'); await poll(); back(); } catch (e) { toast(e.message); } } }));
+  };
+  SCREENS.alerts = function () {
+    var b = page(hdr('Alerts when the app is closed'));
+    var res = el('div', { class: 'none' });
+    b.appendChild(el('div', { class: 'card' }, [el('h3', { html: ic('bell') + ' Send a test alert' }),
+      el('p', { class: 'none', style: 'padding:0;margin:-4px 0 12px', text: 'Close the app after tapping, and an alert should arrive within a few seconds.' }),
+      el('button', { class: 'btn deep wide', text: 'Send me a test alert', onclick: async function () {
+        if (DietoAuth.native) DietoAuth.registerPush('dietician', TOKEN);
+        try { var r = await api('d_push_test'); res.textContent = r.phones ? 'Sent to ' + r.phones + ' phone' + (r.phones > 1 ? 's' : '') + '. Close the app now and wait a few seconds.' : 'No phone is registered for you yet. Open the dietO app on your phone, sign in here, and allow notifications.'; }
+        catch (e) { res.textContent = e.message; }
+      } }), res]));
+    var steps = [['All phones', 'Keep Online switched on. Allow notifications for dietO when asked (Settings → Apps → dietO → Notifications → Allow, with “Clients waiting” and “Dietician chat” turned on).'],
+      ['Xiaomi, Redmi, POCO', 'Settings → Apps → Manage apps → dietO: turn on Autostart, and set Battery saver to “No restrictions”.'],
+      ['Oppo, Realme, OnePlus', 'Settings → Apps → dietO: allow Auto launch / Allow background activity, and set Battery usage to “Don’t optimise”.'],
+      ['Vivo, iQOO', 'Settings → Battery → Background power consumption → dietO: allow. Also turn on Autostart in i Manager.'],
+      ['Samsung', 'Settings → Apps → dietO → Battery → Unrestricted. Make sure dietO isn’t in “Sleeping apps”.'],
+      ['iPhone', 'Settings → Notifications → dietO → Allow Notifications on. Turn off Focus / Do Not Disturb, or allow dietO in it.']];
+    var c = el('div', { class: 'card' }, [el('h3', { html: ic('help') + ' If alerts don’t arrive' })]);
+    c.appendChild(el('p', { class: 'none', style: 'padding:0;margin:-4px 0 8px', text: 'Many Indian phones stop apps in the background to save battery, which also blocks alerts. Fix it once:' }));
+    steps.forEach(function (x) { c.appendChild(el('div', { class: 'tl', style: 'margin:10px 0 0 6px' }, [el('div', {}, [el('b', { text: x[0] }), el('small', { text: x[1] })])])); });
+    b.appendChild(c);
+    b.appendChild(el('div', { class: 'note' }, [ico('bulb'), el('span', { text: 'Alerts only come to the dietO phone app. On a computer, the dashboard beeps only while it is open.' })]));
   };
   SCREENS.password = function () {
     var b = page(hdr('Change password')), c2 = el('div', { class: 'card' }); b.appendChild(c2);
