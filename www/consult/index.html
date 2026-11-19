@@ -584,10 +584,11 @@ window.DIETO_CONSULT = {
   async function refresh() {
     if (!CUR) return;
     var id = CUR.id, v;
-    try { v = await api('poll', { session_id: CUR.id, key: CUR.key, after: LAST }); }
+    try { v = await api('poll', { session_id: CUR.id, key: CUR.key, after: LAST, seen: !document.hidden }); }
     catch (e) { if (CUR && CUR.id === id) POLL = setTimeout(refresh, 5000); return; }
     if (!CUR || CUR.id !== id) return;
     CUR.v = v; render(v);
+    if (CUR && CUR.msgs && v.rcpt) DietoAuth.ticks(CUR.msgs, 'c', v.rcpt);
     // check often while messages are flowing, slow down when the chat is quiet (saves server load)
     CUR.quiet = v.messages && v.messages.length ? 0 : (CUR.quiet || 0) + 1;
     var wait = v.status === 'active' ? Math.min(6000, 2000 + CUR.quiet * 400) : v.status === 'waiting' ? 4000 : v.status === 'booked' ? 30000 : v.status === 'pending' ? 8000 : v.mode === 'plan' && v.can_message ? 8000 : v.status === 'plan_requested' ? 60000 : v.mode === 'pack' && v.status === 'pending' ? 5000 : 0;
@@ -643,7 +644,7 @@ window.DIETO_CONSULT = {
     if (v.can_message) box.appendChild(el('p', { class: 'note', style: 'margin:4px 0 8px', text: v.status === 'plan_requested' ? 'Tell them anything that helps: your routine, foods you avoid, reports.' : 'Questions about your plan? Ask here for 14 days after it arrives.' }));
     var list = el('div', { style: 'display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;padding:4px 0' }); box.appendChild(list);
     CUR.msgs = list; CUR.planThread = true;
-    msgs.forEach(function (m) { if (SEEN[m.id]) return; SEEN[m.id] = 1; LAST = Math.max(LAST, m.id); list.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null])); });
+    msgs.forEach(function (m) { if (SEEN[m.id]) return; SEEN[m.id] = 1; LAST = Math.max(LAST, m.id); list.appendChild(mnode(m)); });
     (v.messages || []).forEach(function (m) { SEEN[m.id] = 1; LAST = Math.max(LAST, m.id); });
     if (!v.can_message) return;
     var ta = el('textarea', { rows: '1', placeholder: 'Type a message…', maxlength: '2000', 'aria-label': 'Message' });
@@ -677,7 +678,7 @@ window.DIETO_CONSULT = {
     if (mode === 'missed') return renderMissed(v, b);
     if (mode === 'waiting' && CUR.waitBox) return updateWaiting(v);
     if (v.mode === 'plan' && CUR.planThread && CUR.planStatus === v.status) {   // keep the page; just add new messages
-      v.messages.forEach(function (m) { if (SEEN[m.id]) return; SEEN[m.id] = 1; LAST = Math.max(LAST, m.id); CUR.msgs.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null])); });
+      v.messages.forEach(function (m) { if (SEEN[m.id]) return; SEEN[m.id] = 1; LAST = Math.max(LAST, m.id); CUR.msgs.appendChild(mnode(m)); });
       CUR.msgs.scrollTop = CUR.msgs.scrollHeight; return;
     }
     CUR.planStatus = v.status; CUR.planThread = false;
@@ -771,6 +772,7 @@ window.DIETO_CONSULT = {
   var API_DIR = C.api.replace(/[^\/]*$/, '');
   function fileHref(f) { return API_DIR + f.url; }
   function kb(n) { return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+  function mnode(m) { var n = m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]); n.setAttribute('data-mid', m.id); return n; }
   function fileNode(m) {
     var f = m.file, box = el('div', { class: 'm file ' + m.from });
     if (/^image\//.test(f.mime)) box.appendChild(el('a', { href: fileHref(f), target: '_blank', rel: 'noopener' }, [el('img', { src: fileHref(f), alt: 'Shared photo', loading: 'lazy' })]));
@@ -851,7 +853,7 @@ window.DIETO_CONSULT = {
     v.messages.forEach(function (m) {
       LAST = Math.max(LAST, m.id); if (SEEN[m.id]) return; SEEN[m.id] = 1;
       var pend = CUR.msgs.querySelector('[data-pending]'); if (m.from === 'c' && pend && pend.dataset.text === m.text) pend.remove();
-      CUR.msgs.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]));
+      CUR.msgs.appendChild(mnode(m));
     });
     if (atBottom || v.messages.length) CUR.msgs.scrollTop = CUR.msgs.scrollHeight;
     CUR.banner.innerHTML = '';

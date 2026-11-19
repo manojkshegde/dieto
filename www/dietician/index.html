@@ -282,7 +282,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   /* ---------- login ---------- */
   function signOut(silent) {
     clearTimeout(STATE_T); clearTimeout(CHAT_T); clearInterval(TICK); clearTimeout(PLAN_T); CH = null;
-    if (!silent && TOKEN) api('d_logout').catch(function () {});
+    if (!silent && TOKEN) { var dev = ''; try { dev = localStorage.getItem('dieto_push_token') || ''; } catch (e) {} api('d_logout', { _dev: dev }).catch(function () {}); }
     cclear(); TOKEN = ''; localStorage.removeItem('dieto_dtoken'); S = null; HIST = null; login();
   }
   function login() {
@@ -322,14 +322,23 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     else if (window.Notification && Notification.permission === 'default') Notification.requestPermission().catch(function () {});
     HIST = cget('hist'); HSTALE = 1;
     var cs = cget('state');
-    if (cs && cs.me) { S.data = cs; cs.queue.forEach(function (q) { KNOWN[q.id] = 1; }); render(); }
+    if (cs && cs.me) { S.data = cs; cs.queue.forEach(function (q) { KNOWN[q.id] = 1; }); render(); hashGo(); }
     else S.scr.appendChild(el('div', { class: 'empty', style: 'margin:auto', text: 'Loading…' }));
     poll();
   }
   function top() { return STACK[STACK.length - 1]; }
   function go(n, arg) { STACK.push({ n: n, a: arg }); try { history.pushState({ d: STACK.length }, ''); } catch (e) {} render(); }
   function back() { if (OVER) { closeOver(); return; } if (STACK.length > 1) { try { history.back(); } catch (e) { STACK.pop(); render(); } } }
-  window.addEventListener('popstate', function () { if (SKIPPOP) { SKIPPOP = 0; return; } if (!S) return; if (OVER) { OVER.remove(); OVER = null; return; } if (STACK.length > 1) { STACK.pop(); render(); } });
+  // links from phone notifications: #chat=ID opens that chat, #chats and #plans open those lists
+  function hashGo() {
+    var h = location.hash; if (!S || !S.data || !/^#(chat=\d+|chats|plans)$/.test(h)) return false;
+    try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
+    if (h.indexOf('#chat=') === 0) { var id = +h.slice(6); if (S.data.queue.some(function (q) { return q.id === id; })) { S.chip.chats = 'waiting'; root_('chats'); } else openChat(id); }
+    else if (h === '#chats') root_('chats'); else { root_('home'); go('plans'); }
+    return true;
+  }
+  window.addEventListener('hashchange', function () { hashGo(); });
+  window.addEventListener('popstate', function () { if (/^#(chat=\d+|chats|plans)$/.test(location.hash)) { hashGo(); return; } if (SKIPPOP) { SKIPPOP = 0; return; } if (!S) return; if (OVER) { OVER.remove(); OVER = null; return; } if (STACK.length > 1) { STACK.pop(); render(); } });
   function closeOver() { if (!OVER) return; try { history.back(); } catch (e) { OVER.remove(); OVER = null; } }
   function openOver(node) { if (OVER) OVER.remove(); OVER = node; root.appendChild(node); try { history.pushState({ o: 1 }, ''); } catch (e) {} }
   var LIVE = { home: 1, chats: 1, bookings: 1, plans: 1, availability: 0 };
@@ -362,7 +371,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       LASTC[a.id] = a.last_c;
     });
     var n = d.queue.length + d.active.filter(function (a) { return a.unread && !(CH && CH.id === a.id); }).length; if (n) nb.appendChild(el('span', { class: 'badge', text: String(n) }));
-    if (first) { render(); return; }
+    if (first) { render(); hashGo(); return; }
     if (CH && CH.others) drawOthers();
     var t = top();
     if (LIVE[t.n] && !OVER && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))) { var b = S.scr.querySelector('.body'), y = b ? b.scrollTop : 0; render(); b = S.scr.querySelector('.body'); if (b) b.scrollTop = y; }
@@ -656,7 +665,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
   };
   async function chatPoll(wait) {
     if (!CH) return; var id = CH.id;
-    if (!wait) { try { var v = await api('d_poll', { session_id: id, after: CH.last }); if (CH && CH.id === id) { CH.quiet = v.messages && v.messages.length ? 0 : (CH.quiet || 0) + 1; renderChat(v); } } catch (e) { if (CH && !CH.built) { S.scr.innerHTML = ''; page(hdr('Chat')).appendChild(el('div', { class: 'empty', text: e.message })); return; } } }
+    if (!wait) { try { var v = await api('d_poll', { session_id: id, after: CH.last, seen: !document.hidden }); if (CH && CH.id === id) { CH.quiet = v.messages && v.messages.length ? 0 : (CH.quiet || 0) + 1; renderChat(v); } } catch (e) { if (CH && !CH.built) { S.scr.innerHTML = ''; page(hdr('Chat')).appendChild(el('div', { class: 'empty', text: e.message })); return; } } }
     if (CH && CH.id === id) { clearTimeout(CHAT_T); CHAT_T = setTimeout(chatPoll, CH.v && CH.v.status === 'active' ? (document.hidden ? 10000 : Math.min(6000, 2000 + (CH.quiet || 0) * 400)) : 15000); }
   }
   function renderChat(v) {
@@ -692,10 +701,11 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       CH.last = Math.max(CH.last, m.id); if (CH.seen[m.id]) return; CH.seen[m.id] = 1;
       var pend = CH.msgs.querySelector('[data-pending]'); if (m.from === 'd' && pend && pend.dataset.text === m.text) pend.remove();
       if (m.from === 'c' && CH.primed) notify(v.client.name + ': ' + (m.text || 'sent a file').slice(0, 60));
-      CH.msgs.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]));
+      CH.msgs.appendChild(mnode(m));
       if (m.file) CH.files.push(Object.assign({ ts: m.ts, from: m.from }, m.file));
     });
     CH.primed = true;
+    if (v.rcpt) DietoAuth.ticks(CH.msgs, 'd', v.rcpt);
     if (CH.side && CH.sideFiles !== CH.files.length) { var keep = CH.side.querySelector('.tabs .on'), tabk = keep ? keep.getAttribute('data-k') : null, nf = CH.side.querySelector('.pnote'); if (!(nf && document.activeElement === nf)) { CH.sideFiles = CH.files.length; patientProfile(null, tabk, CH.side); } }
     if (atBottom || v.messages.length) CH.msgs.scrollTop = CH.msgs.scrollHeight;
     var active = v.status === 'active';
@@ -709,6 +719,7 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
       t(); TICK = setInterval(t, 1000);
     } else CH.timer.textContent = v.status === 'ended' ? 'Chat ended' : v.status === 'booked' ? 'Booked chat' : v.status;
   }
+  function mnode(m) { var n = m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null]); n.setAttribute('data-mid', m.id); return n; }
   function fileNode(m) {
     var f = m.file, box = el('div', { class: 'm file ' + m.from }), u = API_DIR + f.url;
     if (/^image\//.test(f.mime)) box.appendChild(el('a', { href: u, target: '_blank', rel: 'noopener' }, [el('img', { src: u, alt: 'Shared photo', loading: 'lazy' })]));
@@ -857,9 +868,9 @@ window.DIETO_DIETICIAN = { api: (window.DIETO_BASE || '') + '/api/consult.php', 
     var days = []; for (var i = 0; i < 7; i++) days.push(Object.assign({}, (v.plan.days || [])[i] || {}));
     var notes = v.plan.notes || '', dirty = false, TPL = [], hadPlan = days.some(function (dd) { return keys.some(function (k) { return (dd[k] || '').trim(); }); });
     var thread = el('div', { class: 'pthread' }), pseen = {}, plast = 0;
-    function addMsgs(list) { list.forEach(function (m) { plast = Math.max(plast, m.id); if (pseen[m.id]) return; pseen[m.id] = 1; thread.appendChild(m.file ? fileNode(m) : el('div', { class: 'm ' + m.from }, [m.text, m.from !== 'sys' ? el('time', { text: fmtTime(m.ts) }) : null])); }); thread.scrollTop = thread.scrollHeight; }
-    addMsgs(v.messages || []);
-    async function pp() { clearTimeout(PLAN_T); if (top().a !== a) return; try { var r = await api('d_poll', { session_id: id, after: plast }); addMsgs(r.messages); } catch (e) {} PLAN_T = setTimeout(pp, document.hidden ? 30000 : 8000); }
+    function addMsgs(list) { list.forEach(function (m) { plast = Math.max(plast, m.id); if (pseen[m.id]) return; pseen[m.id] = 1; thread.appendChild(mnode(m)); }); thread.scrollTop = thread.scrollHeight; }
+    addMsgs(v.messages || []); DietoAuth.ticks(thread, 'd', v.rcpt);
+    async function pp() { clearTimeout(PLAN_T); if (top().a !== a) return; try { var r = await api('d_poll', { session_id: id, after: plast, seen: !document.hidden }); addMsgs(r.messages); DietoAuth.ticks(thread, 'd', r.rcpt); } catch (e) {} PLAN_T = setTimeout(pp, document.hidden ? 30000 : 8000); }
     PLAN_T = setTimeout(pp, 8000);
     var planFiles = (v.messages || []).filter(function (m) { return m.file; }).map(function (m) { return Object.assign({ ts: m.ts }, m.file); });
     function dayKcal(dd) { var t = 0; keys.forEach(function (k) { t += +dd[k + '_k'] || 0; }); return t; }

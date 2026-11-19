@@ -145,21 +145,55 @@
           var p = await PN.checkPermissions();
           if (p.receive !== 'granted') p = await PN.requestPermissions();
           if (p.receive !== 'granted') return;
-          if (!Auth._listening) {
-            Auth._listening = true;
-            PN.addListener('registration', function (t) {
-              try { localStorage.setItem('dieto_push_token', t.value); } catch (e) {}
-              Auth._sendToken(t.value);
-            });
-            PN.addListener('pushNotificationActionPerformed', function (a) {
-              var url = a && a.notification && a.notification.data && a.notification.data.url; if (url) location.href = Auth.href(url);
-            });
-          }
+          Auth._listen();
           Auth._roles = Auth._roles || {}; Auth._roles[role] = dieticianToken || true;
           var known = localStorage.getItem('dieto_push_token'); if (known) Auth._sendToken(known);
           await PN.register();
         } catch (e) { /* push is optional */ }
       })();
+    },
+    /* Listeners go on at app start (before any permission prompt), so a tap on a notification that opened the app is never missed. */
+    _listen: function () {
+      if (Auth._listening || !NATIVE || !window.DIETO_PUSH) return;
+      var PN = window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications; if (!PN) return;
+      Auth._listening = true;
+      PN.addListener('registration', function (t) {
+        try { localStorage.setItem('dieto_push_token', t.value); } catch (e) {}
+        Auth._sendToken(t.value);
+      });
+      PN.addListener('pushNotificationActionPerformed', function (a) {
+        var url = a && a.notification && a.notification.data && a.notification.data.url; if (url) Auth._go(url);
+      });
+      // app open (Android shows nothing on its own in the foreground; iOS shows its own banner)
+      PN.addListener('pushNotificationReceived', function (n) {
+        if (window.Capacitor.getPlatform() === 'ios') return;
+        var url = (n && n.data && n.data.url) || '';
+        if (url && Auth._here(url)) return;   // already looking at that chat
+        Auth._banner(n.title || 'dietO', n.body || '', url);
+      });
+    },
+    _here: function (url) {
+      var path = url.split('#')[0], hash = url.indexOf('#') >= 0 ? url.slice(url.indexOf('#')) : '';
+      if (location.pathname.indexOf(path.replace(/\/$/, '')) !== 0) return false;
+      if (path.indexOf('/dietician') === 0) return true;   // the dashboard alerts for itself
+      return !hash || location.hash === hash;
+    },
+    _go: function (url) {
+      var target = Auth.href(url);
+      if (Auth._here(url.split('#')[0]) && url.indexOf('#') >= 0) { location.hash = url.slice(url.indexOf('#')); return; }
+      location.href = target;
+    },
+    _banner: function (title, body, url) {
+      var old = document.getElementById('dieto-pushbar'); if (old) old.remove();
+      var b = document.createElement('button'); b.id = 'dieto-pushbar'; b.type = 'button';
+      b.style.cssText = 'position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top,0px));z-index:10000;border:0;text-align:left;background:#0B3B26;color:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:inherit;cursor:pointer;max-width:520px;margin:0 auto';
+      var t = document.createElement('b'); t.textContent = title; t.style.cssText = 'display:block;font-size:14.5px';
+      var d = document.createElement('span'); d.textContent = body; d.style.cssText = 'display:block;font-size:13.5px;opacity:.85;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      b.appendChild(t); b.appendChild(d);
+      b.addEventListener('click', function () { b.remove(); if (url) Auth._go(url); });
+      document.body.appendChild(b);
+      try { navigator.vibrate && navigator.vibrate(60); } catch (e) {}
+      setTimeout(function () { b.remove(); }, 6000);
     },
     _sendToken: function (tok) {
       var platform = window.Capacitor.getPlatform();
@@ -195,6 +229,23 @@
     ov.appendChild(img); ov.appendChild(x); document.body.appendChild(ov);
   }
   Auth.viewer = viewer;
+
+  /* Read receipts on your own messages: ✓ sent · ✓✓ delivered · blue ✓✓ read. rc = { got, seen } from the server. */
+  Auth.ticks = function (box, mine, rc) {
+    if (!box || !rc) return;
+    if (!document.getElementById('dieto-tk')) { var st = document.createElement('style'); st.id = 'dieto-tk'; st.textContent = '.tk{display:inline-block;vertical-align:-2px;margin-left:4px;width:17px;height:11px}.tk path{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.tk.seen{color:#34B7F1;opacity:1}.m.c .tk.seen{color:#9BE7FF}'; document.head.appendChild(st); }
+    var S1 = '<svg class="tk" viewBox="0 0 17 11"><path d="M2 6l3 3 6-7"/></svg>', S2 = '<svg class="tk" viewBox="0 0 17 11"><path d="M1 6l3 3 6-7"/><path d="M7.5 8.5l.5.5 6-7"/></svg>';
+    [].forEach.call(box.querySelectorAll('.m.' + mine + '[data-mid]'), function (n) {
+      var id = +n.getAttribute('data-mid'), st = id <= (rc.seen || 0) ? 'seen' : id <= (rc.got || 0) ? 'got' : 'sent';
+      if (n.getAttribute('data-tk') === st) return;
+      var t = n.querySelector('time'); if (!t) return;
+      var old = t.querySelector('.tk'); if (old) old.remove();
+      t.insertAdjacentHTML('beforeend', st === 'sent' ? S1 : S2);
+      var tk = t.querySelector('.tk'); if (st === 'seen') tk.classList.add('seen');
+      tk.setAttribute('aria-label', st === 'seen' ? 'Read' : st === 'got' ? 'Delivered' : 'Sent');
+      n.setAttribute('data-tk', st);
+    });
+  };
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest && e.target.closest('a[href*="route=file"]'); if (!a) return;
     var isImg = !!a.querySelector('img') || a.dataset.kind === 'image';
@@ -209,7 +260,9 @@
     window.visualViewport.addEventListener('resize', setVH); setVH();
   }
   // keep the push token registered for a signed-in user on every app start
+  Auth._listen();
   if (NATIVE && Auth.token()) Auth.registerPush('user');
+  try { var DT = localStorage.getItem('dieto_dtoken'); if (NATIVE && DT) Auth.registerPush('dietician', DT); } catch (e) {}
   // hide the launch splash as soon as the first screen has drawn (the config only keeps it as a fallback)
   if (NATIVE) {
     var hideSplash = function () { try { var sp = window.Capacitor.Plugins.SplashScreen; if (sp) sp.hide({ fadeOutDuration: 150 }); } catch (e) {} };

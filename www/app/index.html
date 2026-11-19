@@ -797,10 +797,17 @@ window.DIETO_RECIPES = [
     mc.appendChild(h('p', { class: 'sub', style: 'margin:10px 0 0', text: 'Tap the tick when you’ve eaten a meal (tap again to mark skipped or replaced). Tap a meal for its recipe.' }));
     m.appendChild(mc);
     adherenceCard(m);
-    var wc = h('div', { class: 'card' }, [h('h3', { html: ic('droplet') + 'Water · ' + log.water + ' of 8 glasses' })]);
+    var wh = h('h3', { html: ic('droplet') + 'Water · ' + log.water + ' of 8 glasses' }), wc = h('div', { class: 'card' }, [wh]);
     var wrow = h('div', { class: 'water' });
     for (var g = 1; g <= 8; g++) (function (g) {
-      wrow.appendChild(h('button', { class: g <= log.water ? 'on' : '', 'aria-label': g + ' glasses', html: ic('cup-soda'), onclick: function () { setTimeout(syncProgress, 50); var l = dayLog(dstr); l.water = l.water === g ? g - 1 : g; LOG[dstr] = l; store('dieto_log', LOG); render(); } }));
+      wrow.appendChild(h('button', { type: 'button', class: g <= log.water ? 'on' : '', 'aria-label': g + ' glasses', 'aria-pressed': g <= log.water ? 'true' : 'false', html: ic('cup-soda'), onclick: function (ev) {
+        if (ev) ev.preventDefault();
+        var l = dayLog(dstr); l.water = l.water === g ? g - 1 : g; LOG[dstr] = l; store('dieto_log', LOG);
+        // update just this card: no redraw, so the page stays where it is
+        [].forEach.call(wrow.children, function (b, i) { b.classList.toggle('on', i < l.water); b.setAttribute('aria-pressed', i < l.water ? 'true' : 'false'); });
+        wh.innerHTML = ic('droplet') + 'Water · ' + l.water + ' of 8 glasses';
+        setTimeout(syncProgress, 50);
+      } }));
     })(g);
     wc.appendChild(wrow); m.appendChild(wc);
     var s = streak();
@@ -1290,7 +1297,10 @@ window.DIETO_RECIPES = [
   }
 
   var VIEWS = { today: viewToday, week: viewWeek, progress: viewProgress, me: viewMe, grocery: viewGrocery, recipes: viewRecipes, inbox: viewInbox };
-  function render() {
+  function render(ev) {
+    // a new screen (link or first load) starts at the top; a change on the same screen keeps the scroll position
+    var y = window.scrollY || 0, fresh = !render._done || !!(ev && ev.type);
+    render._done = true;
     root.innerHTML = '';
     if (!P || !P.WEEK || !P.R) { viewOnboard(); return; }
     R = P.R; A = P.A || {};
@@ -1301,7 +1311,7 @@ window.DIETO_RECIPES = [
     $$('#nav a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + (v === 'grocery' || v === 'recipes' ? 'week' : v)); });
     VIEWS[v]();
     fabs();
-    window.scrollTo(0, 0);
+    window.scrollTo(0, fresh ? 0 : y);
   }
   window.addEventListener('hashchange', render);
   render();
