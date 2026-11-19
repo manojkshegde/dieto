@@ -1715,6 +1715,7 @@ var DIETO = (function () {
   function closeApp() {
     var s = visible()[idx];
     if (!R && s) track('test_abandon', { section: s.sec, step: s.id });
+    if (window.DIETO_BASE) { location.href = '/app/index.html'; return; }   // inside the phone app: back to the app, never to the website
     app.classList.remove('open'); document.body.style.overflow = ''; document.documentElement.classList.remove('app-open');
     $('#cfab').classList.remove('hidden'); $('#cfab').style.bottom = ''; $('#cfab').style.zIndex = '';
   }
@@ -2383,7 +2384,7 @@ var DIETO = (function () {
       d.appendChild(share);
     }
     d.appendChild(h('button', { class: 'btn btn-green btn-block', style: 'margin-top:12px', html: ic('message-circle') + 'Chat with your dietO coach', onclick: function () { openChat('done'); } }));
-    d.appendChild(h('button', { class: 'linkbtn', style: 'margin-top:8px', text: 'Back to the dietO site', onclick: function () { closeApp(); } }));
+    d.appendChild(h('button', { class: 'linkbtn', style: 'margin-top:8px', text: window.DIETO_BASE ? 'Go to my plan' : 'Back to the dietO site', onclick: function () { closeApp(); } }));
     abody.appendChild(d);
     $('#cfab').classList.add('hidden');
   }
@@ -2402,7 +2403,7 @@ var DIETO = (function () {
     else if (!chatInit) { chatInit = true; botSay('Hey! 👋 I’m the dietO AI. Tell me what’s going on and I’ll help, or I can just build your diet plan right now if you’d rather. Takes 2 minutes.', ['Build my plan', LIVE ? 'Do you deliver to me?' : 'When does delivery start?', 'Diets you support']); }
     setTimeout(function () { if (matchMedia('(min-width: 700px)').matches) $('#cin').focus(); }, 60);
   }
-  function closeChat() { chatOpen = false; chat.classList.add('hidden'); if (params.get('from') === 'app') location.href = window.DIETO_BASE ? '/app/index.html' : '/app/'; }
+  function closeChat() { chatOpen = false; chat.classList.add('hidden'); if (window.DIETO_BASE) location.href = '/app/index.html'; else if (params.get('from') === 'app') location.href = '/app/'; }
   function scroll() { cmsgs.scrollTop = cmsgs.scrollHeight; }
   function botSay(text, chips, delay) {
     var t = h('div', { class: 'cm b typing', html: '<i></i><i></i><i></i>' }); cmsgs.appendChild(t); scroll();
