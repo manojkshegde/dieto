@@ -20,4 +20,8 @@ jobs:
           print('PUSH_ENABLED', 'PUSH_NOTIFICATIONS' in caps)
           b = requests.get('https://api.appstoreconnect.apple.com/v1/builds', params={'sort': '-uploadedDate', 'limit': 3, 'fields[builds]': 'version,processingState,uploadedDate'}, headers=H).json()
           for x in b.get('data', []): print('BUILD', x['attributes'])
+          apps = requests.get('https://api.appstoreconnect.apple.com/v1/apps', params={'filter[bundleId]': 'health.dieto.app'}, headers=H).json().get('data', [])
+          for ap in apps:
+              v = requests.get('https://api.appstoreconnect.apple.com/v1/apps/%s/appStoreVersions' % ap['id'], params={'fields[appStoreVersions]': 'versionString,appStoreState,createdDate'}, headers=H).json()
+              for x in v.get('data', []): print('VERSION', x['attributes'])
           PY
